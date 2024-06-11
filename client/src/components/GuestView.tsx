@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, ChangeEvent } from 'react';
+import io, { Socket } from 'socket.io-client';
 
 function GuestView() {
   let userComments = [
@@ -9,8 +10,33 @@ function GuestView() {
 
   const [commentsArray, setComments] =  useState(userComments);
   const [userMessageInput, setUserMessageInput] = useState('');
+  const socket = useRef<Socket>(); 
 
   useEffect(() => {
+    socket.current = io('http://localhost:3000/');
+    socket.current.on('connect', () => {
+      console.log('Connected to WebSocket server!');
+    });
+
+    socket.current.on('testMessage', (message)=>{
+      console.log(message);
+    });
+
+    socket.current.on('disconnect', () => {
+      console.log('Disconnected from WebSocket server');
+    });
+
+    return () => {
+      if (socket.current) {
+        socket.current.disconnect();
+      }
+    };
+
+  }, []);
+
+
+
+  useEffect(() => { 
     renderComments(commentsArray);
   }, [commentsArray]);
 
@@ -22,6 +48,7 @@ function GuestView() {
     });
     setComments(commentsArrayUpdated);
     setUserMessageInput('');
+    socket.current?.emit('testMessage', userMessageInput);
   }
 
   function storeUserMessageInput(e: ChangeEvent<HTMLInputElement>){
