@@ -81,6 +81,15 @@ function HostView(){
     sendCommand(socket, 'changeScreen', testProject.questions[questionIndex])
   }
 
+  function handleBroadcastingState(isBroadcasting = false){
+    if(isBroadcasting){
+      sendCommand(socket, 'startBroadcasting', {data:null})
+      changeScreen()
+    }else{
+      sendCommand(socket, 'stopBroadcasting', {data:null})
+    }
+  }
+
   function handleQuestionIndexChange(isForward = true){
     const maxIndex = testProject.questions.length - 1;
     if (isForward){
@@ -100,9 +109,9 @@ function HostView(){
     }
   }
 
-  // useEffect(() => { 
-  //   renderComments(commentsArray);
-  // }, [questionIndex]);
+  useEffect(() => { 
+    changeScreen();
+  }, [questionIndex]);
   
   return (
     <div className='container'> 
@@ -122,7 +131,8 @@ function HostView(){
         </div>
       </div>
       <button type='button' onClick={()=>handleQuestionIndexChange()}>Prev</button>
-      <button type='button' onClick={()=>changeScreen()}>Start</button>
+      <button type='button' onClick={()=>handleBroadcastingState(true)}>Start</button>
+      <button type='button' onClick={()=>handleBroadcastingState(false)}>Stop</button>
       <button type='button' onClick={()=>handleQuestionIndexChange()}>Next</button>
     </div> 
   )

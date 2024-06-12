@@ -20,6 +20,16 @@ io.on("connection", (socket) => {
     console.log(passedData)
     io.emit('changeScreen', passedData)
   })
+
+  socket.on('startBroadcasting', (passedData)=>{
+    console.log(passedData)
+    io.emit('startBroadcasting', passedData)
+  })
+
+  socket.on('stopBroadcasting', (passedData)=>{
+    console.log(passedData)
+    io.emit('stopBroadcasting', passedData)
+  })
   
   socket.on('disconnect', () => {
     console.log('User disconnected', socket.id);

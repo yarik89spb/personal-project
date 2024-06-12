@@ -30,7 +30,7 @@ function EventScreen( { question } : EventScreenProps){
     return (
       <>
         <div className="mb-4">
-          <div className="card">
+          <div className="card " >
             <div className="card-body">
               <h4 className="card-title"> {question.content} </h4>
               <div className="row">

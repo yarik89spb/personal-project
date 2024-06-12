@@ -18,6 +18,7 @@ function GuestView() {
     content: 'Please, stand by...',
     options: []
   });
+  const [isHidden, setIsHidden] = useState(true);
 
 
   const socket = useSocket('http://localhost:3000/'); 
@@ -50,13 +51,23 @@ function GuestView() {
     setCurrentScreen(questionData);
   });
 
+  useCommandListener(socket, 'stopBroadcasting', () => {
+    setIsHidden(true);
+  });
+
+  useCommandListener(socket, 'startBroadcasting', () => {
+    setIsHidden(false);
+  });
+
   function storeUserMessageInput(e: ChangeEvent<HTMLInputElement>){
     setUserMessageInput(e.target.value);
   }
 
   return (
       <div className='container' id='chat-container'>
-        <EventScreen question={currentScreen} />
+        <div className={isHidden? 'd-none': 'none'}>
+          <EventScreen question={currentScreen}/>
+        </div>
         <div className='card'>
           <h3 className='card-header'>Chat:</h3>
           <div className='card-body' style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }} id='comments-container'>
