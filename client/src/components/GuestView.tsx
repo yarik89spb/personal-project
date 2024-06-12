@@ -1,6 +1,7 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useSocket, sendMessage, useCommandListener } from '../utils/websocket';
 import EventScreen from './EventScreen';
+import ChatComments from './ChatComments';
 import AlwaysScrollToBottom from './AlwaysScrollToBottom';
 import './GuestView.css'
 
@@ -32,10 +33,6 @@ function GuestView() {
     sendMessage(socket, userMessageInput);
   }
 
-  useEffect(() => { 
-    renderComments(commentsArray);
-  }, [commentsArray]);
-
   interface Option{
     // 一個選擇
     text: string;
@@ -62,22 +59,6 @@ function GuestView() {
     content: string;
   }
 
-  function renderComments(comments: Comment[]){
-    return (
-      <ul className='list-group list-group-numbered"'>
-      {comments.map((comment, index) => (
-        <li key={index} className='list-group-item d-flex justify-content-between align-items-start'>
-          <div className="text-wrap" style={{width: '30rem'}}>
-            {comment.author}
-          </div>
-          <div className="text-wrap" style={{width: '30rem'}}>
-            {comment.content}
-          </div>
-        </li>
-      ))}
-    </ul>
-    )
-  }
 
   return (
       <div className='container' id='chat-container'>
@@ -86,7 +67,7 @@ function GuestView() {
           <h3 className='card-header'>Chat:</h3>
           <div className='card-body' style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }} id='comments-container'>
             <AlwaysScrollToBottom>
-              {renderComments(commentsArray)}
+              <ChatComments comments={commentsArray}/>
             </AlwaysScrollToBottom>
           </div>
           <div className='card-footer'>
