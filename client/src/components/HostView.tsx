@@ -1,8 +1,9 @@
 import { Fragment, useState, useRef, useEffect} from 'react';
 import { useSocket, useMessageListener, sendCommand } from '../utils/websocket';
 import EventScreen from './EventScreen';
+import ChatComments from './ChatComments';
 import AlwaysScrollToBottom from './AlwaysScrollToBottom';
-import './HostView.css'
+import './HostView.css';
 
 function HostView(){
   let userComments = [
@@ -10,6 +11,42 @@ function HostView(){
     {author:'Amy', content:'Wow'}, 
     {author:'Bot', content:'Greeting'}
   ];
+
+  const testProject = {
+    projectName: 'Test project',
+    questions:[
+      {
+        id: 1,
+        content: '晚餐要吃什麽',
+        options: [
+          {text:'麥當勞', isCorrect: true},
+          {text:'便利商店', isCorrect: false},
+          {text:'意麵', isCorrect: false},
+          {text:'炒飯', isCorrect: false}
+        ]
+      }, 
+      {
+        id: 2,
+        content: '最棒的程式語言',
+        options: [
+          {text:'JavaScript', isCorrect: false},
+          {text:'C++', isCorrect: false},
+          {text:'Python', isCorrect: true},
+          {text:'中文', isCorrect: false}
+        ]
+      },
+      {
+        id: 3,
+        content: '最偉大的詩人',
+        options: [
+          {text:'李白', isCorrect: false},
+          {text:'毛主席', isCorrect: true},
+          {text:'周杰倫', isCorrect: false},
+          {text:'蘇軾', isCorrect: false}
+        ]
+      }
+    ]
+  }
 
   const testQuestion = {
     content: '最棒的程式語言',
@@ -22,6 +59,7 @@ function HostView(){
   }
 
   const [commentsArray, setComments] =  useState(userComments);
+  const [questionIndex, setQuestionIndex] =  useState(0);
   const socket = useSocket('http://localhost:3000/');
   
   useMessageListener(socket, 'viewerMessage', (message) => {
@@ -35,35 +73,17 @@ function HostView(){
     content: string;
   }
 
-  function renderComments(comments: Comment[]){
-    return (
-      <ul className='list-group list-group-numbered"'>
-      {comments.map((comment, index) => (
-        <li key={index} className='list-group-item d-flex justify-content-between align-items-start'>
-          <div className="text-wrap" style={{width: '30rem'}}>
-            {comment.author}
-          </div>
-          <div className="text-wrap" style={{width: '30rem'}}>
-            {comment.content}
-          </div>
-        </li>
-      ))}
-    </ul>
-    )
-  }
-
   function addMessageToChat(comment: Comment){
     setComments((prevComments) => [...prevComments, comment]);
   }
 
   function changeScreen(){
-
     sendCommand(socket, 'changeScreen', testQuestion)
   }
 
-  useEffect(() => { 
-    renderComments(commentsArray);
-  }, [commentsArray]);
+  // useEffect(() => { 
+  //   renderComments(commentsArray);
+  // }, [questionIndex]);
   
   return (
     <div className='container'> 
@@ -73,7 +93,7 @@ function HostView(){
             <h3 className='card-header' >User comments:</h3>
             <div className='card-body' style={{ height: '300px', maxHeight: '300px', overflowY: 'auto' }}>
               <AlwaysScrollToBottom>
-                {renderComments(commentsArray)}
+                <ChatComments comments={commentsArray}/>
               </AlwaysScrollToBottom>
             </div>
           </div>
