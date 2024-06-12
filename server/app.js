@@ -15,6 +15,11 @@ io.on("connection", (socket) => {
     console.log(message)
     io.emit('viewerMessage', message)
   })
+
+  socket.on('changeScreen', (passedData)=>{
+    console.log(passedData)
+    io.emit('changeScreen', passedData)
+  })
   
   socket.on('disconnect', () => {
     console.log('User disconnected', socket.id);

@@ -31,6 +31,16 @@ export const sendMessage = (socket: React.MutableRefObject<Socket | undefined>, 
   }
 };
 
+export const sendCommand = (
+  socket: React.MutableRefObject<Socket | undefined>,
+  eventName: string,
+  passedData: object,
+) => {
+  if (socket.current) {
+    socket.current.emit(eventName, passedData);
+  }
+};
+
 export const useMessageListener = (
   socket: React.MutableRefObject<Socket | undefined>,
   eventName: string,
@@ -41,6 +51,23 @@ export const useMessageListener = (
       socket.current.on(eventName, callback);
     }
 
+    return () => {
+      if (socket.current) {
+        socket.current.off(eventName, callback);
+      }
+    };
+  }, [socket, eventName, callback]);
+};
+
+export const useCommandListener = (
+  socket: React.MutableRefObject<Socket | undefined>,
+  eventName: string,
+  callback: (passedData: object) => void
+) => {
+  useEffect(() => {
+    if (socket.current) {
+      socket.current.on(eventName, callback);
+    }
     return () => {
       if (socket.current) {
         socket.current.off(eventName, callback);

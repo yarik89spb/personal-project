@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, ChangeEvent } from 'react';
-import { useSocket, sendMessage } from '../utils/websocket';
+import { useSocket, sendMessage, useCommandListener } from '../utils/websocket';
+import EventScreen from './EventScreen';
 
 function GuestView() {
   let userComments = [
@@ -10,6 +11,12 @@ function GuestView() {
 
   const [commentsArray, setComments] =  useState(userComments);
   const [userMessageInput, setUserMessageInput] = useState('');
+  const [currentScreen, setCurrentScreen] = useState<Question>({
+    content: 'Please, stand by...',
+    options: []
+  });
+
+
   const socket = useSocket('http://localhost:3000/'); 
 
   function addMessageToChat(){
@@ -27,6 +34,22 @@ function GuestView() {
     renderComments(commentsArray);
   }, [commentsArray]);
 
+  interface Option{
+    // 一個選擇
+    text: string;
+    isCorrect: boolean;
+  }
+  
+  interface Question{
+    // 題目的問題
+    content: string;
+    options: Option[];
+  }
+
+  useCommandListener(socket, 'changeScreen', (passedData: object) => {
+    const questionData = passedData as Question;
+    setCurrentScreen(questionData);
+  });
 
   function storeUserMessageInput(e: ChangeEvent<HTMLInputElement>){
     setUserMessageInput(e.target.value);
@@ -64,6 +87,7 @@ function GuestView() {
 
   return (
       <div className='container' id='chat-container'>
+        <EventScreen question={currentScreen} />
         <div className='card'>
           <h3 className='card-header'>Chat:</h3>
           <div className='card-body' style={{ height: '600px', maxHeight: '600px', overflowY: 'auto' }} id='comments-container'>
