@@ -1,0 +1,11 @@
+.btn.btn-custom {
+  /* Your custom styles */
+  --bs-btn-bg: rgb(240, 217, 215);
+  --bs-btn-border-color: rgb(48, 101, 112); 
+  --bs-btn-color: #000;
+  --bs-btn-hover-bg: rgb(48, 101, 112); 
+  --bs-btn-hover-color: #fff; 
+  --bs-btn-hover-border-color: #fff;
+  --bs-font-family-base: 'Roboto', sans-serif; 
+  --bs-font-weight-base: 700;
+}

@@ -1,6 +1,8 @@
 import { Fragment, useState, useRef, useEffect} from 'react';
 import { useSocket, useMessageListener, sendCommand } from '../utils/websocket';
 import EventScreen from './EventScreen';
+import AlwaysScrollToBottom from './AlwaysScrollToBottom';
+import './HostView.css'
 
 function HostView(){
   let userComments = [
@@ -38,8 +40,12 @@ function HostView(){
       <ul className='list-group list-group-numbered"'>
       {comments.map((comment, index) => (
         <li key={index} className='list-group-item d-flex justify-content-between align-items-start'>
-          <div>{comment.author}</div>
-          <div>{comment.content}</div>
+          <div className="text-wrap" style={{width: '30rem'}}>
+            {comment.author}
+          </div>
+          <div className="text-wrap" style={{width: '30rem'}}>
+            {comment.content}
+          </div>
         </li>
       ))}
     </ul>
@@ -51,6 +57,7 @@ function HostView(){
   }
 
   function changeScreen(){
+
     sendCommand(socket, 'changeScreen', testQuestion)
   }
 
@@ -61,10 +68,14 @@ function HostView(){
   return (
     <div className='container'> 
       <div className='row'>
-        <div className='col-md-6'> 
-          <div className='container-sm' id='comments-container'>
-            <h3>User comments:</h3>
-            {renderComments(commentsArray)}
+        <div className='col-md-6'>
+          <div className='card'> 
+            <h3 className='card-header' >User comments:</h3>
+            <div className='card-body' style={{ height: '300px', maxHeight: '300px', overflowY: 'auto' }}>
+              <AlwaysScrollToBottom>
+                {renderComments(commentsArray)}
+              </AlwaysScrollToBottom>
+            </div>
           </div>
         </div>
         <div className='col-md-6'>
