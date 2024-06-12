@@ -54,12 +54,6 @@ function GuestView() {
     setUserMessageInput(e.target.value);
   }
 
-  interface Comment {
-    author: string;
-    content: string;
-  }
-
-
   return (
       <div className='container' id='chat-container'>
         <EventScreen question={currentScreen} />

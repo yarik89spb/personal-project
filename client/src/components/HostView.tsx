@@ -78,7 +78,26 @@ function HostView(){
   }
 
   function changeScreen(){
-    sendCommand(socket, 'changeScreen', testQuestion)
+    sendCommand(socket, 'changeScreen', testProject.questions[questionIndex])
+  }
+
+  function handleQuestionIndexChange(isForward = true){
+    const maxIndex = testProject.questions.length - 1;
+    if (isForward){
+      const newIndex = questionIndex + 1;
+      if (newIndex <= maxIndex) {
+        setQuestionIndex(newIndex);
+      }else {
+        setQuestionIndex(0);
+      }
+    }else{
+      const newIndex = questionIndex - 1;
+      if (newIndex > 0){
+        setQuestionIndex(newIndex);
+      }else {
+        setQuestionIndex(maxIndex);
+      }
+    }
   }
 
   // useEffect(() => { 
@@ -99,11 +118,13 @@ function HostView(){
           </div>
         </div>
         <div className='col-md-6'>
-          <EventScreen question={testQuestion}/>
+          <EventScreen question={testProject.questions[questionIndex]}/>
         </div>
       </div>
+      <button type='button' onClick={()=>handleQuestionIndexChange()}>Prev</button>
       <button type='button' onClick={()=>changeScreen()}>Start</button>
-    </div>
+      <button type='button' onClick={()=>handleQuestionIndexChange()}>Next</button>
+    </div> 
   )
 }
 
