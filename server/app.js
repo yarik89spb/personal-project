@@ -11,9 +11,9 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log('User connected')
-  socket.on('testMessage', (message)=>{
+  socket.on('viewerMessage', (message)=>{
     console.log(message)
-    io.emit('testMessage', message)
+    io.emit('viewerMessage', message)
   })
   
   socket.on('disconnect', () => {

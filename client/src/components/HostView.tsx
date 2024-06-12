@@ -1,5 +1,5 @@
 import { Fragment, useState, useRef, useEffect} from 'react';
-import io, { Socket } from 'socket.io-client';
+import { useSocket, useMessageListener } from '../utils/websocket';
 
 function HostView(){
   let userComments = [
@@ -9,26 +9,11 @@ function HostView(){
   ];
 
   const [commentsArray, setComments] =  useState(userComments);
-  const socket = useRef<Socket>();
+  const socket = useSocket('http://localhost:3000/');
   
-  useEffect(() => {
-    socket.current = io('http://localhost:3000/');
-    socket.current.on('connect', () => {
-      console.log('Connected to WebSocket server!');
-    });
-
-    socket.current.on('testMessage', (message)=>{
-      console.log(message)
-      addMessageToChat({author:'user', content: message});
-    });
-
-    return () => {
-      if (socket.current) {
-        socket.current.disconnect();
-      }
-    };
-
-  }, []);
+  useMessageListener(socket, 'viewerMessage', (message) => {
+    addMessageToChat({ author: 'user', content: message });
+  });
 
   interface Comment {
     author: string;

@@ -1,0 +1,8 @@
+import { useState, useEffect, useRef, ChangeEvent } from 'react';
+import io, { Socket } from 'socket.io-client';
+
+function EventScreen(){
+  return
+}
+
+export default EventScreen;
