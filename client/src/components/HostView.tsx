@@ -127,7 +127,7 @@ function HostView(){
           </div>
         </div>
         <div className='col-md-6'>
-          <EventScreen question={testProject.questions[questionIndex]}/>
+          <EventScreen question={testProject.questions[questionIndex]} onOptionClick={()=>{return}}/>
         </div>
       </div>
       <button type='button' onClick={()=>handleQuestionIndexChange()}>Prev</button>

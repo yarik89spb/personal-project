@@ -30,6 +30,10 @@ io.on("connection", (socket) => {
     console.log(passedData)
     io.emit('stopBroadcasting', passedData)
   })
+
+  socket.on('userAnswer', (userAnswer)=>{
+    console.log(userAnswer)
+  })
   
   socket.on('disconnect', () => {
     console.log('User disconnected', socket.id);

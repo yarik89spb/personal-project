@@ -25,9 +25,12 @@ export const useSocket = (url: string) => {
   return socket;
 };
 
-export const sendMessage = (socket: React.MutableRefObject<Socket | undefined>, message: string) => {
+export const sendMessage = (
+  socket: React.MutableRefObject<Socket | undefined>, 
+  eventName: string,
+  message: string) => {
   if (socket.current) {
-    socket.current.emit('viewerMessage', message);
+    socket.current.emit(eventName, message);
   }
 };
 

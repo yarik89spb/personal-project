@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef, ChangeEvent } from 'react';
+import { MouseEvent} from 'react';
+
 import './EventScreen.css'; 
 
 
@@ -23,20 +24,32 @@ interface Question{
 
 interface EventScreenProps {
   question : Question;
+  onOptionClick: (answer: string) => void;
 }
 
-function EventScreen( { question } : EventScreenProps){
+function EventScreen( { question, onOptionClick } : EventScreenProps){
+  function handleOptionClick(e:  MouseEvent<HTMLButtonElement>){
+    const buttonValue = (e.target as HTMLButtonElement).value;
+    onOptionClick(buttonValue);
+  }
+
   function renderQuestion(question : Question){
     return (
       <>
         <div className="mb-4">
-          <div className="card " >
+          <div className="card" >
             <div className="card-body">
               <h4 className="card-title"> {question.content} </h4>
               <div className="row">
                 {question.options.map((option, index)=>(
                   <div className="col-md-6 mb-2" key={index}>
-                    <button key={index} type="button" className="btn btn-custom w-100">
+                    <button 
+                      key={index} 
+                      type="button"
+                      value={option.text}
+                      className="btn btn-custom w-100"
+                      onClick={(e)=> handleOptionClick(e)}
+                    >
                       {option.text}
                     </button>
                   </div>

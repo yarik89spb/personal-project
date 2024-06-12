@@ -31,7 +31,7 @@ function GuestView() {
     });
     setComments(commentsArrayUpdated);
     setUserMessageInput('');
-    sendMessage(socket, userMessageInput);
+    sendMessage(socket, 'viewerMessage', userMessageInput);
   }
 
   interface Option{
@@ -63,10 +63,14 @@ function GuestView() {
     setUserMessageInput(e.target.value);
   }
 
+  function sendUserAnswerToServer(answer:string){
+    sendMessage(socket, 'userAnswer', answer);
+  }
+
   return (
       <div className='container' id='chat-container'>
         <div className={isHidden? 'd-none': 'none'}>
-          <EventScreen question={currentScreen}/>
+          <EventScreen question={currentScreen} onOptionClick={sendUserAnswerToServer}/>
         </div>
         <div className='card'>
           <h3 className='card-header'>Chat:</h3>
