@@ -1,9 +1,11 @@
 import express from 'express';
 import { createServer } from "http";
 import { Server } from 'socket.io';
-import { testQuery, insertTestData, getProjectData } from './models/queries.js'
+import { testQuery, insertTestData, getProjectData, insertTestResponse } from './models/queries.js'
+import connectToDB from './models/db.js'
 
 const app = express();
+connectToDB()
 
 const server = createServer(app);
 const io = new Server(server, {
@@ -47,16 +49,19 @@ const testProject = {
   ]
 }
 
-// await insertTestData(testProject);
+const testViewerResponse = { text: 'bla bla bla'}
 
-await getProjectData('666aacea11816fd400f2f734');
+//await insertTestData(testProject);
+// await insertTestResponse(testViewerResponse);
+
+// await testQuery();
+// await getProjectData('666aacea11816fd400f2f734');
 
 app.post('/api/project-data', async (req, res)=>{
   try{
     const projctId = req.query.id;
-    const projectData = res.body.
-    await
-    res.status(200).json({text:'Loaded project data...'}) 
+    const projectData = await getProjectData(id);
+    res.status(200).json({projectData}) 
   }catch(error){
     res.status(400).json({error:'Failed to load data'})
   }

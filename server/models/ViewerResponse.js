@@ -5,8 +5,9 @@ const { Schema } = mongoose;
 const viewerResponseSchema = new mongoose.Schema({
   // Define schema fields
   // Example fields:
-  name: String,
-  age: Number,
+  // name: String,
+  // age: Number,
+  text: String
 }, {collection: 'viewer-responses'
 });
 

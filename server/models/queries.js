@@ -3,10 +3,12 @@ import UserProject from './UserProject.js';
 
 export async function testQuery() {
   try {
-    const firstViewerResponse = await ViewerResponse.findOne();
-    console.log("First viewer response:", firstViewerResponse);
+    const document = await ViewerResponse.findOne();
+    console.log("Query result:", document);
+    return document;
   } catch (error) {
-    console.error(`Query error occurred: ${error}`);
+    console.error("Query error:", error);
+    throw error;
   }
 }
 
@@ -19,10 +21,19 @@ export async function insertTestData(dataObj) {
   }
 }
 
+export async function insertTestResponse(responseObj) {
+  try {
+    const result = await ViewerResponse.create(responseObj);
+    console.log('Response inserted id:', result._id);
+  } catch (error) {
+    console.error(`Insert error occurred: ${error}`);
+  }
+}
+
 export async function getProjectData(projectId) {
-  console.log('Hi')
   try {
     const projectData = await UserProject.findById(projectId);
+    console.log(projectData)
     return projectData;
   } catch (error) {
     console.error(`Query error occurred: ${error}`);

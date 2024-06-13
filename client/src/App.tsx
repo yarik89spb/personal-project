@@ -8,8 +8,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="host" element={<HostView />} />
-        <Route path="guest" element={<GuestView />} />
+        <Route path="/host" element={<HostView />} />
+        <Route path="/guest" element={<GuestView />} />
       </Routes>
     </BrowserRouter>
     

@@ -12,7 +12,10 @@ function HostView(){
     {author:'Bot', content:'Greeting'}
   ];
 
-  const [projectData, setProjectData] = useState(null);
+  const [projectData, setProjectData] = useState({
+    projectName: 'Missing',
+    projectId: null,
+    questions:[]});
   const [commentsArray, setComments] =  useState(userComments);
   const [questionIndex, setQuestionIndex] =  useState(0);
   const socket = useSocket('http://localhost:3000/');
@@ -20,8 +23,10 @@ function HostView(){
   useEffect(() => {
     async function fetchData(){
       try{
-        const response = await fetch('http://localhost:3000/api/project-data')
-        setProjectData(response.json());
+        const response = await fetch('http://localhost:3000/api/project-data?id=666aacea11816fd400f2f734')
+        const newProjectData = await response.json();
+        console.log(newProjectData)
+        setProjectData(newProjectData);
       } catch(error){
         console.error(`Failed to get project data. ${error}`)
       }
