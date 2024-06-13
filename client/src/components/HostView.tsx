@@ -12,61 +12,30 @@ function HostView(){
     {author:'Bot', content:'Greeting'}
   ];
 
-  const testProject = {
-    projectName: 'Test project',
-    questions:[
-      {
-        id: 1,
-        content: '晚餐要吃什麽',
-        options: [
-          {text:'麥當勞', isCorrect: true},
-          {text:'便利商店', isCorrect: false},
-          {text:'意麵', isCorrect: false},
-          {text:'炒飯', isCorrect: false}
-        ]
-      }, 
-      {
-        id: 2,
-        content: '最棒的程式語言',
-        options: [
-          {text:'JavaScript', isCorrect: false},
-          {text:'C++', isCorrect: false},
-          {text:'Python', isCorrect: true},
-          {text:'中文', isCorrect: false}
-        ]
-      },
-      {
-        id: 3,
-        content: '最偉大的詩人',
-        options: [
-          {text:'李白', isCorrect: false},
-          {text:'毛主席', isCorrect: true},
-          {text:'周杰倫', isCorrect: false},
-          {text:'蘇軾', isCorrect: false}
-        ]
-      }
-    ]
-  }
-
-  const testQuestion = {
-    content: '最棒的程式語言',
-    options: [
-      {text:'JavaScript', isCorrect: false},
-      {text:'C++', isCorrect: false},
-      {text:'Python', isCorrect: true},
-      {text:'中文', isCorrect: false}
-    ]
-  }
-
+  const [projectData, setProjectData] = useState(null);
   const [commentsArray, setComments] =  useState(userComments);
   const [questionIndex, setQuestionIndex] =  useState(0);
   const socket = useSocket('http://localhost:3000/');
+
+  useEffect(() => {
+    async function fetchData(){
+      try{
+        const response = await fetch('http://localhost:3000/api/project-data')
+        setProjectData(response.json());
+      } catch(error){
+        console.error(`Failed to get project data. ${error}`)
+      }
+    }
+    fetchData();
+  })
   
   useMessageListener(socket, 'viewerMessage', (message) => {
     addMessageToChat({ author: 'user', content: message });
   });
 
-  
+  useMessageListener(socket, 'userAnswer', (message) => {
+    addMessageToChat({ author: 'user', content: message });
+  });
 
   interface Comment {
     author: string;
@@ -78,7 +47,7 @@ function HostView(){
   }
 
   function changeScreen(){
-    sendCommand(socket, 'changeScreen', testProject.questions[questionIndex])
+    sendCommand(socket, 'changeScreen', projectData.questions[questionIndex])
   }
 
   function handleBroadcastingState(isBroadcasting = false){
@@ -91,7 +60,7 @@ function HostView(){
   }
 
   function handleQuestionIndexChange(isForward = true){
-    const maxIndex = testProject.questions.length - 1;
+    const maxIndex = projectData.questions.length - 1;
     if (isForward){
       const newIndex = questionIndex + 1;
       if (newIndex <= maxIndex) {
@@ -127,7 +96,7 @@ function HostView(){
           </div>
         </div>
         <div className='col-md-6'>
-          <EventScreen question={testProject.questions[questionIndex]} onOptionClick={()=>{return}}/>
+          <EventScreen question={projectData.questions[questionIndex]} onOptionClick={()=>{return}}/>
         </div>
       </div>
       <button type='button' onClick={()=>handleQuestionIndexChange()}>Prev</button>
