@@ -57,11 +57,11 @@ const testViewerResponse = { text: 'bla bla bla'}
 // await testQuery();
 // await getProjectData('666aacea11816fd400f2f734');
 
-app.post('/api/project-data', async (req, res)=>{
+app.get('/api/project-data', async (req, res)=>{
   try{
-    const projctId = req.query.id;
-    const projectData = await getProjectData(id);
-    res.status(200).json({projectData}) 
+    const projectId = req.query.id;
+    const projectData = await getProjectData(projectId);
+    res.status(200).json({data: projectData}) 
   }catch(error){
     res.status(400).json({error:'Failed to load data'})
   }

@@ -18,6 +18,7 @@ function HostView(){
     questions:[]});
   const [commentsArray, setComments] =  useState(userComments);
   const [questionIndex, setQuestionIndex] =  useState(0);
+  const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
   const socket = useSocket('http://localhost:3000/');
 
   useEffect(() => {
@@ -25,15 +26,16 @@ function HostView(){
       try{
         const response = await fetch('http://localhost:3000/api/project-data?id=666aacea11816fd400f2f734')
         const newProjectData = await response.json();
-        console.log(newProjectData)
-        setProjectData(newProjectData);
+        setIsLoadingQuestions(false);
+        setProjectData(newProjectData.data);
       } catch(error){
         console.error(`Failed to get project data. ${error}`)
+        setIsLoadingQuestions(false);
       }
     }
     fetchData();
-  })
-  
+  }, [])
+
   useMessageListener(socket, 'viewerMessage', (message) => {
     addMessageToChat({ author: 'user', content: message });
   });
@@ -101,7 +103,14 @@ function HostView(){
           </div>
         </div>
         <div className='col-md-6'>
-          <EventScreen question={projectData.questions[questionIndex]} onOptionClick={()=>{return}}/>
+        {isLoadingQuestions === false && (
+            <EventScreen
+              question={projectData.questions[questionIndex]}
+              onOptionClick={() => {
+                return;
+              }}
+            />
+          )}
         </div>
       </div>
       <button type='button' onClick={()=>handleQuestionIndexChange()}>Prev</button>
