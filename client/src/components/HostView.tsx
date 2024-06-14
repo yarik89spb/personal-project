@@ -96,9 +96,9 @@ function HostView(){
   //   sendAnswerBatch({questionId, userAnswers });
   // }
 
-  // // Store user answers' batch: every 10 answers
+  // // Store user answers' batch: every 50 answers
   // useEffect(() => {
-  //   if(userAnswers.length % 10 === 0){
+  //   if(userAnswers.length % 50 === 0){
   //     storeAnswers();
   //   }
   // }, [userAnswers]);
@@ -127,10 +127,22 @@ function HostView(){
           )}
         </div>
       </div>
-      <button type='button' onClick={()=>handleQuestionIndexChange()}>Prev</button>
-      <button type='button' onClick={()=>handleBroadcastingState(true)}>Start</button>
-      <button type='button' onClick={()=>handleBroadcastingState(false)}>Stop</button>
-      <button type='button' onClick={()=>handleQuestionIndexChange()}>Next</button>
+      <div className="d-flex justify-content-center">
+      <div className="btn-group" role="group" aria-label="Control Buttons">
+        <button type="button" className="btn btn-primary btn-lg mx-2" onClick={() => handleQuestionIndexChange(false)}>
+          &lt;
+        </button>
+        <button type="button" className="btn btn-success btn-lg mx-2" onClick={() => handleBroadcastingState(true)}>
+          Start
+        </button>
+        <button type="button" className="btn btn-danger btn-lg mx-2" onClick={() => handleBroadcastingState(false)}>
+          Stop
+        </button>
+        <button type="button" className="btn btn-primary btn-lg mx-2" onClick={() => handleQuestionIndexChange(true)}>
+          &gt;
+        </button>
+      </div>
+    </div>
     </div> 
   )
 }
