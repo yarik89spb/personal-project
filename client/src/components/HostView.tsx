@@ -4,6 +4,7 @@ import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import AlwaysScrollToBottom from './AlwaysScrollToBottom';
 import { Option, Question, Comment } from '../utils/interfaces.ts';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './HostView.css';
 
 function HostView(){
@@ -20,7 +21,7 @@ function HostView(){
   const [questionIndex, setQuestionIndex] =  useState(0);
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
   const [commentsArray, setComments] =  useState(userComments);
-  const [answersArray, setAnswers] =  useState([]);
+  const [answersArray, setAnswers] =  useState<Option[]>([]);
   const socket = useSocket('http://localhost:3000/');
 
   /* Project data rendering and broadcasting */
@@ -87,21 +88,11 @@ function HostView(){
     setComments((prevComments) => [...prevComments, comment]);
   }
 
-  // useAnswerListener(socket, 'userAnswer', (userAnswer:Option) => {
-  //   setAnswers([...answersArray, userAnswer]);
-  // });
+  useAnswerListener(socket, 'userAnswer', (userAnswer:Option) => {
+    setAnswers([...answersArray, userAnswer]);
+  });
 
-  // function storeAnswers(userAnswer){
-  //   const questionId = projectData[questionIndex].id;
-  //   sendAnswerBatch({questionId, userAnswers });
-  // }
 
-  // // Store user answers' batch: every 50 answers
-  // useEffect(() => {
-  //   if(userAnswers.length % 50 === 0){
-  //     storeAnswers();
-  //   }
-  // }, [userAnswers]);
   
   return (
     <div className='container'> 

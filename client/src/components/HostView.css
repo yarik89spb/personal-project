@@ -1,50 +1,10 @@
-.btn {
-  font-size: 1.5rem; /* Increase the font size */
-  padding: 1rem 2rem; /* Increase the padding */
-  border-radius: 0.5rem; /* Make the corners rounded */
-}
-
-.custom-btn {
-  border: 2px solid transparent; /* Initial border with no color */
-  border-radius: 8px; /* Rounded corners */
-  transition: all 0.3s ease; /* Smooth transition for hover effects */
-}
-
-.custom-btn:hover {
-  border-color: #333; /* Border color on hover */
-}
-
-
-.btn-group-lg > .btn {
-  height: auto; /* Ensure the height is adjusted for larger buttons */
-}
-
 .btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
-}
-
-.btn-primary:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
-}
-
-.btn-success {
-  background-color: #28a745;
-  border-color: #28a745;
-}
-
-.btn-success:hover {
-  background-color: #218838;
-  border-color: #1e7e34;
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  border-color: #dc3545;
-}
-
-.btn-danger:hover {
-  background-color: #c82333;
-  border-color: #bd2130;
+  --bs-btn-bg: rgb(48, 101, 112); /* Background color */
+  --bs-btn-border-color: rgb(48, 101, 112); /* Border color */
+  --bs-btn-color: #fff; /* Text color */
+  --bs-btn-hover-bg: rgb(20, 75, 85); /* Hover background color */
+  --bs-btn-hover-color: #fff; /* Hover text color */
+  --bs-btn-hover-border-color: #fff; /* Hover border color */
+  --bs-font-family-base: 'Roboto', sans-serif; /* Font family */
+  --bs-font-weight-base: 700; /* Font weight */
 }
