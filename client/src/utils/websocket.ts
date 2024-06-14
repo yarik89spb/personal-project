@@ -1,6 +1,14 @@
 import io, { Socket } from 'socket.io-client';
 import { useEffect, useRef } from 'react';
 
+interface Option{
+  // 一個選擇
+  _id: string,
+  id: number;
+  text: string;
+  isCorrect: boolean;
+}
+
 export const useSocket = (url: string) => {
   const socket = useRef<Socket>();
 
@@ -31,6 +39,15 @@ export const sendMessage = (
   message: string) => {
   if (socket.current) {
     socket.current.emit(eventName, message);
+  }
+};
+
+export const sendUserAnswer = (
+  socket: React.MutableRefObject<Socket | undefined>, 
+  eventName: string,
+  userAnswer: Option) => {
+  if (socket.current) {
+    socket.current.emit(eventName, userAnswer);
   }
 };
 

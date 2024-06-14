@@ -1,8 +1,9 @@
 import { Fragment, useState, useRef, useEffect} from 'react';
-import { useSocket, useMessageListener, sendCommand } from '../utils/websocket';
+import { useSocket, useMessageListener, sendCommand, useAnswerListener } from '../utils/websocket';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import AlwaysScrollToBottom from './AlwaysScrollToBottom';
+import { Option, Question, Comment } from '../utils/interfaces.ts';
 import './HostView.css';
 
 function HostView(){
@@ -40,14 +41,9 @@ function HostView(){
     addMessageToChat({ author: 'user', content: message });
   });
 
-  useMessageListener(socket, 'userAnswer', (message) => {
-    addMessageToChat({ author: 'user', content: message });
+  useAnswerListener(socket, 'userAnswer', (userAnswer) => {
+    storeAnswer(userAnswer);
   });
-
-  interface Comment {
-    author: string;
-    content: string;
-  }
 
   function addMessageToChat(comment: Comment){
     setComments((prevComments) => [...prevComments, comment]);
@@ -85,9 +81,22 @@ function HostView(){
     }
   }
 
+  function storeAnswers(userAnswer){
+    const questionId = projectData[questionIndex].id;
+    sendAnswerBatch({questionId, userAnswers });
+  }
+
+  // Change task (question) screen for viewers
   useEffect(() => { 
     changeScreen();
   }, [questionIndex]);
+
+  // Store user answers' batch: every 10 answers
+  useEffect(() => {
+    if(userAnswers.length % 10 === 0){
+      storeAnswers();
+    }
+  }, [userAnswers]);
   
   return (
     <div className='container'> 

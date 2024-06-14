@@ -1,5 +1,5 @@
 import { useState, useEffect, ChangeEvent } from 'react';
-import { useSocket, sendMessage, useCommandListener } from '../utils/websocket';
+import { useSocket, sendMessage, sendUserAnswer, useCommandListener } from '../utils/websocket';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import AlwaysScrollToBottom from './AlwaysScrollToBottom';
@@ -15,6 +15,8 @@ function GuestView() {
   const [commentsArray, setComments] =  useState(userComments);
   const [userMessageInput, setUserMessageInput] = useState('');
   const [currentScreen, setCurrentScreen] = useState<Question>({
+    id: 0,
+    title: 'placeholder',
     content: 'Please, stand by...',
     options: []
   });
@@ -36,12 +38,16 @@ function GuestView() {
 
   interface Option{
     // 一個選擇
+    _id: string,
+    id: number;
     text: string;
     isCorrect: boolean;
   }
   
   interface Question{
     // 題目的問題
+    id: number;
+    title: string;
     content: string;
     options: Option[];
   }
@@ -63,8 +69,8 @@ function GuestView() {
     setUserMessageInput(e.target.value);
   }
 
-  function sendUserAnswerToServer(answer:string){
-    sendMessage(socket, 'userAnswer', answer);
+  function sendUserAnswerToServer(answer:Option){
+    sendUserAnswer(socket, 'userAnswer', answer);
   }
 
   return (

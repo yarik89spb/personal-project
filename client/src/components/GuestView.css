@@ -3,3 +3,15 @@
   white-space: pre-wrap;
   word-wrap: break-word;
 } */
+
+.btn.btn-primary {
+  /* Your custom styles */
+  --bs-btn-bg: rgb(48, 101, 112);
+  --bs-btn-border-color: rgb(48, 101, 112); 
+  --bs-btn-color: #fff;
+  --bs-btn-hover-bg: rgb(20, 75, 85); 
+  --bs-btn-hover-color: #fff; 
+  --bs-btn-hover-border-color: #fff;
+  --bs-font-family-base: 'Roboto', sans-serif; 
+  --bs-font-weight-base: 700;
+}

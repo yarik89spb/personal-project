@@ -5,12 +5,16 @@ import './EventScreen.css';
 
 interface Option{
   // 一個選擇
+  _id: string,
+  id: number;
   text: string;
   isCorrect: boolean;
 }
 
 interface Question{
   // 題目的問題
+  id: number;
+  title: string;
   content: string;
   options: Option[];
 }
@@ -24,13 +28,24 @@ interface Question{
 
 interface EventScreenProps {
   question : Question;
-  onOptionClick: (answer: string) => void;
+  onOptionClick: (userAnswer: Option) => void;
 }
 
 function EventScreen( { question, onOptionClick } : EventScreenProps){
+
+  // Called outside the EventScreen 
   function handleOptionClick(e:  MouseEvent<HTMLButtonElement>){
-    const buttonValue = (e.target as HTMLButtonElement).value;
-    onOptionClick(buttonValue);
+    const optionId = (e.target as HTMLButtonElement).value;
+    const userAnswer = question.options.find((option) => option.id === parseInt(optionId))
+    if(userAnswer){
+      onOptionClick(userAnswer);
+    }else{
+      onOptionClick({
+        _id: '000000000', 
+        id: 0,
+        text: 'unknown option',
+        isCorrect: false});
+    }
   }
 
   function renderQuestion(question : Question){
@@ -46,7 +61,7 @@ function EventScreen( { question, onOptionClick } : EventScreenProps){
                     <button 
                       key={index} 
                       type="button"
-                      value={option.text}
+                      value={option.id}
                       className="btn btn-custom w-100"
                       onClick={(e)=> handleOptionClick(e)}
                     >

@@ -18,7 +18,8 @@ const testProject = {
   questions:[
     {
       id: 1,
-      content: '晚餐要吃什麽',
+      title: '晚餐',
+      content: '晚餐要吃什麽',    
       options: [
         {id: 11, text:'麥當勞', isCorrect: true},
         {id: 12, text:'便利商店', isCorrect: false},
@@ -28,6 +29,7 @@ const testProject = {
     }, 
     {
       id: 2,
+      title: '程式語言',
       content: '最棒的程式語言',
       options: [
         {id: 21, text:'JavaScript', isCorrect: false},
@@ -38,6 +40,7 @@ const testProject = {
     },
     {
       id: 3,
+      title: '詩人',
       content: '最偉大的詩人',
       options: [
         {id: 31, text:'李白', isCorrect: false},
@@ -62,6 +65,15 @@ app.get('/api/project-data', async (req, res)=>{
     const projectId = req.query.id;
     const projectData = await getProjectData(projectId);
     res.status(200).json({data: projectData}) 
+  }catch(error){
+    res.status(400).json({error:'Failed to load data'})
+  }
+})
+
+app.post('/api/viewerAnswer', async (req, res)=>{
+  try{
+
+    res.status(200).json({text: 'Ok'}) 
   }catch(error){
     res.status(400).json({error:'Failed to load data'})
   }
