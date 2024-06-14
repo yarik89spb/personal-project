@@ -4,6 +4,7 @@ import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import AlwaysScrollToBottom from './AlwaysScrollToBottom';
 import './GuestView.css'
+import { Option, Question, Answer } from '../utils/interfaces.ts';
 
 function GuestView() {
   let userComments = [
@@ -36,21 +37,18 @@ function GuestView() {
     sendMessage(socket, 'viewerMessage', userMessageInput);
   }
 
-  interface Option{
-    // 一個選擇
-    _id: string,
-    id: number;
-    text: string;
-    isCorrect: boolean;
+  function storeUserMessageInput(e: ChangeEvent<HTMLInputElement>){
+    setUserMessageInput(e.target.value);
   }
-  
-  interface Question{
-    // 題目的問題
-    id: number;
-    title: string;
-    content: string;
-    options: Option[];
+
+  function sendUserAnswerToServer(answer:Option){
+    sendUserAnswer(socket, 'userAnswer', {
+      id: currentScreen.id, 
+      title: currentScreen.title,
+      userAnswer: answer});
   }
+
+  /* Commands from host */
 
   useCommandListener(socket, 'changeScreen', (passedData: object) => {
     const questionData = passedData as Question;
@@ -64,14 +62,7 @@ function GuestView() {
   useCommandListener(socket, 'startBroadcasting', () => {
     setIsHidden(false);
   });
-
-  function storeUserMessageInput(e: ChangeEvent<HTMLInputElement>){
-    setUserMessageInput(e.target.value);
-  }
-
-  function sendUserAnswerToServer(answer:Option){
-    sendUserAnswer(socket, 'userAnswer', answer);
-  }
+  
 
   return (
       <div className='container' id='chat-container'>

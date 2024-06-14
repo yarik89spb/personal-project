@@ -1,7 +1,12 @@
 import express from 'express';
 import { createServer } from "http";
 import { Server } from 'socket.io';
-import { testQuery, insertTestData, getProjectData, insertTestResponse } from './models/queries.js'
+import { 
+  testQuery, 
+  insertTestData, 
+  getProjectData, 
+  insertTestResponse, 
+  insertAnswer } from './models/queries.js'
 import connectToDB from './models/db.js'
 
 const app = express();
@@ -72,7 +77,6 @@ app.get('/api/project-data', async (req, res)=>{
 
 app.post('/api/viewerAnswer', async (req, res)=>{
   try{
-
     res.status(200).json({text: 'Ok'}) 
   }catch(error){
     res.status(400).json({error:'Failed to load data'})
@@ -101,8 +105,11 @@ io.on("connection", (socket) => {
     io.emit('stopBroadcasting', passedData)
   })
 
-  socket.on('userAnswer', (userAnswer)=>{
-    console.log(userAnswer)
+  // Create temporary id for a project:
+  const testProjectId = 'a84a11fs68bbs2'
+
+  socket.on('userAnswer', async (answerData)=>{
+    await insertAnswer(testProjectId, answerData)
   })
   
   socket.on('disconnect', () => {

@@ -17,10 +17,13 @@ function HostView(){
     projectName: 'Missing',
     projectId: null,
     questions:[]});
-  const [commentsArray, setComments] =  useState(userComments);
   const [questionIndex, setQuestionIndex] =  useState(0);
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
+  const [commentsArray, setComments] =  useState(userComments);
+  const [answersArray, setAnswers] =  useState([]);
   const socket = useSocket('http://localhost:3000/');
+
+  /* Project data rendering and broadcasting */
 
   useEffect(() => {
     async function fetchData(){
@@ -36,31 +39,6 @@ function HostView(){
     }
     fetchData();
   }, [])
-
-  useMessageListener(socket, 'viewerMessage', (message) => {
-    addMessageToChat({ author: 'user', content: message });
-  });
-
-  useAnswerListener(socket, 'userAnswer', (userAnswer) => {
-    storeAnswer(userAnswer);
-  });
-
-  function addMessageToChat(comment: Comment){
-    setComments((prevComments) => [...prevComments, comment]);
-  }
-
-  function changeScreen(){
-    sendCommand(socket, 'changeScreen', projectData.questions[questionIndex])
-  }
-
-  function handleBroadcastingState(isBroadcasting = false){
-    if(isBroadcasting){
-      sendCommand(socket, 'startBroadcasting', {data:null})
-      changeScreen()
-    }else{
-      sendCommand(socket, 'stopBroadcasting', {data:null})
-    }
-  }
 
   function handleQuestionIndexChange(isForward = true){
     const maxIndex = projectData.questions.length - 1;
@@ -81,22 +59,49 @@ function HostView(){
     }
   }
 
-  function storeAnswers(userAnswer){
-    const questionId = projectData[questionIndex].id;
-    sendAnswerBatch({questionId, userAnswers });
+  function changeScreen(){
+    sendCommand(socket, 'changeScreen', projectData.questions[questionIndex])
   }
 
-  // Change task (question) screen for viewers
   useEffect(() => { 
     changeScreen();
   }, [questionIndex]);
 
-  // Store user answers' batch: every 10 answers
-  useEffect(() => {
-    if(userAnswers.length % 10 === 0){
-      storeAnswers();
+  function handleBroadcastingState(isBroadcasting = false){
+    if(isBroadcasting){
+      sendCommand(socket, 'startBroadcasting', {data:null})
+      changeScreen()
+    }else{
+      sendCommand(socket, 'stopBroadcasting', {data:null})
     }
-  }, [userAnswers]);
+  }
+
+
+  /* Receiving viewers' comments and reactions */
+
+  useMessageListener(socket, 'viewerMessage', (message) => {
+    addMessageToChat({ author: 'user', content: message });
+  });
+
+  function addMessageToChat(comment: Comment){
+    setComments((prevComments) => [...prevComments, comment]);
+  }
+
+  // useAnswerListener(socket, 'userAnswer', (userAnswer:Option) => {
+  //   setAnswers([...answersArray, userAnswer]);
+  // });
+
+  // function storeAnswers(userAnswer){
+  //   const questionId = projectData[questionIndex].id;
+  //   sendAnswerBatch({questionId, userAnswers });
+  // }
+
+  // // Store user answers' batch: every 10 answers
+  // useEffect(() => {
+  //   if(userAnswers.length % 10 === 0){
+  //     storeAnswers();
+  //   }
+  // }, [userAnswers]);
   
   return (
     <div className='container'> 

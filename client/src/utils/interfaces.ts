@@ -6,6 +6,12 @@ export interface Option{
   isCorrect: boolean;
 }
 
+export interface Answer{
+  id: number;
+  title: string;
+  userAnswer: Option;
+}
+
 export interface Question{
   // 題目的問題
   id: number;
@@ -13,6 +19,7 @@ export interface Question{
   content: string;
   options: Option[];
 }
+
 
 export interface Comment {
   author: string;
