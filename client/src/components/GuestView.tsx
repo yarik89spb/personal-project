@@ -4,16 +4,16 @@ import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import AlwaysScrollToBottom from './AlwaysScrollToBottom';
 import './GuestView.css'
-import { Option, Question, Answer } from '../utils/interfaces.ts';
+import { Option, Question, Comment, Answer } from '../utils/interfaces.ts';
 
 function GuestView() {
   let userComments = [
-    {author: 'John', content:'Hi'},
-    {author:'Amy', content:'Wow'}, 
-    {author:'Bot', content:'Greeting'}
+    {userName: 'John', text:'Hi', questionId: 11},
+    {userName:'Amy', text:'Wow', questionId: 11}, 
+    {userName:'Bot', text:'Greeting', questionId: 11}
   ];
 
-  const [commentsArray, setComments] =  useState(userComments);
+  const [commentsArray, setComments] =  useState<Comment[]>(userComments);
   const [userMessageInput, setUserMessageInput] = useState('');
   const [currentScreen, setCurrentScreen] = useState<Question>({
     id: 0,
@@ -29,16 +29,18 @@ function GuestView() {
   function addMessageToChat(){
     let commentsArrayUpdated = [...commentsArray]
     commentsArrayUpdated.push({
-      author: 'user', 
-      content:userMessageInput
+      userName: 'user', 
+      text: userMessageInput,
+      questionId: currentScreen.id
     });
-    const commentObj = {
+    const commentObj: Comment = {
       userName: 'user',
       questionId: currentScreen.id,
       text: userMessageInput
     }; 
     setComments(commentsArrayUpdated);
     setUserMessageInput('');
+    console.log(commentObj)
     sendMessage(socket, 'viewerMessage', commentObj);
   }
 

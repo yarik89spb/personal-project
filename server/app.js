@@ -13,9 +13,10 @@ const io = new Server(server, {
   //...
 });
 
+const testProjectId = 'a84a11fs68bbs2'
 const testProject = {
   projectName: 'Test project',
-  projectId: 't1234567',
+  projectId: testProjectId ,
   questions:[
     {
       id: 1,
@@ -82,9 +83,8 @@ app.post('/api/viewerAnswer', async (req, res)=>{
 io.on("connection", (socket) => {
   console.log('User connected')
   socket.on('viewerMessage', async (message)=>{
-    console.log(message);
     io.emit('viewerMessage', message)
-    await storeComment(message);
+    await storeComment(testProjectId, message);
   })
 
   socket.on('changeScreen', (passedData)=>{
@@ -103,7 +103,6 @@ io.on("connection", (socket) => {
   })
 
   // Create temporary id for a project:
-  const testProjectId = 'a84a11fs68bbs2'
 
   socket.on('userAnswer', async (answerData)=>{
     io.emit('userAnswer', answerData);

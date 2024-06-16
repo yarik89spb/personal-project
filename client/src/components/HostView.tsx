@@ -9,9 +9,9 @@ import './HostView.css';
 
 function HostView(){
   let userComments = [
-    {author: 'John', content:'Hi'},
-    {author:'Amy', content:'Wow'}, 
-    {author:'Bot', content:'Greeting'}
+    {userName: 'John', text:'Hi', questionId: 11},
+    {userName:'Amy', text:'Wow', questionId: 11}, 
+    {userName:'Bot', text:'Greeting', questionId: 11}
   ];
 
   const [projectData, setProjectData] = useState({
@@ -21,7 +21,7 @@ function HostView(){
   const [questionIndex, setQuestionIndex] =  useState(0);
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
   const [commentsArray, setComments] =  useState(userComments);
-  const [answersArray, setAnswers] =  useState([]);
+  const [answersArray, setAnswers] =  useState<Option[]>([]);
   const socket = useSocket('http://localhost:3000/');
 
   /* Project data rendering and broadcasting */
@@ -81,8 +81,11 @@ function HostView(){
 
   /* Receiving viewers' comments and reactions */
 
-  useMessageListener(socket, 'viewerMessage', (message) => {
-    addMessageToChat({ author: 'user', content: message });
+  useMessageListener(socket, 'viewerMessage', (message: Comment) => {
+    addMessageToChat({
+      userName: message.userName, 
+      text: message.text, 
+      questionId: message.questionId });
   });
 
   function addMessageToChat(comment: Comment){
@@ -90,7 +93,7 @@ function HostView(){
   }
 
   useAnswerListener(socket, 'userAnswer', (userAnswer:Option) => {
-    setAnswers([...answersArray, userAnswer]);
+    setAnswers((prevAnswers) => [...prevAnswers, userAnswer]);
     //console.log(answersArray);
     renderAnswers();
   });

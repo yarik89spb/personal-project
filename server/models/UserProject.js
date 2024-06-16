@@ -10,8 +10,9 @@ const OptionSchema = new Schema({
 
 const QuestionSchema = new Schema({
   id: Number,
+  title: String,
   content: String,
-  options: [OptionSchema], 
+  answers: [OptionSchema], 
 });
 
 const UserProjectSchema = new Schema({

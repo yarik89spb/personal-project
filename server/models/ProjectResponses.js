@@ -3,8 +3,9 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const CommentSchema = new Schema({
-  user: String,
-  content: String
+  userName: String,
+  questionId: Number,
+  text: String
 });
 
 const ReactionSchema = new Schema({

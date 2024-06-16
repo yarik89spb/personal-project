@@ -1,9 +1,5 @@
 import React from 'react';
-
-interface Comment {
-  author: string;
-  content: string;
-}
+import { Comment } from '../utils/interfaces';
 
 interface ChatCommentsProps {
   comments: Comment[];
@@ -15,10 +11,10 @@ const ChatComments: React.FC<ChatCommentsProps> = ({ comments }) => {
       {comments.map((comment, index) => (
         <li key={index} className='list-group-item d-flex justify-content-between align-items-start'>
           <div className="text-wrap" style={{width: '30rem'}}>
-            {comment.author}
+            {comment.userName}
           </div>
           <div className="text-wrap" style={{width: '30rem'}}>
-            {comment.content}
+            {comment.text}
           </div>
         </li>
       ))}

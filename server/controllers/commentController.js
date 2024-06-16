@@ -9,11 +9,10 @@ export async function storeComment(projectId, comment){
   }else{
     comments[projectId].push(comment);
   }
-  console.log(commentCount % 10)
+  // Insert every 20 comments 
   if(commentCount % 10 === 0){
-    console.log('Fire!')
-    comments[projectId] = [];
+    await insertComments(projectId, comment.questionId, comments[projectId])
     commentCount = 0;
-    await insertComments(projectId, comments[projectId])
+    comments[projectId] = [];
   }
 }

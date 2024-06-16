@@ -1,6 +1,6 @@
 export interface Comment{
   userName: string;
-  questionId: string;
+  questionId: number;
   text: string;
 }
 
