@@ -123,39 +123,19 @@ export async function insertAnswer(projectId, answerData){
 }
 
 
-// export async function insertAnswer(projectId, answerData){
-//   try {
-//     const questionId = answerData.id
-//     const result = await ProjectResponses.findOneAndUpdate(
-//       { 
-//         projectId: projectId,
-//         'questions.id': questionId
-//       },
-//       {
-//         $push: { 'questions.$.answers': answerData.userAnswer }
-//       },
-//       {
-//         new: true // Return the updated document
-//       }
-//     );
+export async function getUserActivity(projectId) {
+  try {
+    const reactionData = await ProjectResponses.findOne({ projectId: projectId });
+    const userActivity = reactionData.questions;
 
-    
+    const questionsData = await UserProject.findOne({ projectId: projectId });
+    const projectName = questionsData.projectName;
+    const questionsContent = questionsData.questions;
 
-//     if (!result) {
-//       // Project or question not found, create a new project
-//       const newProject = new ProjectResponses({
-//         projectId: projectId,
-//         questions: [{
-//           id: questionId,
-//           answers: [answerData.userAnswer]
-//         }]
-//       });
-//       await newProject.save();
-//       console.log('Project and answer inserted successfully');
-//     } else {
-//       console.log('Answer inserted successfully');
-//     }
-//   } catch (error) {
-//     console.error(`Insert error occurred: ${error}`);
-//   }
-// }
+    return {projectName, questionsContent, userActivity};
+
+  } catch (error) {
+    console.error('Fetch error occurred:', error);
+    throw error;
+  }
+}

@@ -4,6 +4,7 @@ import { Server } from 'socket.io';
 import connectToDB from './models/db.js';
 import { testQuery, insertTestData, getProjectData, insertTestResponse, insertAnswer } from './models/queries.js';
 import { storeComment } from './controllers/commentController.js';
+import { getProjectStatistics } from './controllers/dashboard.js';
 
 const app = express();
 connectToDB()
@@ -12,6 +13,8 @@ const server = createServer(app);
 const io = new Server(server, {
   //...
 });
+
+await getProjectStatistics('a84a11fs68bbs2');
 
 const testProjectId = 'a84a11fs68bbs2'
 const testProject = {
@@ -72,7 +75,8 @@ app.get('/api/project-data', async (req, res)=>{
   }
 })
 
-app.post('/api/viewerAnswer', async (req, res)=>{
+
+app.get('/api/project-stats', async (req, res)=>{
   try{
     res.status(200).json({text: 'Ok'}) 
   }catch(error){
