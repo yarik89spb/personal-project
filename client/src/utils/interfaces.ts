@@ -1,3 +1,9 @@
+export interface Comment{
+  userName: string;
+  questionId: string;
+  text: string;
+}
+
 export interface Option{
   // 一個選擇
   _id: string,
@@ -20,11 +26,6 @@ export interface Question{
   options: Option[];
 }
 
-
-export interface Comment {
-  author: string;
-  content: string;
-}
 
 export interface Task{
   // 一個題目（畫面）

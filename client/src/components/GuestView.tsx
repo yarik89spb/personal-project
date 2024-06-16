@@ -32,9 +32,14 @@ function GuestView() {
       author: 'user', 
       content:userMessageInput
     });
+    const commentObj = {
+      userName: 'user',
+      questionId: currentScreen.id,
+      text: userMessageInput
+    }; 
     setComments(commentsArrayUpdated);
     setUserMessageInput('');
-    sendMessage(socket, 'viewerMessage', userMessageInput);
+    sendMessage(socket, 'viewerMessage', commentObj);
   }
 
   function storeUserMessageInput(e: ChangeEvent<HTMLInputElement>){

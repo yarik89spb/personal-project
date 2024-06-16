@@ -1,7 +1,7 @@
 import io, { Socket } from 'socket.io-client';
 import { useEffect, useRef } from 'react';
 
-import { Option,  Answer } from '../utils/interfaces.ts';
+import { Comment, Option,  Answer } from '../utils/interfaces.ts';
 
 export const useSocket = (url: string) => {
   const socket = useRef<Socket>();
@@ -42,7 +42,7 @@ export const sendCommand = (
 export const useMessageListener = (
   socket: React.MutableRefObject<Socket | undefined>,
   eventName: string,
-  callback: (message: string) => void
+  callback: (message: Comment) => void
 ) => {
   useEffect(() => {
     if (socket.current) {
@@ -80,7 +80,7 @@ export const useAnswerListener = (
 export const sendMessage = (
   socket: React.MutableRefObject<Socket | undefined>, 
   eventName: string,
-  message: string) => {
+  message: Comment) => {
   if (socket.current) {
     socket.current.emit(eventName, message);
   }

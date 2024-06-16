@@ -1,13 +1,9 @@
 import express from 'express';
-import { createServer } from "http";
+import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { 
-  testQuery, 
-  insertTestData, 
-  getProjectData, 
-  insertTestResponse, 
-  insertAnswer } from './models/queries.js'
-import connectToDB from './models/db.js'
+import connectToDB from './models/db.js';
+import { testQuery, insertTestData, getProjectData, insertTestResponse, insertAnswer } from './models/queries.js';
+import { storeComment } from './controllers/commentController.js';
 
 const app = express();
 connectToDB()
@@ -85,9 +81,10 @@ app.post('/api/viewerAnswer', async (req, res)=>{
 
 io.on("connection", (socket) => {
   console.log('User connected')
-  socket.on('viewerMessage', (message)=>{
-    console.log(message)
+  socket.on('viewerMessage', async (message)=>{
+    console.log(message);
     io.emit('viewerMessage', message)
+    await storeComment(message);
   })
 
   socket.on('changeScreen', (passedData)=>{

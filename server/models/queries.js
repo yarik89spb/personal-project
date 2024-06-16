@@ -41,6 +41,31 @@ export async function getProjectData(projectId) {
   }
 }
 
+export async function insertComments(projectId, commentsArray){
+  try{
+    const result = await ProjectResponses.findOneAndUpdate(
+      { 
+        projectId: projectId,
+        'questions.id': questionId
+      },
+      {
+        $push: { 'questions.$.comments': { $each: commentsArray } }
+      },
+      {
+        new: true // Return the updated document
+      }
+    );
+
+    if (result) {
+      console.log('Comments inserted successfully');
+    } else {
+      console.error('Project or question not found');
+    }
+  } catch (error) {
+    console.error(`Insert error occurred: ${error}`);
+  }
+}
+
 export async function insertAnswer(projectId, answerData){
   try {
     const questionId = answerData.id
