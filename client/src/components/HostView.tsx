@@ -21,7 +21,7 @@ function HostView(){
   const [questionIndex, setQuestionIndex] =  useState(0);
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
   const [commentsArray, setComments] =  useState(userComments);
-  const [answersArray, setAnswers] =  useState<Option[]>([]);
+  const [answersArray, setAnswers] =  useState([]);
   const socket = useSocket('http://localhost:3000/');
 
   /* Project data rendering and broadcasting */
@@ -66,6 +66,7 @@ function HostView(){
 
   useEffect(() => { 
     changeScreen();
+    setAnswers([]);
   }, [questionIndex]);
 
   function handleBroadcastingState(isBroadcasting = false){
@@ -90,8 +91,22 @@ function HostView(){
 
   useAnswerListener(socket, 'userAnswer', (userAnswer:Option) => {
     setAnswers([...answersArray, userAnswer]);
+    //console.log(answersArray);
+    renderAnswers();
   });
 
+  function renderAnswers(){
+    return(
+      <div>
+        <div>Answers submitted</div>
+        <div>{answersArray.length}</div>
+      </div>
+    )
+  }
+
+  // useEffect(() =>{
+  //   renderAnswers();
+  // }, [answersArray])
 
   
   return (
@@ -116,6 +131,9 @@ function HostView(){
               }}
             />
           )}
+        </div>
+        <div>
+          {renderAnswers()}
         </div>
       </div>
       <div className="d-flex justify-content-center">

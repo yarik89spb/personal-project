@@ -1,13 +1,7 @@
 import io, { Socket } from 'socket.io-client';
 import { useEffect, useRef } from 'react';
 
-interface Option{
-  // 一個選擇
-  _id: string,
-  id: number;
-  text: string;
-  isCorrect: boolean;
-}
+import { Option,  Answer } from '../utils/interfaces.ts';
 
 export const useSocket = (url: string) => {
   const socket = useRef<Socket>();
@@ -33,23 +27,7 @@ export const useSocket = (url: string) => {
   return socket;
 };
 
-export const sendMessage = (
-  socket: React.MutableRefObject<Socket | undefined>, 
-  eventName: string,
-  message: string) => {
-  if (socket.current) {
-    socket.current.emit(eventName, message);
-  }
-};
-
-export const sendUserAnswer = (
-  socket: React.MutableRefObject<Socket | undefined>, 
-  eventName: string,
-  userAnswer: Option) => {
-  if (socket.current) {
-    socket.current.emit(eventName, userAnswer);
-  }
-};
+/* Host functions */
 
 export const sendCommand = (
   socket: React.MutableRefObject<Socket | undefined>,
@@ -77,6 +55,44 @@ export const useMessageListener = (
       }
     };
   }, [socket, eventName, callback]);
+};
+
+export const useAnswerListener = (
+  socket: React.MutableRefObject<Socket | undefined>,
+  eventName: string,
+  callback: (answer: Option) => void
+) => {
+  useEffect(() => {
+    if (socket.current) {
+      socket.current.on(eventName, callback);
+    }
+
+    return () => {
+      if (socket.current) {
+        socket.current.off(eventName, callback);
+      }
+    };
+  }, [socket, eventName, callback]);
+};
+
+/* Guest functions */
+
+export const sendMessage = (
+  socket: React.MutableRefObject<Socket | undefined>, 
+  eventName: string,
+  message: string) => {
+  if (socket.current) {
+    socket.current.emit(eventName, message);
+  }
+};
+
+export const sendUserAnswer = (
+  socket: React.MutableRefObject<Socket | undefined>, 
+  eventName: string,
+  userAnswer: Answer) => {
+  if (socket.current) {
+    socket.current.emit(eventName, userAnswer);
+  }
 };
 
 export const useCommandListener = (

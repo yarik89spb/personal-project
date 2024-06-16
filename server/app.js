@@ -109,6 +109,7 @@ io.on("connection", (socket) => {
   const testProjectId = 'a84a11fs68bbs2'
 
   socket.on('userAnswer', async (answerData)=>{
+    io.emit('userAnswer', answerData);
     await insertAnswer(testProjectId, answerData)
   })
   
