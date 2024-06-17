@@ -12,9 +12,9 @@ connectToDB()
 const server = createServer(app);
 const io = new Server(server, {
   //...
-});
+}); 
 
-await getProjectStatistics('a84a11fs68bbs2');
+//await getProjectStatistics('a84a11fs68bbs2');
 
 const testProjectId = 'a84a11fs68bbs2'
 const testProject = {
