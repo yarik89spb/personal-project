@@ -1,30 +1,7 @@
-import { MouseEvent} from 'react';
+import { MouseEvent } from 'react';
 
+import { Option, Question } from '../utils/interfaces.ts';
 import './EventScreen.css'; 
-
-
-interface Option{
-  // 一個選擇
-  _id: string,
-  id: number;
-  text: string;
-  isCorrect: boolean;
-}
-
-interface Question{
-  // 題目的問題
-  id: number;
-  title: string;
-  content: string;
-  options: Option[];
-}
-
-// interface Task{
-//   // 一個題目（畫面）
-//   project: Question[];
-//   type?: String;
-//   isInteractive: Boolean;
-// }
 
 interface EventScreenProps {
   question : Question;
@@ -49,6 +26,8 @@ function EventScreen( { question, onOptionClick } : EventScreenProps){
   }
 
   function renderQuestion(question : Question){
+    console.log('Hi')
+    console.log(question)
     return (
       <>
         <div className="mb-4">
@@ -65,7 +44,7 @@ function EventScreen( { question, onOptionClick } : EventScreenProps){
                       className="btn btn-custom w-100"
                       onClick={(e)=> handleOptionClick(e)}
                     >
-                      {option.text}
+                      {option.content}
                     </button>
                   </div>
                 ))}
