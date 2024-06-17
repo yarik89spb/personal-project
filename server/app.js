@@ -3,7 +3,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import connectToDB from './models/db.js';
 import { testQuery, insertTestData, getProjectData, insertTestResponse, insertAnswer } from './models/queries.js';
-import { storeComment } from './controllers/commentController.js';
+import { storeComment, storeCurrentBatch } from './controllers/commentController.js';
 import { getProjectStatistics } from './controllers/dashboard.js';
 
 const app = express();
@@ -88,8 +88,9 @@ io.on("connection", (socket) => {
     await storeComment(testProjectId, message);
   })
 
-  socket.on('changeScreen', (passedData)=>{
+  socket.on('changeScreen', async (passedData)=>{
     console.log(passedData)
+    await storeCurrentBatch(testProjectId);
     io.emit('changeScreen', passedData)
   })
 
