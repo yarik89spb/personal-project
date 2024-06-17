@@ -4,29 +4,34 @@ export async function getProjectStatistics(projectId){
 
   const {projectName, questionsContent, userActivity} = await getUserActivity(projectId);
 
-
-  const answerCountsArray = []
+  let answerCountsArray = []
   for(let question of questionsContent){
-    //question.id 
-    //
-    // let questionAnswers = userActivity.find((q) => q.id == question.id).answers;
-    // let questionComments= userActivity.find((q) => q.id == question.id).comments;
-    // let answerCounts = questionAnswers.map((q) => q.text).reduce((acc, val) => {
-    //   console.log(val)
-    //   if(acc[val]){
-    //     acc[val] += 1;
-    //   } else{
-    //     acc[val] = 1;
-    //   }    
-    //   return acc;
-    // }, {})
-    // answerCountsArray.push({title:question.title, answers: answerCounts});
-    // let asnwerCounts = questionAnswers.reduce( , 0)
-    // console.log(questionActivity.answers.find((questionObject)=>questionObject.id == question.id))
-    //console.log(questionActivity);
+    let questionAnswersObj = {
+      title:question.title,
+      totalAnswers:0, 
+      totalCorrectAnswers: 0,
+      comments:[],
+      answers: [],
+      reactions: []
+    }
+    let questionAnswers = userActivity.find((q) => q.id == question.id).answers;
+    let answerCounts = questionAnswers.reduce((acc, val) => {
+      const answerText = val.text;
+      questionAnswersObj.totalAnswers += 1;
+      questionAnswersObj.totalCorrectAnswers += val.isCorrect ? 1 : 0;
+      acc[answerText] = (acc[answerText] || 0) + 1;
+      return acc;
+    }, {})
+    questionAnswersObj.answers =  Object.entries(answerCounts);
+    questionAnswersObj.comments = userActivity
+    .find((q) => q.id == question.id).comments
+    .map((c) => c.text);
+    questionAnswersObj.commentsAmount = questionAnswersObj.comments.length;
 
-    // questionAnswerCounts[question.title] = 
+    answerCountsArray.push(questionAnswersObj);
   }
-  // const formattedOutput = JSON.stringify(answerCountsArray, null, 2);
-  console.log(answerCountsArray)
+  console.log(answerCountsArray);
+  return {projectName:projectName, data: answerCountsArray}
 }
+
+getProjectStatistics('b84a11fs68ccs3');

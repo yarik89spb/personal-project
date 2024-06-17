@@ -14,7 +14,6 @@ const io = new Server(server, {
   //...
 }); 
 
-//await getProjectStatistics('a84a11fs68bbs2');
 
 const testProjectId = 'b84a11fs68ccs3'
 const testProject = {
@@ -75,11 +74,14 @@ app.get('/api/project-data', async (req, res)=>{
 
 app.get('/api/project-stats', async (req, res)=>{
   try{
-    res.status(200).json({text: 'Ok'}) 
+    const testId = 'b84a11fs68ccs3'
+    const data = await getProjectStatistics(testId);
+    res.status(200).json({data: data}) 
   }catch(error){
     res.status(400).json({error:'Failed to load data'})
   }
 })
+
 
 io.on("connection", (socket) => {
   console.log('User connected')
