@@ -8,13 +8,13 @@ export const barChartOptions: ChartOptions = {
     },
     datalabels: {
       display: true,
-      color: 'white', // Font color for counts
+      color: 'white', 
       font: {
-        size: 14, // Font size
-        weight: 'bold', // Font weight
+        size: 14, 
+        weight: 'bold', 
       },
-      formatter: (value) => value.toString(), // Display value on top of each bar
-      backgroundColor: 'rgba(48, 101, 112, 0.5)', // Background color for labels (options)
+      formatter: (value) => value.toString(),
+      backgroundColor: 'rgba(48, 101, 112, 0.5)', 
       borderRadius: 4, 
       padding: {
         top: 4,
@@ -39,10 +39,10 @@ export const barChartOptions: ChartOptions = {
         display: false,
       },
       ticks: {
-        color: 'white', // Font color for labels (options)
+        color: 'white', 
         font: {
-          size: 12, // Font size
-          weight: 'bold', // Font weight
+          size: 16, 
+          weight: 'bold',
         },
       },
     },

@@ -70,6 +70,12 @@ export default function StatsView(){
                 <div className="card-body">
                   {renderBarChart(q.answers)}
                 </div>
+                <div className="card-footer">
+                  <div className="row">
+                    <div className="col-md-6 mb-3">Total answers: {q.totalAnswers}</div>
+                    <div className="col-md-6 mb-3">Correct answers: {q.totalCorrectAnswers}</div>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
