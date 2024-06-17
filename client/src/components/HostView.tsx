@@ -29,10 +29,11 @@ function HostView(){
   useEffect(() => {
     async function fetchData(){
       try{
-        const response = await fetch('http://localhost:3000/api/project-data?id=666abba8e6750aa41b2df646')
+        const response = await fetch('http://localhost:3000/api/project-data?id=666fa010515d2dd6fabc08d5')
         const newProjectData = await response.json();
         setIsLoadingQuestions(false);
         setProjectData(newProjectData.data);
+        console.log(newProjectData.data)
       } catch(error){
         console.error(`Failed to get project data. ${error}`)
         setIsLoadingQuestions(false);

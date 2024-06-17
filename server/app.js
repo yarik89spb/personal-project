@@ -3,7 +3,8 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import connectToDB from './models/db.js';
 import { testQuery, insertTestData, getProjectData, insertTestResponse, insertAnswer } from './models/queries.js';
-import { storeComment } from './controllers/commentController.js';
+import { storeComment, storeCurrentBatch } from './controllers/commentController.js';
+import { getProjectStatistics } from './controllers/dashboard.js';
 
 const app = express();
 connectToDB()
@@ -11,9 +12,10 @@ connectToDB()
 const server = createServer(app);
 const io = new Server(server, {
   //...
-});
+}); 
 
-const testProjectId = 'a84a11fs68bbs2'
+
+const testProjectId = 'b84a11fs68ccs3'
 const testProject = {
   projectName: 'Test project',
   projectId: testProjectId ,
@@ -56,11 +58,8 @@ const testProject = {
 
 const testViewerResponse = { text: 'bla bla bla'}
 
-//await insertTestData(testProject);
+// await insertTestData(testProject);
 // await insertTestResponse(testViewerResponse);
-
-// await testQuery();
-// await getProjectData('666aacea11816fd400f2f734');
 
 app.get('/api/project-data', async (req, res)=>{
   try{
@@ -72,13 +71,17 @@ app.get('/api/project-data', async (req, res)=>{
   }
 })
 
-app.post('/api/viewerAnswer', async (req, res)=>{
+
+app.get('/api/project-stats', async (req, res)=>{
   try{
-    res.status(200).json({text: 'Ok'}) 
+    const testId = 'b84a11fs68ccs3'
+    const data = await getProjectStatistics(testId);
+    res.status(200).json({data: data}) 
   }catch(error){
     res.status(400).json({error:'Failed to load data'})
   }
 })
+
 
 io.on("connection", (socket) => {
   console.log('User connected')
@@ -87,8 +90,9 @@ io.on("connection", (socket) => {
     await storeComment(testProjectId, message);
   })
 
-  socket.on('changeScreen', (passedData)=>{
+  socket.on('changeScreen', async (passedData)=>{
     console.log(passedData)
+    await storeCurrentBatch(testProjectId);
     io.emit('changeScreen', passedData)
   })
 
