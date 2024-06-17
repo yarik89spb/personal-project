@@ -27,6 +27,18 @@ export interface Question{
 }
 
 
+interface QuestionStats{
+  title: string;
+  answers: [string, string][];
+  comments: string[];
+  reactions: string[];
+}
+
+export interface ProjectStats{
+  projectName: string;
+  data: QuestionStats[];
+}
+
 export interface Task{
   // 一個題目（畫面）
   project: Question[];
