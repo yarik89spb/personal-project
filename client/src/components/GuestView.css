@@ -15,3 +15,25 @@
   --bs-font-family-base: 'Roboto', sans-serif; 
   --bs-font-weight-base: 700;
 }
+
+.reaction-buttons {
+  display: flex;
+  gap: 10px; /* Adjust the space between buttons */
+}
+
+.reaction-button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 5px;
+  outline: none;
+  transition: background-color 0.3s ease;
+}
+
+.reaction-button:hover {
+  background-color: #f0f0f0; /* Change background color on hover */
+}
+
+.reaction-button.selected {
+  border-radius: 50%; /* Make selected button round */
+}

@@ -4,6 +4,8 @@ import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import AlwaysScrollToBottom from './AlwaysScrollToBottom';
 import './GuestView.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import { Option, Question, Comment, Answer } from '../utils/interfaces.ts';
 
 function GuestView() {
@@ -22,6 +24,7 @@ function GuestView() {
     options: []
   });
   const [isHidden, setIsHidden] = useState(true);
+  const [selectedReaction, setSelectedReaction] = useState(null);
 
 
   const socket = useSocket('http://localhost:3000/'); 
@@ -55,6 +58,10 @@ function GuestView() {
       userAnswer: answer});
   }
 
+  const handleReactionClick = (reaction) => {
+    setSelectedReaction(reaction);
+  };
+
   /* Commands from host */
 
   useCommandListener(socket, 'changeScreen', (passedData: object) => {
@@ -83,7 +90,22 @@ function GuestView() {
               <ChatComments comments={commentsArray}/>
             </AlwaysScrollToBottom>
           </div>
+
+          
           <div className='card-footer'>
+            <div className='reaction-buttons'>
+              <button className={`reaction-button ${selectedReaction === 'heart' ? 'selected' : ''}`} onClick={() => handleReactionClick('heart')}>
+                <FontAwesomeIcon icon={faHeart} />
+              </button>
+              <button className={`reaction-button ${selectedReaction === 'like' ? 'selected' : ''}`} onClick={() => handleReactionClick('like')}>
+                <FontAwesomeIcon icon={faThumbsUp} />
+              </button>
+              <button className={`reaction-button ${selectedReaction === 'dislike' ? 'selected' : ''}`} onClick={() => handleReactionClick('dislike')}>
+                <FontAwesomeIcon icon={faThumbsDown} />
+              </button>
+              {/* Add more reaction buttons as needed */}
+            </div>             
+
             <div id='messenger' className='input-group'>
               <input
                 type='text'
