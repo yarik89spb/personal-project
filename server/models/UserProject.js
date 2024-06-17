@@ -12,7 +12,7 @@ const QuestionSchema = new Schema({
   id: Number,
   title: String,
   content: String,
-  answers: [OptionSchema], 
+  options: [OptionSchema], 
 });
 
 const UserProjectSchema = new Schema({

@@ -16,7 +16,7 @@ const io = new Server(server, {
 
 //await getProjectStatistics('a84a11fs68bbs2');
 
-const testProjectId = 'a84a11fs68bbs2'
+const testProjectId = 'b84a11fs68ccs3'
 const testProject = {
   projectName: 'Test project',
   projectId: testProjectId ,
@@ -59,11 +59,8 @@ const testProject = {
 
 const testViewerResponse = { text: 'bla bla bla'}
 
-//await insertTestData(testProject);
+// await insertTestData(testProject);
 // await insertTestResponse(testViewerResponse);
-
-// await testQuery();
-// await getProjectData('666aacea11816fd400f2f734');
 
 app.get('/api/project-data', async (req, res)=>{
   try{

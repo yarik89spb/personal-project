@@ -26,8 +26,6 @@ function EventScreen( { question, onOptionClick } : EventScreenProps){
   }
 
   function renderQuestion(question : Question){
-    console.log('Hi')
-    console.log(question)
     return (
       <>
         <div className="mb-4">
@@ -44,7 +42,7 @@ function EventScreen( { question, onOptionClick } : EventScreenProps){
                       className="btn btn-custom w-100"
                       onClick={(e)=> handleOptionClick(e)}
                     >
-                      {option.content}
+                      {option.text}
                     </button>
                   </div>
                 ))}
