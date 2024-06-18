@@ -4,7 +4,7 @@ let commentCount = 0;
 let comments = {};
 let QUESTION_ID;
 export async function storeComment(projectId, comment){
-  console.log(comments.length)
+  console.log(comment)
   QUESTION_ID = comment.questionId;
   commentCount++;
   if(!comments[projectId]){

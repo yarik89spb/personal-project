@@ -17,48 +17,64 @@ const io = new Server(server, {
 }); 
 
 
-const testProjectId = 'b84a11fs68ccs3'
+const testProjectId = 'c75a22fs68cgs3'
 const testProject = {
-  projectName: 'Test project',
+  projectName: 'Porko demo',
   projectId: testProjectId ,
   questions:[
     {
       id: 1,
-      title: '晚餐',
-      content: '晚餐要吃什麽',    
+      title: '歡迎',
+      content: '歡迎光臨玩Porko。這次的主題是比較了解Batch 24的同學 ',    
       options: [
-        {id: 11, text:'麥當勞', isCorrect: true},
-        {id: 12, text:'便利商店', isCorrect: false},
-        {id: 13, text:'意麵', isCorrect: false},
-        {id: 14, text:'炒飯', isCorrect: false}
+        {id: 11, text:'OK', isCorrect: true},
       ]
     }, 
     {
       id: 2,
-      title: '程式語言',
-      content: '最棒的程式語言',
+      title: '嗜好',
+      content: '空閒喜歡做的事...',
       options: [
-        {id: 21, text:'JavaScript', isCorrect: false},
-        {id: 22, text:'C++', isCorrect: false},
-        {id: 23, text:'Python', isCorrect: true},
-        {id: 24, text:'中文', isCorrect: false}
+        {id: 21, text:'運動', isCorrect: false},
+        {id: 22, text:'玩電腦', isCorrect: false},
+        {id: 23, text:'寫Stylish API', isCorrect: true},
+        {id: 24, text:'復甦死掉的ec2', isCorrect: false},
       ]
     },
     {
       id: 3,
-      title: '詩人',
-      content: '最偉大的詩人',
+      title: '技術',
+      content: '在AppleWorks上課時最我最喜歡做...',
       options: [
-        {id: 31, text:'李白', isCorrect: false},
-        {id: 32, text:'毛主席', isCorrect: true},
-        {id: 33, text:'周杰倫', isCorrect: false},
-        {id: 34, text:'蘇軾', isCorrect: false}
+        {id: 31, text:'伺服器', isCorrect: false},
+        {id: 32, text:'資料庫', isCorrect: true},
+        {id: 33, text:'演算法', isCorrect: false},
+        {id: 34, text:'客戶端', isCorrect: false},
+        {id: 35, text:'Nginx', isCorrect: false},
+        {id: 36, text:'快取', isCorrect: false}
+      ]
+    },
+    {
+      id: 4,
+      title: '技術',
+      content: '在AppleWorks上課時最討厭...',
+      options: [
+        {id: 41, text:'準備簡報', isCorrect: true},
+        {id: 42, text:'很早起床', isCorrect: true},
+        {id: 43, text:'通勤', isCorrect: true},
+        {id: 44, text:'Yarik', isCorrect: false},
+      ]
+    },
+    {
+      id: 5,
+      title: '結束',
+      content: '謝謝參加Demo #1 。請多喝水，愛自己的父母，下課記得打卡',
+      options: [
+        {id: 51, text:'<3', isCorrect: true},
       ]
     }
   ]
 }
-
-const testViewerResponse = { text: 'bla bla bla'}
 
 // await insertTestData(testProject);
 // await insertTestResponse(testViewerResponse);
@@ -69,7 +85,6 @@ const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/api/project-data', async (req, res)=>{
-  console.log('Hi')
   try{
     const projectId = req.query.id;
     const projectData = await getProjectData(projectId);
@@ -82,8 +97,7 @@ app.get('/api/project-data', async (req, res)=>{
 
 app.get('/api/project-stats', async (req, res)=>{
   try{
-    const testId = 'b84a11fs68ccs3'
-    const data = await getProjectStatistics(testId);
+    const data = await getProjectStatistics(testProjectId);
     res.status(200).json({data: data}) 
   }catch(error){
     res.status(400).json({error:'Failed to load data'})
