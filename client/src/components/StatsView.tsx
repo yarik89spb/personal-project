@@ -1,4 +1,4 @@
-import { Fragment, useState, useRef, useEffect} from 'react';
+import { useState,  useEffect} from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -22,11 +22,11 @@ export default function StatsView(){
   });
 
   useEffect(() => {
-    async function fetchData(){
+    async function fetchData(): Promise<void>{
       try{
         const response = await fetch('http://localhost:3000/api/project-stats')
         const responseJSON = await response.json();
-        const responseData = responseJSON.data;
+        const responseData: ProjectStats = responseJSON.data;
         console.log(responseData);
         setProjectStats(responseData);
       } catch(error){
@@ -68,7 +68,7 @@ export default function StatsView(){
                   <h5>Question: {q.title}</h5>
                 </div>
                 <div className="card-body">
-                  {renderBarChart(q.answers)}
+                  {renderBarChart(q.answers.map((a) => [a[0], parseInt(a[1])]))}
                 </div>
                 <div className="card-footer">
                   <div className="row">

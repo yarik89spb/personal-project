@@ -29,6 +29,8 @@ export interface Question{
 
 interface QuestionStats{
   title: string;
+  totalAnswers: number;
+  totalCorrectAnswers: number;
   answers: [string, string][];
   comments: string[];
   reactions: string[];

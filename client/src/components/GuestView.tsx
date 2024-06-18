@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { useSocket, sendMessage, sendUserAnswer, useCommandListener } from '../utils/websocket';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
@@ -6,7 +6,7 @@ import AlwaysScrollToBottom from './AlwaysScrollToBottom';
 import './GuestView.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
-import { Option, Question, Comment, Answer } from '../utils/interfaces.ts';
+import { Option, Question, Comment } from '../utils/interfaces.ts';
 
 function GuestView() {
   let userComments = [
@@ -24,7 +24,7 @@ function GuestView() {
     options: []
   });
   const [isHidden, setIsHidden] = useState(true);
-  const [selectedReaction, setSelectedReaction] = useState(null);
+  const [selectedReaction, setSelectedReaction] = useState("");
 
 
   const socket = useSocket('http://localhost:3000/'); 
@@ -58,7 +58,7 @@ function GuestView() {
       userAnswer: answer});
   }
 
-  const handleReactionClick = (reaction) => {
+  const handleReactionClick = (reaction: string) => {
     setSelectedReaction(reaction);
   };
 

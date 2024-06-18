@@ -1,9 +1,9 @@
-import { Fragment, useState, useRef, useEffect} from 'react';
+import { useState, useEffect} from 'react';
 import { useSocket, useMessageListener, sendCommand, useAnswerListener } from '../utils/websocket';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import AlwaysScrollToBottom from './AlwaysScrollToBottom';
-import { Option, Question, Comment } from '../utils/interfaces.ts';
+import { Option,  Comment } from '../utils/interfaces.ts';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './HostView.css';
 

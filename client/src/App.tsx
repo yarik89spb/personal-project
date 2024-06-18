@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 import HostView from './components/HostView'
 import GuestView from './components/GuestView'

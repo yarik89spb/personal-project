@@ -1,6 +1,6 @@
 import { ChartOptions } from 'chart.js';
 
-export const barChartOptions: ChartOptions = {
+export const barChartOptions: ChartOptions<'bar'> = {
   responsive: true,
   plugins: {
     legend: {
