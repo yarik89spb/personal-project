@@ -138,6 +138,12 @@ io.on("connection", (socket) => {
     io.emit('userAnswer', answerData);
     await insertAnswer(testProjectId, answerData)
   })
+
+  socket.on('userEmoji', async (emoji)=>{
+    console.log(emoji)
+    io.emit('userEmoji', emoji);
+  })
+
   
   socket.on('disconnect', () => {
     console.log('User disconnected', socket.id);

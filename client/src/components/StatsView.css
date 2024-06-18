@@ -9,23 +9,23 @@ h2 {
   font-family: 'Orbitron', sans-serif;
 }
 
-.card-header h5 {
+.card-header.h5 {
   font-size: 1.5rem;
   font-family: 'Orbitron', sans-serif; /* Apply Roboto font to the card header */
   /* Add other styling as needed */
 }
 
 .card {
-  background-color: rgba(211, 211, 211, 0.5) !important; 
+  background-color: rgba(211, 211, 211, 0.5); 
 }
 
 .card-header{
-  background-color: rgba(223, 198, 215, 0.7) !important;
+  background-color: rgba(223, 198, 215, 0.7);
 }
 
 
 .card-footer {
-  background-color: rgba(223, 198, 215, 0.7) !important; 
+  background-color: rgba(223, 198, 215, 0.7); 
 }
 
 div.col-md-6.mb-3{

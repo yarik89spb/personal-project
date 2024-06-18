@@ -1,5 +1,10 @@
 import { useState, ChangeEvent } from 'react';
-import { useSocket, sendMessage, sendUserAnswer, useCommandListener } from '../utils/websocket';
+import { 
+  useSocket, 
+  sendMessage, 
+  sendUserAnswer, 
+  useCommandListener,
+  sendUserEmoji } from '../utils/websocket';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import AlwaysScrollToBottom from './AlwaysScrollToBottom';
@@ -22,7 +27,7 @@ function GuestView() {
     options: []
   });
   const [isHidden, setIsHidden] = useState(true);
-  const [selectedReaction, setSelectedReaction] = useState("");
+  const [selectedEmoji, setSelectedEmoji] = useState("");
 
 
   const socket = useSocket('http://localhost:3000/'); 
@@ -56,8 +61,9 @@ function GuestView() {
       userAnswer: answer});
   }
 
-  const handleReactionClick = (reaction: string) => {
-    setSelectedReaction(reaction);
+  const handleEmojiClick = (emoji: string) => {
+    sendUserEmoji(socket, 'userEmoji', emoji)
+    setSelectedEmoji(emoji);
   };
 
   /* Commands from host */
@@ -82,7 +88,7 @@ function GuestView() {
           <EventScreen question={currentScreen} onOptionClick={sendUserAnswerToServer}/>
         </div>
         <div className='card'>
-          <h3 className='card-header'>Chat:</h3>
+          <h3 className='card-header chat'>Chat:</h3>
           <div className='card-body' style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }} id='comments-container'>
             <AlwaysScrollToBottom>
               <ChatComments comments={commentsArray}/>
@@ -90,15 +96,15 @@ function GuestView() {
           </div>
 
           
-          <div className='card-footer'>
+          <div className='card-footer chat'>
             <div className='reaction-buttons'>
-              <button className={`reaction-button ${selectedReaction === 'heart' ? 'selected' : ''}`} onClick={() => handleReactionClick('heart')}>
+              <button className={`reaction-button ${selectedEmoji=== 'heart' ? 'selected' : ''}`} onClick={() => handleEmojiClick('heart')}>
                 <FontAwesomeIcon icon={faHeart} />
               </button>
-              <button className={`reaction-button ${selectedReaction === 'like' ? 'selected' : ''}`} onClick={() => handleReactionClick('like')}>
+              <button className={`reaction-button ${selectedEmoji === 'like' ? 'selected' : ''}`} onClick={() => handleEmojiClick('like')}>
                 <FontAwesomeIcon icon={faThumbsUp} />
               </button>
-              <button className={`reaction-button ${selectedReaction === 'dislike' ? 'selected' : ''}`} onClick={() => handleReactionClick('dislike')}>
+              <button className={`reaction-button ${selectedEmoji === 'dislike' ? 'selected' : ''}`} onClick={() => handleEmojiClick('dislike')}>
                 <FontAwesomeIcon icon={faThumbsDown} />
               </button>
               {/* Add more reaction buttons as needed */}

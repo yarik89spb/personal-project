@@ -8,3 +8,43 @@
   --bs-font-family-base: 'Roboto', sans-serif; /* Font family */
   --bs-font-weight-base: 700; /* Font weight */
 }
+
+/* Basic button styles */
+.reaction-buttons {
+  display: flex;
+  gap: 10px; /* Adjust the space between buttons */
+}
+
+.reaction-button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 10px;
+  font-size: 24px;
+  outline: none;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.reaction-button:hover {
+  transform: scale(1.2); /* Slightly enlarge the button on hover */
+}
+
+.reaction-button.selected {
+  background-color: rgba(0, 123, 255, 0.4); /* Light blue background */
+  border-radius: 50%; /* Make button round */
+  animation: shine 1s ease-in-out;
+}
+
+/* Animation for the shine effect */
+@keyframes shine {
+  0% {
+    box-shadow: 0 0 5px rgba(48, 101, 112, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(48, 101, 112, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(48, 101, 112, 0.5);
+  }
+}
+
