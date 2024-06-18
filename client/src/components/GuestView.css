@@ -3,6 +3,9 @@
   white-space: pre-wrap;
   word-wrap: break-word;
 } */
+#chat-container{
+  max-width: 70%;
+}
 
 .btn.btn-primary {
   /* Your custom styles */
