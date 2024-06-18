@@ -1,11 +1,13 @@
 import { useState, useEffect} from 'react';
-import { useSocket, useMessageListener, sendCommand, useAnswerListener } from '../utils/websocket';
+import { useSocket, useMessageListener, sendCommand, useAnswerListener, useEmojiListener } from '../utils/websocket';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import AlwaysScrollToBottom from './AlwaysScrollToBottom';
 import { Option,  Comment } from '../utils/interfaces.ts';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './HostView.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 
 function HostView(){
   let userComments = [
@@ -23,13 +25,14 @@ function HostView(){
   const [commentsArray, setComments] =  useState(userComments);
   const [answersArray, setAnswers] =  useState<Option[]>([]);
   const socket = useSocket('http://localhost:3000/');
+  const [selectedEmoji, setSelectedEmoji] = useState("");
 
   /* Project data rendering and broadcasting */
 
   useEffect(() => {
     async function fetchData(){
       try{
-        const response = await fetch('http://localhost:3000/api/project-data?id=666fa010515d2dd6fabc08d5')
+        const response = await fetch('http://localhost:3000/api/project-data?id=66714e0596a05e731122579b')
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -102,6 +105,17 @@ function HostView(){
     renderAnswers();
   });
 
+  const handleEmojiClick = (emoji: string) => {
+    setSelectedEmoji(emoji);
+    setTimeout(() => setSelectedEmoji(''), 1000); // Reset the selected emoji after animation
+  };
+
+  useEmojiListener(socket, 'userEmoji', (emoji:string) => {
+    console.log(emoji)
+    handleEmojiClick(emoji);
+    setTimeout(() => setSelectedEmoji(''), 1000);
+  });
+
   function renderAnswers(){
     return(
       <div>
@@ -130,14 +144,28 @@ function HostView(){
           </div>
         </div>
         <div className='col-md-6'>
-        {isLoadingQuestions === false && (
-            <EventScreen
-              question={projectData.questions[questionIndex]}
-              onOptionClick={() => {
-                return;
-              }}
-            />
-          )}
+          <div className='event-screen'>
+            {isLoadingQuestions === false && (
+                <EventScreen
+                  question={projectData.questions[questionIndex]}
+                  onOptionClick={() => {
+                    return;
+                  }}
+                />
+              )
+            }
+          </div>
+          <div className='user-emoji-container'>
+            <button className={`reaction-button ${selectedEmoji === 'heart' ? 'selected' : ''}`} onClick={() => handleEmojiClick('heart')}>
+              <FontAwesomeIcon icon={faHeart} />
+            </button>
+            <button className={`reaction-button ${selectedEmoji === 'like' ? 'selected' : ''}`} onClick={() => handleEmojiClick('like')}>
+              <FontAwesomeIcon icon={faThumbsUp} />
+            </button>
+            <button className={`reaction-button ${selectedEmoji === 'dislike' ? 'selected' : ''}`} onClick={() => handleEmojiClick('dislike')}>
+              <FontAwesomeIcon icon={faThumbsDown} />
+            </button>
+          </div>
         </div>
         <div>
           {renderAnswers()}

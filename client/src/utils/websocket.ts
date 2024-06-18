@@ -75,6 +75,24 @@ export const useAnswerListener = (
   }, [socket, eventName, callback]);
 };
 
+export const useEmojiListener = (
+  socket: React.MutableRefObject<Socket | undefined>,
+  eventName: string,
+  callback: (emoji: string) => void
+) => {
+  useEffect(() => {
+    if (socket.current) {
+      socket.current.on(eventName, callback);
+    }
+
+    return () => {
+      if (socket.current) {
+        socket.current.off(eventName, callback);
+      }
+    };
+  }, [socket, eventName, callback]);
+};
+
 /* Guest functions */
 
 export const sendMessage = (
@@ -92,6 +110,15 @@ export const sendUserAnswer = (
   userAnswer: Answer) => {
   if (socket.current) {
     socket.current.emit(eventName, userAnswer);
+  }
+};
+
+export const sendUserEmoji = (
+  socket: React.MutableRefObject<Socket | undefined>, 
+  eventName: string,
+  userEmoji: string) => {
+  if (socket.current) {
+    socket.current.emit(eventName, userEmoji);
   }
 };
 
