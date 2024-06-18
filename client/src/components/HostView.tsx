@@ -9,9 +9,7 @@ import './HostView.css';
 
 function HostView(){
   let userComments = [
-    {userName: 'John', text:'Hi', questionId: 11},
-    {userName:'Amy', text:'Wow', questionId: 11}, 
-    {userName:'Bot', text:'Greeting', questionId: 11}
+    {userName:'Bot', text:'請大家盡量留言和回答問題', questionId: 11}
   ];
 
   const [projectData, setProjectData] = useState({
