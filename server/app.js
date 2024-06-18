@@ -5,6 +5,8 @@ import connectToDB from './models/db.js';
 import { testQuery, insertTestData, getProjectData, insertTestResponse, insertAnswer } from './models/queries.js';
 import { storeComment, storeCurrentBatch } from './controllers/commentController.js';
 import { getProjectStatistics } from './controllers/dashboard.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 connectToDB()
@@ -61,7 +63,13 @@ const testViewerResponse = { text: 'bla bla bla'}
 // await insertTestData(testProject);
 // await insertTestResponse(testViewerResponse);
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.get('/api/project-data', async (req, res)=>{
+  console.log('Hi')
   try{
     const projectId = req.query.id;
     const projectData = await getProjectData(projectId);
@@ -82,6 +90,10 @@ app.get('/api/project-stats', async (req, res)=>{
   }
 })
 
+// Put it after other routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 io.on("connection", (socket) => {
   console.log('User connected')
@@ -91,18 +103,18 @@ io.on("connection", (socket) => {
   })
 
   socket.on('changeScreen', async (passedData)=>{
-    console.log(passedData)
+    // console.log(passedData)
     await storeCurrentBatch(testProjectId);
     io.emit('changeScreen', passedData)
   })
 
   socket.on('startBroadcasting', (passedData)=>{
-    console.log(passedData)
+    // console.log(passedData)
     io.emit('startBroadcasting', passedData)
   })
 
   socket.on('stopBroadcasting', (passedData)=>{
-    console.log(passedData)
+    // console.log(passedData)
     io.emit('stopBroadcasting', passedData)
   })
 

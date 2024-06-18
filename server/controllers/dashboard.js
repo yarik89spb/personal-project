@@ -30,8 +30,5 @@ export async function getProjectStatistics(projectId){
 
     answerCountsArray.push(questionAnswersObj);
   }
-  console.log(answerCountsArray);
   return {projectName:projectName, data: answerCountsArray}
 }
-
-getProjectStatistics('b84a11fs68ccs3');
