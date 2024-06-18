@@ -22,14 +22,17 @@ function HostView(){
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
   const [commentsArray, setComments] =  useState(userComments);
   const [answersArray, setAnswers] =  useState<Option[]>([]);
-  const socket = useSocket('');
+  const socket = useSocket('http://localhost:3000/');
 
   /* Project data rendering and broadcasting */
 
   useEffect(() => {
     async function fetchData(){
       try{
-        const response = await fetch('/api/project-data?id=666fa010515d2dd6fabc08d5')
+        const response = await fetch('http://localhost:3000/api/project-data?id=666fa010515d2dd6fabc08d5')
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
         const newProjectData = await response.json();
         setIsLoadingQuestions(false);
         setProjectData(newProjectData.data);
