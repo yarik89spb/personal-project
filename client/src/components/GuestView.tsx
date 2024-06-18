@@ -84,7 +84,7 @@ function GuestView() {
           <EventScreen question={currentScreen} onOptionClick={sendUserAnswerToServer}/>
         </div>
         <div className='card'>
-          <h3 className='card-header'>Chat:</h3>
+          <h3 className='card-header chat'>Chat:</h3>
           <div className='card-body' style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }} id='comments-container'>
             <AlwaysScrollToBottom>
               <ChatComments comments={commentsArray}/>
@@ -92,7 +92,7 @@ function GuestView() {
           </div>
 
           
-          <div className='card-footer'>
+          <div className='card-footer chat'>
             <div className='reaction-buttons'>
               <button className={`reaction-button ${selectedReaction === 'heart' ? 'selected' : ''}`} onClick={() => handleReactionClick('heart')}>
                 <FontAwesomeIcon icon={faHeart} />
