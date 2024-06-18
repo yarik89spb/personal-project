@@ -155,6 +155,9 @@ function HostView(){
               )
             }
           </div>
+          <div>
+            {renderAnswers()}
+          </div>
           <div className='user-emoji-container'>
             <button className={`reaction-button ${selectedEmoji === 'heart' ? 'selected' : ''}`} onClick={() => handleEmojiClick('heart')}>
               <FontAwesomeIcon icon={faHeart} />
@@ -166,9 +169,6 @@ function HostView(){
               <FontAwesomeIcon icon={faThumbsDown} />
             </button>
           </div>
-        </div>
-        <div>
-          {renderAnswers()}
         </div>
       </div>
       <div className="d-flex justify-content-center">

@@ -4,7 +4,8 @@ import {
   sendMessage, 
   sendUserAnswer, 
   useCommandListener,
-  sendUserEmoji } from '../utils/websocket';
+  sendUserEmoji, 
+  useMessageListener} from '../utils/websocket';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import AlwaysScrollToBottom from './AlwaysScrollToBottom';
@@ -34,22 +35,21 @@ function GuestView() {
   const socket = useSocket(''); 
 
   function addMessageToChat(){
-    let commentsArrayUpdated = [...commentsArray]
-    commentsArrayUpdated.push({
-      userName: 'user', 
-      text: userMessageInput,
-      questionId: currentScreen.id
-    });
     const commentObj: Comment = {
       userName: 'user',
       questionId: currentScreen.id,
       text: userMessageInput
     }; 
-    setComments(commentsArrayUpdated);
     setUserMessageInput('');
-    console.log(commentObj)
     sendMessage(socket, 'viewerMessage', commentObj);
   }
+
+  useMessageListener(socket, 'viewerMessage', (message: Comment) => {
+    setComments((prevComments) => [...prevComments, {
+      userName: message.userName, 
+      text: message.text, 
+      questionId: message.questionId }]);
+  });
 
   function storeUserMessageInput(e: ChangeEvent<HTMLInputElement>){
     setUserMessageInput(e.target.value);

@@ -20,7 +20,7 @@ div.card-footer.chat{
   margin-right: 10px;
 }
 
-.user-name{
+div.text-wrap.user-name{
   background-color: rgba(48, 101, 112, 0.7);
   margin-right: 20rem;
   border: 1px solid #ccc;
@@ -29,6 +29,7 @@ div.card-footer.chat{
   border-radius: 10px;
   text-align: center;
   font-family: 'Oxanium', sans-serif;
+  margin-right: 100px;
 }
 
 div.text-wrap.user-comment{
