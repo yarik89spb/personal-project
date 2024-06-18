@@ -22,7 +22,8 @@ function HostView(){
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
   const [commentsArray, setComments] =  useState(userComments);
   const [answersArray, setAnswers] =  useState<Option[]>([]);
-  const socket = useSocket('http://localhost:3000/');
+  // const socket = useSocket('http://localhost:3000/');
+  const socket = useSocket('');
   const [selectedEmoji, setSelectedEmoji] = useState("");
 
   /* Project data rendering and broadcasting */
@@ -30,7 +31,8 @@ function HostView(){
   useEffect(() => {
     async function fetchData(){
       try{
-        const response = await fetch('http://localhost:3000/api/project-data?id=66714e0596a05e731122579b')
+        // const response = await fetch('http://localhost:3000/api/project-data?id=66714e0596a05e731122579b')
+        const response = await fetch('/api/project-data?id=66714e0596a05e731122579b')
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }

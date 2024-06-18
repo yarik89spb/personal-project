@@ -30,7 +30,8 @@ function GuestView() {
   const [selectedEmoji, setSelectedEmoji] = useState("");
 
 
-  const socket = useSocket('http://localhost:3000/'); 
+  //const socket = useSocket('http://localhost:3000/');
+  const socket = useSocket(''); 
 
   function addMessageToChat(){
     let commentsArrayUpdated = [...commentsArray]

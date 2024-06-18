@@ -24,7 +24,8 @@ export default function StatsView(){
   useEffect(() => {
     async function fetchData(): Promise<void>{
       try{
-        const response = await fetch('http://localhost:3000/api/project-stats')
+        // const response = await fetch('http://localhost:3000/api/project-stats')
+        const response = await fetch('/api/project-stats')
         const responseJSON = await response.json();
         const responseData: ProjectStats = responseJSON.data;
         console.log(responseData);
