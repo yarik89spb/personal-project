@@ -29,7 +29,7 @@ function HostView(){
   useEffect(() => {
     async function fetchData(){
       try{
-        const response = await fetch('http://localhost:3000/api/project-data?id=666fa010515d2dd6fabc08d5')
+        const response = await fetch('http://localhost:3000/api/project-data?id=66714e0596a05e731122579b')
         const newProjectData = await response.json();
         setIsLoadingQuestions(false);
         setProjectData(newProjectData.data);

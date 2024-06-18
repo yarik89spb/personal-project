@@ -1,7 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap');
 
-h3.card-header{
+
+h3.card-header.chat{
+  background-color: rgba(48, 101, 112, 0.7);
+  border: 2px solid #131111;
   font-size: 3rem;
+  font-family: 'Oxanium', sans-serif;
+}
+
+div.card-footer.chat{
+  background-color: rgba(48, 101, 112, 0.7);
+  border: 2px solid #131111;
   font-family: 'Oxanium', sans-serif;
 }
 
@@ -23,7 +32,7 @@ h3.card-header{
 }
 
 div.text-wrap.user-comment{
-  background-color: rgba(191, 193, 193, 0.7);
+  background-color: rgba(223, 198, 215, 0.7);
   margin-right: 20rem;
   border: 1px solid #3f3b3b;
   border-radius: 10px;
