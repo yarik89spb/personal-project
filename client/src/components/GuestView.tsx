@@ -27,7 +27,7 @@ function GuestView() {
   const [selectedReaction, setSelectedReaction] = useState("");
 
 
-  const socket = useSocket('http://localhost:3000/'); 
+  const socket = useSocket(''); 
 
   function addMessageToChat(){
     let commentsArrayUpdated = [...commentsArray]
