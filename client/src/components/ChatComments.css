@@ -1,5 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap');
 
+h3.card-header{
+  font-size: 3rem;
+  font-family: 'Oxanium', sans-serif;
+}
+
+.list-group-item.d-flex.justify-content-between.align-items-start.comment-line{
+  background-color: rgba(0, 0, 0, 0);
+  border-color:rgba(0, 0, 0, 0);
+  margin-right: 10px;
+}
+
+.user-name{
+  background-color: rgba(48, 101, 112, 0.7);
+  margin-right: 20rem;
+  border: 1px solid #ccc;
+  color: aliceblue;
+  font-weight: bold;
+  border-radius: 10px;
+  text-align: center;
+  font-family: 'Oxanium', sans-serif;
+}
+
+div.text-wrap.user-comment{
+  background-color: rgba(191, 193, 193, 0.7);
+  margin-right: 20rem;
+  border: 1px solid #3f3b3b;
+  border-radius: 10px;
+  text-align: left;
+  font-family: 'Oxanium', sans-serif;
+  margin-right: 150px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap');
+
 
 h3.card-header.chat{
   background-color: rgba(48, 101, 112, 0.7);
