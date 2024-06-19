@@ -6,6 +6,7 @@
 #chat-container{
   max-width: 70%;
 }
+
 div#comments-container.card-body{
   border: 1px solid #262424;
 }
