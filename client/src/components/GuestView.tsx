@@ -40,11 +40,14 @@ function GuestView() {
       questionId: currentScreen.id,
       text: userMessageInput
     }; 
+    console.log('Emmiting comment to WS', userMessageInput)
     setUserMessageInput('');
     sendMessage(socket, 'viewerMessage', commentObj);
   }
 
   useMessageListener(socket, 'viewerMessage', (message: Comment) => {
+    console.log('Intercepted viewer comment', message.text)
+    console.log('Re-rendering comments')
     setComments((prevComments) => [...prevComments, {
       userName: message.userName, 
       text: message.text, 
