@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import { MouseEvent, useState } from 'react';
 
 import { Option, Question } from '../utils/interfaces.ts';
 import './EventScreen.css'; 
@@ -10,11 +10,15 @@ interface EventScreenProps {
 
 function EventScreen( { question, onOptionClick } : EventScreenProps){
 
+  const [selectedAnswerId, setSelectedAnswerId] = useState<number>();
+
   // Called outside the EventScreen 
   function handleOptionClick(e:  MouseEvent<HTMLButtonElement>){
     const optionId = (e.target as HTMLButtonElement).value;
     const userAnswer = question.options.find((option) => option.id === parseInt(optionId))
+    console.log(userAnswer);
     if(userAnswer){
+      setSelectedAnswerId(userAnswer.id);
       onOptionClick(userAnswer);
     }else{
       onOptionClick({
@@ -39,7 +43,9 @@ function EventScreen( { question, onOptionClick } : EventScreenProps){
                       key={index} 
                       type="button"
                       value={option.id}
-                      className="btn btn-custom w-100"
+                      className={`btn btn-custom w-100 ${selectedAnswerId == option.id ? 'selected' : ''}`}
+                      disabled={
+                        selectedAnswerId && selectedAnswerId != option.id ? true : false}
                       onClick={(e)=> handleOptionClick(e)}
                     >
                       {option.text}

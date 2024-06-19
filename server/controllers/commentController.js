@@ -18,7 +18,7 @@ export async function storeComment(projectId, comment){
 }
 
 export async function storeCurrentBatch(projectId){
-  if(comments[projectId].length > 0){
+  if(comments[projectId] && comments[projectId].length > 0){
     console.log('Sending comments to DB...')
     await insertComments(projectId, QUESTION_ID, comments[projectId])
     commentCount = 0;
