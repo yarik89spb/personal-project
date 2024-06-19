@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 
 import { Option, Question } from '../utils/interfaces.ts';
 import './EventScreen.css'; 
@@ -16,7 +16,6 @@ function EventScreen( { question, onOptionClick } : EventScreenProps){
   function handleOptionClick(e:  MouseEvent<HTMLButtonElement>){
     const optionId = (e.target as HTMLButtonElement).value;
     const userAnswer = question.options.find((option) => option.id === parseInt(optionId))
-    console.log(userAnswer);
     if(userAnswer){
       setSelectedAnswerId(userAnswer.id);
       onOptionClick(userAnswer);
@@ -29,7 +28,11 @@ function EventScreen( { question, onOptionClick } : EventScreenProps){
     }
   }
 
-  function renderQuestion(question : Question){
+  useEffect(() => {
+    setSelectedAnswerId(0);
+  }, [question])
+
+  function renderQuestion(currentQuestion : Question){
     return (
       <>
         <div className="mb-4">
