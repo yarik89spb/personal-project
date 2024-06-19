@@ -14,14 +14,14 @@ export async function storeComment(projectId, comment){
   // Insert every 20 comments
   if(commentCount % 10 === 0){
     await storeCurrentBatch(projectId, comment.questionId)
-    commentCount = 0;
-    comments[projectId] = [];
   }
 }
 
 export async function storeCurrentBatch(projectId){
-  console.log('Sending comments to DB...')
-  if(comments.length > 0){
+  if(comments[projectId].length > 0){
+    console.log('Sending comments to DB...')
     await insertComments(projectId, QUESTION_ID, comments[projectId])
+    commentCount = 0;
+    comments[projectId] = [];
   }
 }

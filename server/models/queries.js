@@ -44,7 +44,6 @@ export async function getProjectData(projectId) {
 export async function insertComments(projectId, questionId, comments) {
   try {
     console.log(`Inserting comments into projectId: ${projectId}, questionId: ${questionId}`);
-    
     // Try to update the specific question's comments if it exists
     const result = await ProjectResponses.updateOne(
       { projectId: projectId, 'questions.id': questionId },
@@ -67,6 +66,8 @@ export async function insertComments(projectId, questionId, comments) {
         },
         { upsert: true } // Create the project if it doesn't exist
       );
+
+
 
       if (projectUpdateResult.matchedCount === 0 && projectUpdateResult.upsertedCount === 0) {
         console.error('Project not found and not created');
