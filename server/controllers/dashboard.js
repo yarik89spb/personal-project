@@ -1,8 +1,17 @@
 import { getUserActivity } from '../models/queries.js'
+import jieba from 'node-jieba';
+import sw from 'stopword';
+
+// function sanitizeCommentsArray(commentsArray){
+//   const commentsTokenized = jieba.cut(commentsArray.join(''))
+//   const commentsSanitized = sw.removeStopwords(commentsTokenized, sw.zh);
+//   return commentsSanitized;
+// }
 
 export async function getProjectStatistics(projectId){
   const {projectName, questionsContent, userActivity} = await getUserActivity(projectId);
-  let answerCountsArray = []
+  let answerCountsArray = [];
+  let commentsAll = [];
   try{
     for(let question of questionsContent){
       let questionAnswersObj = {
@@ -23,10 +32,12 @@ export async function getProjectStatistics(projectId){
         return acc;
       }, {})
       questionAnswersObj.answers =  Object.entries(answerCounts);
-      questionAnswersObj.comments = userActivity
+      const currentQuestionComments = userActivity
       .find((q) => q.id == question.id).comments
       .map((c) => c.text);
-      questionAnswersObj.commentsAmount = questionAnswersObj.comments.length;
+      questionAnswersObj.comments = currentQuestionComments;
+      questionAnswersObj.commentsAmount = currentQuestionComments.length;
+      // commentsAll.push(sanitizeCommentsArray(currentQuestionComments));
       answerCountsArray.push(questionAnswersObj);
     }
   } catch(error) {
