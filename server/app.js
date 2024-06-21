@@ -5,6 +5,7 @@ import connectToDB from './models/db.js';
 import { testQuery, insertTestData, getProjectData, insertTestResponse, insertAnswer, getWordCounts } from './models/queries.js';
 import { storeComment, storeCurrentBatch } from './controllers/commentController.js';
 import { getProjectStatistics } from './controllers/dashboard.js';
+import { addWordCounts } from './utils/callPython.js'
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -139,6 +140,7 @@ io.on("connection", (socket) => {
   socket.on('stopBroadcasting', (passedData)=>{
     // console.log(passedData)
     io.emit('stopBroadcasting', passedData)
+    addWordCounts(testProjectId);
   })
 
   // Create temporary id for a project:

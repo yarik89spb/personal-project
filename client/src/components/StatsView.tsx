@@ -4,7 +4,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ProjectStats } from '../utils/interfaces.ts'
 import { barChartOptions } from '../utils/chartOptions.ts'
-import WordCloud from 'react-wordcloud';
+import WordCloud, { Options } from 'react-wordcloud';
 import './StatsView.css';
 
 
@@ -17,13 +17,19 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 
 export default function StatsView(){
 
+  interface WordCount {
+    text: string;
+    value: number;
+  }
+
   const [projectStats, setProjectStats] = useState<ProjectStats>({
     projectName: 'No project',
     data: []
   });
-  const [wordCounts, setWordCounts] = useState([{
+  const [wordCounts, setWordCounts] = useState<WordCount[]>([{
     text:'nothing',
-    size: 0}])
+    value: 0}])
+
 
   useEffect(() => {
     async function fetchResponses(): Promise<void>{
@@ -104,18 +110,18 @@ export default function StatsView(){
   }
 
   function renderWordCloud(){
-    const options = {
+    const options: Partial<Options> = {
+      fontFamily: 'Arial',
       rotations: 2,
       rotationAngles: [-90, 0],
       scale: 'sqrt',
       fontSizes: [20, 50],
     };
-  
-    const size = [800, 300];
+
   
     return (
       <div style={{ width: '100%', height: '100%' }}>
-        <WordCloud options={options} size={size} words={wordCounts} />
+        <WordCloud options={options} words={wordCounts} />
       </div>
     );
   }
