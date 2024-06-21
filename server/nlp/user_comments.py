@@ -15,6 +15,7 @@ load_dotenv(dotenv_path=env_path)
 database_name = os.getenv('MONGO_DATABASE_NAME')
 database_connection_string = os.getenv('MONGO_CONNECTION_STRING')
 
+project_id = "c75a22fs68cgs3"
 class AtlasClient ():
   def __init__ (self, connection_string, database_name):
     self.mongodb_client = MongoClient(connection_string)
@@ -33,13 +34,16 @@ class AtlasClient ():
     items = list(collection.find(filter=filter, limit=limit))
     return items
   
-  def insert_word_count (self, collection_name, word, count):
+  def insert_word_count (self, collection_name, project_id, word_counts_list):
     collection = self.database[collection_name]
-    collection.insert_one({"word": word, "count": count})
-  
+    collection.update_one(
+      {"projectId": project_id}, 
+      {"$set": {"wordCounts": word_counts_list}}
+      )
+
 
 atlas_client = AtlasClient (database_connection_string, database_name)
-project_data = atlas_client.find('project-responses', filter={'projectId':"c75a22fs68cgs3"}, limit=1)
+project_data = atlas_client.find('project-responses', filter={'projectId':project_id}, limit=1)
 # Since mongo.find always going to return array, get the first (=only) element 
 project_data = project_data[0]
 # Store comments in array of arrays 
@@ -60,7 +64,6 @@ custom_stopwords = (sw.stopwords("zh")).union(sw.stopwords("en")).union({
 comments_df['text_sanitzized'] = comments_df['text_split'].apply(lambda x: [w for w in x if w not in custom_stopwords])
 
 comments_all = list(np.concatenate(comments_df['text_sanitzized']))
-word_counts = Counter(comments_all)
-# Store top 50 words
-for word, count in word_counts.items():
-    collection.insert_one({"word": word, "count": count})
+word_counts = [{"text": str(word), "size": int(count)} for word, count in Counter(comments_all).most_common(50)]
+
+atlas_client.insert_word_count('project-responses', project_id, word_counts)

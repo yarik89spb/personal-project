@@ -56,6 +56,7 @@ export async function insertComments(projectId, questionId, comments) {
         { projectId: projectId },
         {
           $addToSet: {
+            wordCounts: [],
             questions: {
               id: questionId,
               comments: comments,
@@ -99,11 +100,12 @@ export async function insertAnswer(projectId, answerData){
         { projectId: projectId },
         {
           $addToSet: {
+            wordCounts: [], 
             questions: {
               id: questionId,
               comments: [],
               reactions: [],
-              answers: [userAnswer]
+              answers: [userAnswer],
             }
           }
         },
@@ -134,6 +136,18 @@ export async function getUserActivity(projectId) {
     const questionsContent = questionsData.questions;
 
     return {projectName, questionsContent, userActivity};
+
+  } catch (error) {
+    console.error('Fetch error occurred:', error);
+    throw error;
+  }
+}
+
+export async function getWordCounts(projectId) {
+  try {
+    const reactionData = await ProjectResponses.findOne({ projectId: projectId });
+    const wordCounts = reactionData.wordCounts;
+    return wordCounts;
 
   } catch (error) {
     console.error('Fetch error occurred:', error);

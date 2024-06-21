@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
+const WordCountsSchema = new Schema({
+  text: String,
+  size: Number,
+});
+
 const CommentSchema = new Schema({
   userName: String,
   questionId: Number,
@@ -25,7 +30,7 @@ const QuestionSchema = new Schema({
   title: String,
   comments: [CommentSchema],
   reactions: [ReactionSchema],
-  answers: [AnswerSchema] 
+  answers: [AnswerSchema]
 }); 
 
 const ProjectResponsesSchema = new Schema({
@@ -34,6 +39,7 @@ const ProjectResponsesSchema = new Schema({
     required: true,
     unique: true,
   },
+  wordCounts: [WordCountsSchema],
   questions: [QuestionSchema]
 }, {
   collection: 'project-responses' // Specify the collection name explicitly

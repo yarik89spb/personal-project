@@ -2,7 +2,7 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import connectToDB from './models/db.js';
-import { testQuery, insertTestData, getProjectData, insertTestResponse, insertAnswer } from './models/queries.js';
+import { testQuery, insertTestData, getProjectData, insertTestResponse, insertAnswer, getWordCounts } from './models/queries.js';
 import { storeComment, storeCurrentBatch } from './controllers/commentController.js';
 import { getProjectStatistics } from './controllers/dashboard.js';
 import path from 'path';
@@ -98,6 +98,15 @@ app.get('/api/project-data', async (req, res)=>{
 app.get('/api/project-stats', async (req, res)=>{
   try{
     const data = await getProjectStatistics(testProjectId);
+    res.status(200).json({data: data}) 
+  }catch(error){
+    res.status(400).json({error:'Failed to load data'})
+  }
+})
+
+app.get('/api/word-counts', async (req, res)=>{
+  try{
+    const data = await getWordCounts(testProjectId);
     res.status(200).json({data: data}) 
   }catch(error){
     res.status(400).json({error:'Failed to load data'})
