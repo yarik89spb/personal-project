@@ -136,3 +136,7 @@ dist
 *.key
 *.pem
 *.env
+
+# Python environment 
+
+myenv/
