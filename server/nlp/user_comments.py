@@ -61,9 +61,9 @@ comments_df['text_clean'] = comments_df['text'].apply(lambda x: x.strip().transl
 comments_df['text_split'] = comments_df['text_clean'].apply(lambda x: list(jieba.cut(x)))
 custom_stopwords = (sw.stopwords("zh")).union(sw.stopwords("en")).union({
   ' ', '', '妳', '你', '他', '她', '它'})
-comments_df['text_sanitzized'] = comments_df['text_split'].apply(lambda x: [w for w in x if w not in custom_stopwords])
+comments_df['text_sanitized'] = comments_df['text_split'].apply(lambda x: [w for w in x if w not in custom_stopwords])
 
-comments_all = list(np.concatenate(comments_df['text_sanitzized']))
-word_counts = [{"text": str(word), "size": int(count)} for word, count in Counter(comments_all).most_common(50)]
+comments_all = list(np.concatenate(comments_df['text_sanitized']))
+word_counts = [{"text": str(word), "value": int(count)} for word, count in Counter(comments_all).most_common(50)]
 
 atlas_client.insert_word_count('project-responses', project_id, word_counts)

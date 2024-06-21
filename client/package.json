@@ -16,10 +16,12 @@
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.3",
     "chartjs-plugin-datalabels": "^2.2.0",
+    "d3-cloud": "^1.2.7",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.1",
+    "react-wordcloud": "^1.2.7",
     "sass": "^1.77.4"
   },
   "devDependencies": {

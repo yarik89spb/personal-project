@@ -4,6 +4,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ProjectStats } from '../utils/interfaces.ts'
 import { barChartOptions } from '../utils/chartOptions.ts'
+import WordCloud from 'react-wordcloud';
 import './StatsView.css';
 
 
@@ -20,21 +21,38 @@ export default function StatsView(){
     projectName: 'No project',
     data: []
   });
+  const [wordCounts, setWordCounts] = useState([{
+    text:'nothing',
+    size: 0}])
 
   useEffect(() => {
-    async function fetchData(): Promise<void>{
+    async function fetchResponses(): Promise<void>{
       try{
-        // const response = await fetch('http://localhost:3000/api/project-stats')
-        const response = await fetch('/api/project-stats')
+        const response = await fetch('http://localhost:3000/api/project-stats')
+        // response = await fetch('/api/project-stats')
         const responseJSON = await response.json();
         const responseData: ProjectStats = responseJSON.data;
-        console.log(responseData);
         setProjectStats(responseData);
+
       } catch(error){
-        console.error(`Failed to get project data. ${error}`)
+        console.error(`Failed to get project response. ${error}`)
       }
     }
-    fetchData();
+    async function fetchWordCounts(){
+      try{
+        const response = await fetch('http://localhost:3000/api/word-counts')
+        // const response = await fetch('/api/word-counts')
+        const responseJSON = await response.json();
+        const wordCounts = responseJSON.data;
+        setWordCounts(wordCounts);
+
+      } catch(error){
+        console.error(`Failed to get project response. ${error}`)
+      }
+    }
+
+    fetchResponses();
+    fetchWordCounts();
   }, [])
 
   function renderBarChart(answers: [string, number][]){
@@ -85,11 +103,31 @@ export default function StatsView(){
     );
   }
 
+  function renderWordCloud(){
+    const options = {
+      rotations: 2,
+      rotationAngles: [-90, 0],
+      scale: 'sqrt',
+      fontSizes: [20, 50],
+    };
+  
+    const size = [800, 300];
+  
+    return (
+      <div style={{ width: '100%', height: '100%' }}>
+        <WordCloud options={options} size={size} words={wordCounts} />
+      </div>
+    );
+  }
+
   return (
     <div className="container-fluid bg-dark text-white">
       <div className="container mt-5">
         <h2> Statistics for {projectStats.projectName} </h2>
         <div>{renderAnswers()}</div>
+      </div>
+      <div className="container mt-5">
+        <div>{renderWordCloud()}</div>
       </div>
     </div>
   )

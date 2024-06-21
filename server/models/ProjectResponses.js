@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const WordCountsSchema = new Schema({
   text: String,
-  size: Number,
+  value: Number,
 });
 
 const CommentSchema = new Schema({
