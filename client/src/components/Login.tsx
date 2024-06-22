@@ -4,13 +4,19 @@ import { AuthContext } from "../context/AuthContext"
 
 
 export default function Login(){
-  const { login } = useContext(AuthContext);
+  const { login, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     login();
-    navigate('/host');
+    navigate('/profile');
+  }
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    logout();
+    navigate('/');
   }
 
   return (
