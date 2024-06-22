@@ -2,6 +2,7 @@ import './App.css'
 import HostView from './components/HostView'
 import GuestView from './components/GuestView'
 import StatsView from './components/StatsView'
+import Header from './components/Header'
 import Login from './components/Login'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useContext } from 'react';
@@ -19,6 +20,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <Header/>
         <Routes>
           <Route path='' element={<Welcome />} />
           <Route path='login' element={<Login />} />
