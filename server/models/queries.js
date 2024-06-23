@@ -1,31 +1,28 @@
 import ViewerResponse from './ViewerResponse.js';
 import UserProject from './UserProject.js';
 import ProjectResponses from './ProjectResponses.js'
+import User from './User.js'
 
-export async function testQuery() {
-  try {
-    const document = await ViewerResponse.findOne();
-    console.log("Query result:", document);
-    return document;
-  } catch (error) {
-    console.error("Query error:", error);
-    throw error;
+export async function addNewUser({userEmail, userName, userHashedPwd, userCompany}){
+  try{
+    const searchResult = await User.findOne({ userEmail });
+    if (searchResult) {
+      throw new Error('User with this email already exists');
+    }
+
+  } catch(error){
+    throw new Error(`Failed to add new user to DB ${error}`)
   }
+  
+  const newUser = new User({userEmail, userName, userHashedPwd, userCompany});
+  const savedUser = await newUser.save();
+  return savedUser._id;
 }
 
 export async function insertTestData(dataObj) {
   try {
     const result = await UserProject.create(dataObj);
     console.log('Project inserted id:', result._id);
-  } catch (error) {
-    console.error(`Insert error occurred: ${error}`);
-  }
-}
-
-export async function insertTestResponse(responseObj) {
-  try {
-    const result = await ViewerResponse.create(responseObj);
-    console.log('Response inserted id:', result._id);
   } catch (error) {
     console.error(`Insert error occurred: ${error}`);
   }

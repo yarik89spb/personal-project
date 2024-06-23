@@ -2,12 +2,17 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import connectToDB from './models/db.js';
-import { testQuery, insertTestData, getProjectData, insertTestResponse, insertAnswer, getWordCounts } from './models/queries.js';
+import { getProjectData, insertAnswer, getWordCounts } from './models/queries.js';
 import { storeComment, storeCurrentBatch } from './controllers/commentController.js';
 import { getProjectStatistics } from './controllers/dashboard.js';
+import { signUp } from './controllers/userContoller.js'
 import { addWordCounts } from './utils/callPython.js'
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+
+dotenv.config();
 
 const app = express();
 connectToDB()
@@ -84,6 +89,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/api/project-data', async (req, res)=>{
   try{
@@ -111,6 +118,25 @@ app.get('/api/word-counts', async (req, res)=>{
     res.status(200).json({data: data}) 
   }catch(error){
     res.status(400).json({error:'Failed to load data'})
+  }
+})
+
+app.post('/user/signup', async (req, res) => {
+  try{
+    const userData = {
+      userEmail: req.body.userEmail,
+      userName: req.body.userName,
+      userPassword: req.body.userPassword,
+      userCompany: req.body.userCompany
+    }
+    if(!userData.userEmail || !userData.userPassword || !userData.userName){
+      throw new Error('Incomplete user credentials');
+    }
+    const userObject = await signUp(userData);
+    res.status(201).json(userObject);
+  } catch(error) {
+    console.error(error)
+    res.status(400).json({text: `Failed to register user: ${error}`})
   }
 })
 
