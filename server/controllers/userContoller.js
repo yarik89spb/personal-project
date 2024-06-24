@@ -36,6 +36,16 @@ function createJWT({userEmail, userName, userCompany}){
   
 }
 
+export function validateJWT(userJWT){
+  try{
+    jwt.verify(userJWT, process.env.JWT_SECRET);
+    return true;
+  } catch{
+    throw new Error(`Invalid JWT.`)
+  }
+}
+
+
 export async function signUp(userData){
   try{
     const userEmail = sanitizeData(userData.userEmail);

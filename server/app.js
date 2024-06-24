@@ -5,7 +5,7 @@ import connectToDB from './models/db.js';
 import { getProjectData, insertAnswer, getWordCounts } from './models/queries.js';
 import { storeComment, storeCurrentBatch } from './controllers/commentController.js';
 import { getProjectStatistics } from './controllers/dashboard.js';
-import { signUp, signIn } from './controllers/userContoller.js'
+import { signUp, signIn, validateJWT } from './controllers/userContoller.js'
 import { addWordCounts } from './utils/callPython.js'
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -154,6 +154,25 @@ app.post('/user/signin', async (req, res) => {
   } catch(error) {
     console.error(error)
     res.status(400).json({text: `Failed to login. ${error.message}`})
+  }
+})
+
+app.get('/user/verify', (req, res) => {
+  // Verify jwt validity
+  try{
+    const authHeader = req.headers.authorization;
+    const userJWT = authHeader.split(' ')[1];
+    if(!userJWT){
+      throw new Error('Missing JWT')
+    }
+    const jwtValidity = validateJWT(userJWT);
+    if(jwtValidity === true){
+      res.status(201).json({message: 'Correct JWT'});
+    }else{
+      throw new Error('JWT validation failed.')
+    }
+  } catch(error) {
+    res.status(400).json({text: `Incorrect or epxired JWT. ${error.message}`})
   }
 })
 
