@@ -24,7 +24,7 @@ function App() {
         <Routes>
           <Route path='' element={<Welcome />} />
           <Route path='login' element={<Login />} />
-          <Route path='profile' element={<ProtectedRoute element={<HostProfile />}/>} />
+          <Route path='profile/:userId' element={<ProtectedRoute element={<HostProfile />}/>} />
           <Route path='host' element={<ProtectedRoute element={<HostView />}/>} />
           <Route path='guest' element={<GuestView />} />
           <Route path='stats' element={<ProtectedRoute element={<HostView />}/>} />

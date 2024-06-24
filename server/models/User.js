@@ -2,6 +2,21 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
+const ProjectInfoSchema = new Schema({
+  projectId: {
+    type: String,
+    unique: true,
+    required: true
+  },
+  projectName: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+  }
+})
+
 const UserSchema = new Schema({
   userEmail: {
     type: String,
@@ -14,7 +29,7 @@ const UserSchema = new Schema({
   },
   userName: String, 
   userCompany: String,
-  projects: [String]
+  projects: [ProjectInfoSchema]
 }, {
   collection: 'users'
 });

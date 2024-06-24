@@ -16,11 +16,12 @@ async function hashPassword(userPassword){
     throw new Error(`Failed to hash the password ${error}`); 
 }}
 
-function createJWT({userEmail, userName, userCompany}){
+function createJWT({userEmail, userName, userCompany, userId}){
   const payload = {
     userEmail,
     userName,
-    userCompany
+    userCompany,
+    userId
   };
   try{
     const userJWT = jwt.sign(
@@ -38,8 +39,8 @@ function createJWT({userEmail, userName, userCompany}){
 
 export function validateJWT(userJWT){
   try{
-    jwt.verify(userJWT, process.env.JWT_SECRET);
-    return true;
+    const payload = jwt.verify(userJWT, process.env.JWT_SECRET);
+    return payload;
   } catch{
     throw new Error(`Invalid JWT.`)
   }
@@ -60,7 +61,8 @@ export async function signUp(userData){
     const userJWT = createJWT({
       userEmail, 
       userName: userData.userName, 
-      userCompany: userData.userCompany});
+      userCompany: userData.userCompany,
+      userId});
     const userObject = {userJWT, user: {userId, userEmail, userName, userCompany}};
     return userObject;
 
@@ -88,7 +90,8 @@ export async function signIn(userData){
     const userJWT = createJWT({
       userEmail, 
       userName, 
-      userCompany});
+      userCompany,
+      userId});
     const userObject = {userJWT, user: {userId, userEmail, userName, userCompany}};
     return userObject;
 

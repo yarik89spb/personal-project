@@ -6,6 +6,7 @@ import { getProjectData, insertAnswer, getWordCounts } from './models/queries.js
 import { storeComment, storeCurrentBatch } from './controllers/commentController.js';
 import { getProjectStatistics } from './controllers/dashboard.js';
 import { signUp, signIn, validateJWT } from './controllers/userContoller.js'
+import { addNewProject } from './controllers/projectController.js'
 import { addWordCounts } from './utils/callPython.js'
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -26,7 +27,8 @@ const io = new Server(server, {
 const testProjectId = 'c75a22fs68cgs3'
 const testProject = {
   projectName: 'Porko demo',
-  projectId: testProjectId ,
+  projectId: testProjectId,
+  userId: 'blalbal',
   questions:[
     {
       id: 1,
@@ -82,7 +84,6 @@ const testProject = {
   ]
 }
 
-// await insertTestData(testProject);
 // await insertTestResponse(testViewerResponse);
 
 const __filename = fileURLToPath(import.meta.url);
@@ -92,10 +93,30 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.post('/api/add-project', async (req, res)=>{
+  try{
+    const projectData = req.body;
+    const projectId = await addNewProject(projectData);
+    res.status(200).json({projectId}) 
+  }catch(error){
+    res.status(400).json({error:'Failed to add project data'})
+  }
+})
+
 app.get('/api/project-data', async (req, res)=>{
   try{
     const projectId = req.query.id;
     const projectData = await getProjectData(projectId);
+    res.status(200).json({data: projectData}) 
+  }catch(error){
+    res.status(400).json({error:'Failed to load data'})
+  }
+})
+
+app.get('/api/user-projects', async (req, res)=>{
+  try{
+    const projectId = req.query.userId;
+    const projectData = await getUserProjects(projectId);
     res.status(200).json({data: projectData}) 
   }catch(error){
     res.status(400).json({error:'Failed to load data'})
@@ -166,9 +187,9 @@ app.get('/user/verify', (req, res) => {
     if(!userJWT){
       throw new Error('Missing JWT')
     }
-    const jwtValidity = validateJWT(userJWT);
-    if(jwtValidity === true){
-      res.status(200).json({message: 'Correct JWT'});
+    const payload = validateJWT(userJWT);
+    if(payload){
+      res.status(200).json(payload);
     }else{
       throw new Error('JWT validation failed.')
     }

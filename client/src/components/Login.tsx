@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../context/AuthContext"
 
@@ -30,7 +30,7 @@ export default function Login(){
       const { userJWT } = data;
       const userData = data.user;
       login(userJWT, userData);
-      navigate('/profile');
+      navigate(`/profile/${userData.userId}`);
     } catch(error) {
       console.error('Login error:', error);
       setError(error.message)

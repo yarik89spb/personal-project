@@ -1,11 +1,12 @@
 import { useContext } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 
 export default function HostProfile(){
   const navigate = useNavigate();
-  const { userId, userEmail, userName } = useContext(AuthContext);
+  const { userId } = useParams();
+  const { userEmail, userName } = useContext(AuthContext);
 
   function handleEventStart(){
     navigate('/host')

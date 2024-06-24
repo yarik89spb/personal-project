@@ -1,11 +1,20 @@
+import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 export default function WelcomePage(){
+  const { isLogined, userId, userEmail, userName } = useContext(AuthContext);
   const navigate = useNavigate();
 
 
   const handleHostClick = () => {
-    navigate('/host');
+    console.log(isLogined, userId, userEmail, userName)
+    if (isLogined && userId) {
+      console.log(isLogined && userId)
+      navigate(`/profile/${userId}`);
+    } else {
+      navigate('/login');
+    }
   }
 
   const handleViewerClick = () => {

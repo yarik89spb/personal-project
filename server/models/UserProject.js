@@ -20,11 +20,13 @@ const UserProjectSchema = new Schema({
     type: String,
     required: true,
   },
-  projectId: {
+  userId: {
     type: String,
     required: true,
-    unique: true,
   },
+  
+  description: String,
+
   questions: [QuestionSchema],
 }, {
   collection: 'user-projects' // Specify the collection name explicitly

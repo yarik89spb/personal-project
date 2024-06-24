@@ -32,12 +32,38 @@ export async function searchUserByEmail(userEmail){
   }
 }
 
-export async function insertTestData(dataObj) {
+export async function insertProjectData(dataObj) {
   try {
+    // Project data
     const result = await UserProject.create(dataObj);
-    console.log('Project inserted id:', result._id);
+    const projectId = result._id;
+    console.log('Project inserted id:', projectId); 
+    // Add project to the corresponding user projects
+    const user = await User.findById(dataObj.userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    user.projects.push({
+      projectId, 
+      projectName: dataObj.projectName,
+      description: dataObj.description
+    });
+    await user.save();
+    return projectId;
   } catch (error) {
     console.error(`Insert error occurred: ${error}`);
+  }
+}
+
+export async function searchUserById(userId) {
+  try {
+    const userData = await User.findById(userId);
+    if(!userData){
+      throw new Error(`User not found`)
+    }
+    return userData;
+  } catch (error) {
+    console.error(`Failed to get project data: ${error}`);
   }
 }
 
