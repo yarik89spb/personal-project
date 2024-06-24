@@ -141,6 +141,7 @@ app.post('/user/signup', async (req, res) => {
 })
 
 app.post('/user/signin', async (req, res) => {
+  console.log()
   try{
     const userData = {
       userEmail: req.body.userEmail,
@@ -167,7 +168,7 @@ app.get('/user/verify', (req, res) => {
     }
     const jwtValidity = validateJWT(userJWT);
     if(jwtValidity === true){
-      res.status(201).json({message: 'Correct JWT'});
+      res.status(200).json({message: 'Correct JWT'});
     }else{
       throw new Error('JWT validation failed.')
     }
