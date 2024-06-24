@@ -7,7 +7,6 @@ export default function Header(){
       <nav>
         <button>Main page</button>
         <button>User profile</button>
-        <button>Main page</button>
       </nav>
     </div>
   )

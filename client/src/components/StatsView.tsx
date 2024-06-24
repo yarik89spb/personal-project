@@ -34,7 +34,7 @@ export default function StatsView(){
   useEffect(() => {
     async function fetchResponses(): Promise<void>{
       try{
-        const response = await fetch('http://localhost:3000/api/project-stats')
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/project-stats`)
         // response = await fetch('/api/project-stats')
         const responseJSON = await response.json();
         const responseData: ProjectStats = responseJSON.data;
@@ -46,7 +46,7 @@ export default function StatsView(){
     }
     async function fetchWordCounts(){
       try{
-        const response = await fetch('http://localhost:3000/api/word-counts')
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/word-counts`)
         // const response = await fetch('/api/word-counts')
         const responseJSON = await response.json();
         const wordCounts = responseJSON.data;

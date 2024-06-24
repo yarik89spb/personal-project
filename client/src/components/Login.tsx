@@ -9,10 +9,10 @@ export default function Login(){
   const [error, setError] = useState('');
   const [hasAccount, setHasAccount] = useState(true);
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/user/signin', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -28,7 +28,8 @@ export default function Login(){
       }
       const data = await response.json();
       const { userJWT } = data;
-      login(userJWT);
+      const userData = data.user;
+      login(userJWT, userData);
       navigate('/profile');
     } catch(error) {
       console.error('Login error:', error);
@@ -36,7 +37,7 @@ export default function Login(){
     }
   }
 
-  const handleLogout = (e) => {
+  const handleLogout = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     logout();
     navigate('/');
@@ -46,10 +47,10 @@ export default function Login(){
     setHasAccount(!hasAccount)
   }
 
-  const handleRegistration = async (e) => {
+  const handleRegistration = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/user/signup', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +68,8 @@ export default function Login(){
       }
       const data = await response.json();
       const { userJWT } = data;
-      login(userJWT);
+      const userData = data.user;
+      login(userJWT, userData);
       navigate('/profile');
     } catch(error) {
       console.error('Login error:', error);

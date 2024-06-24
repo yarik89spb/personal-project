@@ -30,8 +30,7 @@ function GuestView() {
   const [isHidden, setIsHidden] = useState(true);
   const [selectedEmoji, setSelectedEmoji] = useState("");
 
-
-  const socket = useSocket('http://localhost:3000/');
+  const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`);
   //const socket = useSocket(''); 
 
   function addMessageToChat(){
