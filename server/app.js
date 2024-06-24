@@ -2,11 +2,11 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import connectToDB from './models/db.js';
-import { getProjectData, insertAnswer, getWordCounts } from './models/queries.js';
+import { getWordCounts } from './models/queries.js';
 import { storeComment, storeCurrentBatch } from './controllers/commentController.js';
 import { getProjectStatistics } from './controllers/dashboard.js';
 import { signUp, signIn, validateJWT } from './controllers/userContoller.js'
-import { addNewProject } from './controllers/projectController.js'
+import { addNewProject, getUserProjects, getProjectData } from './controllers/projectController.js'
 import { addWordCounts } from './utils/callPython.js'
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -22,69 +22,6 @@ const server = createServer(app);
 const io = new Server(server, {
   //...
 }); 
-
-
-const testProjectId = 'c75a22fs68cgs3'
-const testProject = {
-  projectName: 'Porko demo',
-  projectId: testProjectId,
-  userId: 'blalbal',
-  questions:[
-    {
-      id: 1,
-      title: '歡迎',
-      content: '歡迎光臨玩Porko。這次的主題是比較了解Batch 24的同學 ',    
-      options: [
-        {id: 11, text:'OK', isCorrect: true},
-      ]
-    }, 
-    {
-      id: 2,
-      title: '嗜好',
-      content: '空閒喜歡做的事...',
-      options: [
-        {id: 21, text:'運動', isCorrect: false},
-        {id: 22, text:'玩電腦', isCorrect: false},
-        {id: 23, text:'寫Stylish API', isCorrect: true},
-        {id: 24, text:'復甦死掉的ec2', isCorrect: false},
-      ]
-    },
-    {
-      id: 3,
-      title: '技術',
-      content: '在AppleWorks上課時最我最喜歡做...',
-      options: [
-        {id: 31, text:'伺服器', isCorrect: false},
-        {id: 32, text:'資料庫', isCorrect: true},
-        {id: 33, text:'演算法', isCorrect: false},
-        {id: 34, text:'客戶端', isCorrect: false},
-        {id: 35, text:'Nginx', isCorrect: false},
-        {id: 36, text:'快取', isCorrect: false}
-      ]
-    },
-    {
-      id: 4,
-      title: '技術',
-      content: '在AppleWorks上課時最討厭...',
-      options: [
-        {id: 41, text:'準備簡報', isCorrect: true},
-        {id: 42, text:'很早起床', isCorrect: true},
-        {id: 43, text:'通勤', isCorrect: true},
-        {id: 44, text:'Yarik', isCorrect: false},
-      ]
-    },
-    {
-      id: 5,
-      title: '結束',
-      content: '謝謝參加Demo #1 。請多喝水，愛自己的父母，下課記得打卡',
-      options: [
-        {id: 51, text:'<3', isCorrect: true},
-      ]
-    }
-  ]
-}
-
-// await insertTestResponse(testViewerResponse);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -105,11 +42,11 @@ app.post('/api/add-project', async (req, res)=>{
 
 app.get('/api/project-data', async (req, res)=>{
   try{
-    const projectId = req.query.id;
+    const projectId = req.query.projectId;
     const projectData = await getProjectData(projectId);
     res.status(200).json({data: projectData}) 
   }catch(error){
-    res.status(400).json({error:'Failed to load data'})
+    res.status(400).json({error:`Failed to load data. ${error.message}`})
   }
 })
 
@@ -119,6 +56,7 @@ app.get('/api/user-projects', async (req, res)=>{
     const projectData = await getUserProjects(projectId);
     res.status(200).json({data: projectData}) 
   }catch(error){
+    console.log(error)
     res.status(400).json({error:'Failed to load data'})
   }
 })

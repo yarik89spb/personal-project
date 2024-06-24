@@ -67,13 +67,15 @@ export async function searchUserById(userId) {
   }
 }
 
-export async function getProjectData(projectId) {
+export async function searchProjectById(projectId) {
   try {
     const projectData = await UserProject.findById(projectId);
-    console.log(projectData)
+    if(!projectData){
+      throw new Error('Project not found')
+    }
     return projectData;
   } catch (error) {
-    console.error(`Query error occurred: ${error}`);
+    console.error(`Failed to get project data: ${error}`);
   }
 }
 
