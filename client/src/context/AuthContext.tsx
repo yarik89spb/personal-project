@@ -38,8 +38,26 @@ export function AuthProvider({ children } : AuthProviderProps){
     const getLoginStance = async () => {
       if(cookies.jwt){
         console.log('Found token')
+        try{
+          const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/verify`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${cookies.jwt}`,
+            },
+          });
+          console.log(response)
+          if (!response.ok) {
+            const errorData = await response.json(); 
+            throw new Error(`${errorData.text}`);
+          }
+          setIsLogined(true)
+        } catch(error){
+          setIsLogined(false)
+        }
+        
       }else{
         console.log('Missing token')
+        setIsLogined(false)
       }
     }
     getLoginStance();
