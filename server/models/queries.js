@@ -11,12 +11,25 @@ export async function addNewUser({userEmail, userName, userHashedPwd, userCompan
     }
 
   } catch(error){
-    throw new Error(`Failed to add new user to DB ${error}`)
+    throw new Error(`Could not add new user: ${error}`)
   }
   
   const newUser = new User({userEmail, userName, userHashedPwd, userCompany});
   const savedUser = await newUser.save();
   return savedUser._id;
+}
+
+export async function searchUserByEmail(userEmail){
+  try{
+    const result = await User.findOne({ userEmail });
+    if(!result){
+      throw new Error(`No user with email '${userEmail}'`);
+    }
+    return result
+
+  } catch (error) {
+    throw new Error(`Could no find the user data. ${error.message}`)
+  }
 }
 
 export async function insertTestData(dataObj) {

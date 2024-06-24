@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { addNewUser } from '../models/queries.js'
+import { addNewUser, searchUserByEmail } from '../models/queries.js'
 
 function sanitizeData(inputString){
   const newString = inputString.trim().toLowerCase();
@@ -55,6 +55,34 @@ export async function signUp(userData){
     return userObject;
 
   } catch(error) {
-    throw new Error(`Failed to register new user ${error}`);
+    throw new Error(`${error.message}`);
+  }
+}
+
+export async function signIn(userData){
+  try{
+    const userEmail = sanitizeData(userData.userEmail);
+    // Search user by email
+    const searchResult = await searchUserByEmail(userEmail);
+
+    const correctPwd = searchResult.userHashedPwd;
+    const {userName} = searchResult;
+    const userId = searchResult._id;
+    const {userCompany} = searchResult;
+    
+    const pwdValidity = await bcrypt.compare(userData.userPassword, correctPwd);
+    if (!pwdValidity) {
+      throw new Error('Invalid password');
+    }
+
+    const userJWT = createJWT({
+      userEmail, 
+      userName, 
+      userCompany});
+    const userObject = {userJWT, user: {userId, userEmail, userName, userCompany}};
+    return userObject;
+
+  } catch(error) {
+    throw new Error(`${error.message}`);
   }
 }

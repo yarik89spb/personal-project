@@ -5,7 +5,7 @@ import connectToDB from './models/db.js';
 import { getProjectData, insertAnswer, getWordCounts } from './models/queries.js';
 import { storeComment, storeCurrentBatch } from './controllers/commentController.js';
 import { getProjectStatistics } from './controllers/dashboard.js';
-import { signUp } from './controllers/userContoller.js'
+import { signUp, signIn } from './controllers/userContoller.js'
 import { addWordCounts } from './utils/callPython.js'
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -136,7 +136,24 @@ app.post('/user/signup', async (req, res) => {
     res.status(201).json(userObject);
   } catch(error) {
     console.error(error)
-    res.status(400).json({text: `Failed to register user: ${error}`})
+    res.status(400).json({text: `Failed to register user. ${error.message}`})
+  }
+})
+
+app.post('/user/signin', async (req, res) => {
+  try{
+    const userData = {
+      userEmail: req.body.userEmail,
+      userPassword: req.body.userPassword,
+    }
+    if(!userData.userEmail || !userData.userPassword){
+      throw new Error('Incomplete user credentials');
+    }
+    const userObject = await signIn(userData);
+    res.status(201).json(userObject);
+  } catch(error) {
+    console.error(error)
+    res.status(400).json({text: `Failed to login. ${error.message}`})
   }
 })
 
