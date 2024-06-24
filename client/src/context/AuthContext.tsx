@@ -5,7 +5,7 @@ export const AuthContext = createContext();
 
 export function AuthProvider({ children }){
   const [isLogined, setIsLogined] = useState(false);
-  const [cookies, setCookie, removeCookie]  = useCookies(['token'])
+  const [cookies, setCookie, removeCookie]  = useCookies(['jwt'])
 
   useEffect(() => {
     const getLoginStance = async () => {
@@ -19,14 +19,14 @@ export function AuthProvider({ children }){
   }, [cookies])
   
 
-  const login = () => {
+  const login = (userJWT: string) => {
     setIsLogined(true);
-    setCookie('token', 'test');
+    setCookie('jwt', userJWT, { path: '/' });
   }
 
   const logout = () => {
     setIsLogined(false)
-    removeCookie('token');
+    removeCookie('jwt', { path: '/' });
   }
 
   return (
