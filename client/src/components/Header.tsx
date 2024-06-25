@@ -1,7 +1,23 @@
 import './Header.css';
+import { useNavigate } from 'react-router-dom';
+import { useContext } from "react";
+import { AuthContext } from '../context/AuthContext';
 
 export default function Header(){
+  const {isLogined, userId} = useContext(AuthContext);
+  const navigate = useNavigate();
 
+  const handleNavClick = (page:string) => {
+    if(page==='profile'){
+      if(isLogined && userId){
+        navigate(`/${page}/${userId}`)
+      }else{
+        navigate('/login')
+      }
+    }else{
+      navigate(`/${page}`)
+    }
+  }
 
   return (
     <div>
@@ -16,10 +32,10 @@ export default function Header(){
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <a className="nav-link" href="#">Main page</a>
+                <a className="nav-link" href="" onClick={()=>handleNavClick('')}>Main page</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">User profile</a>
+                <a className="nav-link" href=""  onClick={()=>handleNavClick('profile')}>User profile</a>
               </li>
             </ul>
           </div>

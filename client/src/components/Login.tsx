@@ -1,6 +1,7 @@
 import { useContext, useState } from "react"
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../context/AuthContext"
+import './Login.css'
 
 
 export default function Login(){
@@ -88,55 +89,61 @@ export default function Login(){
   }
 
   return (
-    <div>
-      <form onSubmit={handleLogin}>
+    <div className='login-container'>
+      <form onSubmit={handleLogin} className="login-form">
         {error && <p> {error} </p>}
         <input
           type='text'
           placeholder='E-mail'
           name='userEmail'
+          className="form-control mb-2"
         />
         <input
           type='password'
           placeholder='Password'
           name='userPassword'
-          
+          className="form-control mb-2"
         />
-        <button type='submit'> Login </button>
+        <button type='submit' className="btn btn-primary btn-block"> Login </button>
       </form>
-      <div>
+      <div className="text-center mt-3">
         <button
         type='button'
+        className="btn btn-link"
         onClick={showRegistrationForm}>
           Create account
         </button>
       </div>
-      {!hasAccount && <div>
+      {!hasAccount && <div className="register-form">
         <form onSubmit={handleRegistration}>
         <input
           type='text'
           placeholder='E-mail'
           name='userEmail'
+          className="form-control mb-2"
           required
         />
         <input
           type='text'
           placeholder='Username'
           name='userName'
+          className="form-control mb-2"
         />
         <input
           type='text'
           placeholder='Company name'
           name='userCompany'
+          className="form-control mb-2"
           required
         />
         <input
           type='password'
           placeholder='Password'
           name='userPassword'
+          className="form-control mb-2"
           required
         />
-        <button type='submit'> Register </button>
+        <button type='submit' className="btn btn-primary btn-block"> Register </button>
         </form>
       </div>}
     </div>
