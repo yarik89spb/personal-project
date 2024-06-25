@@ -1,6 +1,6 @@
 import React from 'react';
 import { Comment } from '../utils/interfaces';
-import './ChatComments.css'
+import './ChatComments.css';
 
 interface ChatCommentsProps {
   comments: Comment[];
@@ -8,14 +8,14 @@ interface ChatCommentsProps {
 
 const ChatComments: React.FC<ChatCommentsProps> = ({ comments }) => {
   return (
-    <ul className='list-group list-group'>
+    <ul className='comment-list'>
       {comments.map((comment, index) => (
-        <li key={index} className='list-group-item d-flex justify-content-between align-items-start comment-line'>
-          <div className="text-wrap user-name" style={{width: '20rem'}}>
-            {comment.userName}
+        <li key={index} className='comment-container'>
+          <div className="comment-header">
+            <span className="user-name">{comment.userName}</span>
           </div>
-          <div className="text-wrap user-comment" style={{width: '70rem'}}>
-            {comment.text}
+          <div className="comment-content">
+            <p>{comment.text}</p>
           </div>
         </li>
       ))}

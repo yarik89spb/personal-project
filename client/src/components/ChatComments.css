@@ -1,42 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap');
 
 
-h3.card-header.chat{
-  background-color: rgba(48, 101, 112, 0.7);
-  border: 2px solid #131111;
-  font-size: 3rem;
-  font-family: 'Oxanium', sans-serif;
+.comment-list {
+  list-style: none; /* Remove default list styles */
+  padding: 0; /* Remove default padding */
 }
 
-div.card-footer.chat{
-  background-color: rgba(48, 101, 112, 0.7);
-  border: 2px solid #131111;
-  font-family: 'Oxanium', sans-serif;
+.comment-container {
+  background-color: rgba(40, 30, 78, 0.3); /* Light gray background */
+  border-radius: 8px; /* Rounded corners */
+  margin-bottom: 12px; /* Spacing between comments */
+  padding: 10px; /* Padding inside the comment box */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
 }
 
-.list-group-item.d-flex.justify-content-between.align-items-start.comment-line{
-  background-color: rgba(0, 0, 0, 0);
-  border-color:rgba(0, 0, 0, 0);
-  margin-right: 10px;
+.comment-header {
+  display: flex; /* Use flexbox for header layout */
+  align-items: center; /* Center align items vertically */
+  margin-bottom: 8px; /* Space below header */
 }
 
-.user-name{
-  background-color: rgba(48, 101, 112, 0.7);
-  margin-right: 20rem;
-  border: 1px solid #ccc;
-  color: aliceblue;
-  font-weight: bold;
-  border-radius: 10px;
-  text-align: center;
-  font-family: 'Oxanium', sans-serif;
+.user-name {
+  background-color: rgba(48, 101, 112, 0.6); /* Green background for username */
+  color: white; /* Text color */
+  font-weight: bold; /* Bold font */
+  padding: 6px 12px; /* Padding inside the username box */
+  border-radius: 8px; /* Rounded corners */
+  margin-right: 8px; /* Space to the right of username */
 }
 
-div.text-wrap.user-comment{
-  background-color: rgba(223, 198, 215, 0.7);
-  margin-right: 20rem;
-  border: 1px solid #3f3b3b;
-  border-radius: 10px;
-  text-align: left;
-  font-family: 'Oxanium', sans-serif;
-  margin-right: 150px;
+.comment-content p {
+  margin: 0; /* Remove default margin for paragraphs */
 }
+
+.comment-content {
+  font-family: 'Oxanium', sans-serif;
+  color: #f8f0f0; /* Text color for comment content */
+  font-weight: 600; /* Adjusted font weight */
+  padding-top: 4px; /* Add some padding above the content */
+  line-height: 1.4; /* Increased line height for better readability */
+  font-size: 1.5rem;
+}
+
