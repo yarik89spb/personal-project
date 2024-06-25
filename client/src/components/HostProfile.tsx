@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { ProjectObject } from '../utils/interfaces'
+import ProjectConstructor from './ProjectConstructor';
 import './HostProfile.css';
 
 
@@ -81,6 +82,9 @@ export default function HostProfile(){
         onClick={()=>{setShowConstructor(!showConstructor)}}>
           Create project
         </button>
+      </div>
+      <div>
+        {showConstructor && <ProjectConstructor/>}
       </div>
     </div>
   )

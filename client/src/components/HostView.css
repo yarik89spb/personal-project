@@ -26,20 +26,27 @@
 }
 
 .reaction-button:hover {
-  background-color: rgba(240, 207, 21, 0.4);
-  transform: scale(1.5); /* Slightly enlarge the button on hover */
-}s
+  transform: scale(1.2); /* Slightly enlarge the button on hover */
+}
 
 .reaction-button.selected {
-  background-color: rgba(240, 207, 21, 0.4); /* Light blue background */
+  background-color: rgba(0, 123, 255, 0.4); /* Light blue background */
   border-radius: 50%; /* Make button round */
   animation: shine 1s ease-in-out;
+}
+
+.answer-counter{
+  font-size: large;
+  font-family: 'Roboto', sans-serif;;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  text-align: center;
 }
 
 /* Animation for the shine effect */
 @keyframes shine {
   0% {
-    box-shadow: 0 0 5px rgba(243, 241, 101, 0.3);
+    box-shadow: 0 0 5px rgba(48, 101, 112, 0.5);
   }
   50% {
     box-shadow: 0 0 20px rgba(48, 101, 112, 0.5);

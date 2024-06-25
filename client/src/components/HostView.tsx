@@ -128,7 +128,7 @@ function HostView(){
 
   function renderAnswers(){
     return(
-      <div>
+      <div className='answer-counter'>
         <div>Answers submitted</div>
         <div>{answersArray.length}</div>
       </div>
