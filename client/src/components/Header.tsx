@@ -2,6 +2,7 @@ import './Header.css';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from "react";
 import { AuthContext } from '../context/AuthContext';
+import logo from '/public/project-logo-no-bg.png';
 
 export default function Header(){
   const {isLogined, userId} = useContext(AuthContext);
@@ -24,7 +25,7 @@ export default function Header(){
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container">
           <a className="navbar-brand" href="#">
-            <img src='/public/project-logo-no-bg.png' alt="Logo" className="nav-logo d-inline-block align-top mr-2" />
+            <img src={logo} alt="Logo" className="nav-logo d-inline-block align-top mr-2" />
           </a>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>

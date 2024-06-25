@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import { EventPayload, Option, Question, Comment } from '../utils/interfaces.ts';
 import { useParams } from 'react-router-dom';
+import standBy from '/public/stand-by.jpg';
 
 function GuestView() {
   let userComments = [
@@ -113,7 +114,7 @@ function GuestView() {
         </div>
         <div id='stand-by' className={isHidden ? 'none' : 'd-none'}>
           <div className="tv-box">
-            <img src='/public/stand-by.jpg' className="centered-image" />
+            <img src={standBy} className="centered-image" />
           </div>
         </div>
         <div className='card'>

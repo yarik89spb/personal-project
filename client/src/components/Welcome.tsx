@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import logo from '/public/project-logo-no-bg.png';
 import './Welcome.css';
 
 export default function WelcomePage(){
@@ -27,7 +28,7 @@ export default function WelcomePage(){
   return (
     <div className="container d-flex flex-column align-items-center justify-content-center">
       <div className='welcome-logo'>
-        <img src='/public/project-logo-no-bg.png' alt="Project Logo"></img>
+        <img src={logo} alt="Project Logo"></img>
       </div>
       <h2>Welcome to Porko</h2>
       <h3>Getting started</h3>
