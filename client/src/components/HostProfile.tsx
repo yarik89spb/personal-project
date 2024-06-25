@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { ProjectObject } from '../utils/interfaces'
+import './HostProfile.css';
 
 
 export default function HostProfile(){
@@ -22,11 +23,13 @@ export default function HostProfile(){
             <p>{projectObj.description}</p>
             <button 
             type='button'
+            className="btn btn-primary mr-2"
             onClick={()=>handleEventStart(projectObj.projectId)}>
               Start 
             </button>
             <button 
             type='button'
+            className="btn btn-secondary"
             onClick={()=>handleStatsClick(projectObj.projectId)}>
               Summary 
             </button>
@@ -53,7 +56,7 @@ export default function HostProfile(){
     if(projectsArray && projectsArray.length > 0){
       renderProjectsList();
     }
-  }, [])
+  }, [userId])
 
 
   function handleEventStart(projectId: string){
@@ -65,19 +68,20 @@ export default function HostProfile(){
   }
 
   return (
-    <>
-      <h3>Hi, {userName}!</h3>
-      <h2>Your projects:</h2>
+    <div className="host-profile-container">
+      <h3 className='welcome-username'>Hi, {userName}!</h3>
+      <h2 className='username-projects-title'>Your projects:</h2>
       <div>
         {renderProjectsList()}
       </div>
       <div>
         <button 
         type='button'
+        className="btn btn-info create-project"
         onClick={()=>{setShowConstructor(!showConstructor)}}>
           Create project
         </button>
       </div>
-    </>
+    </div>
   )
 }
