@@ -100,7 +100,6 @@ app.post('/user/signup', async (req, res) => {
 })
 
 app.post('/user/signin', async (req, res) => {
-  console.log()
   try{
     const userData = {
       userEmail: req.body.userEmail,
@@ -149,7 +148,7 @@ io.on("connection", (socket) => {
   })
 
   socket.on('changeScreen', async (passedData)=>{
-    // console.log(passedData)
+    console.log(passedData)
     await storeCurrentBatch(testProjectId);
     io.emit('changeScreen', passedData)
   })

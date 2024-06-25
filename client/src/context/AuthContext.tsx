@@ -69,7 +69,6 @@ export function AuthProvider({ children } : AuthProviderProps){
   }
 
   useEffect(() => {
-    console.log(userData)
     getLoginStance();
   }, [cookies])
   

@@ -1,5 +1,6 @@
 import { useState, useEffect} from 'react';
 import { useSocket, useMessageListener, sendCommand, useAnswerListener, useEmojiListener } from '../utils/websocket';
+import { useNavigate, useParams } from 'react-router-dom';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import AlwaysScrollToBottom from './AlwaysScrollToBottom';
@@ -13,7 +14,7 @@ function HostView(){
   let userComments = [
     {userName:'Bot', text:'請大家盡量留言和回答問題', questionId: 11}
   ];
-
+  const { projectId } = useParams();
   const [projectData, setProjectData] = useState({
     projectName: 'Missing',
     projectId: null,
@@ -23,7 +24,6 @@ function HostView(){
   const [commentsArray, setComments] =  useState(userComments);
   const [answersArray, setAnswers] =  useState<Option[]>([]);
   const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`);
-  //const socket = useSocket('');
   const [selectedEmoji, setSelectedEmoji] = useState("");
 
   /* Project data rendering and broadcasting */
@@ -31,15 +31,13 @@ function HostView(){
   useEffect(() => {
     async function fetchData(){
       try{
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/project-data?id=66714e0596a05e731122579b`)
-        //const response = await fetch('/api/project-data?id=66714e0596a05e731122579b')
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/project-data?projectId=${projectId}`)
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const newProjectData = await response.json();
         setIsLoadingQuestions(false);
         setProjectData(newProjectData.data);
-        console.log(newProjectData.data)
       } catch(error){
         console.error(`Failed to get project data. ${error}`)
         setIsLoadingQuestions(false);
