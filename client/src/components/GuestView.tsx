@@ -35,21 +35,25 @@ function GuestView() {
   });
   const [isHidden, setIsHidden] = useState(true);
   const [selectedEmoji, setSelectedEmoji] = useState("");
+  const [nickname, setNickname] = useState('user')
+  const [userNicknameInput, setUserNicknameInput] = useState('')
 
   const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId);
   //const socket = useSocket(''); 
 
   function addMessageToChat(){
-    const commentObj: Comment = {
-      userName: 'user',
-      questionId: currentScreen.id,
-      text: userMessageInput
-    }; 
-    setUserMessageInput('');
-    sendMessage(socket, 'viewerMessage', {
-      roomId: projectId, 
-      passedData: commentObj});
-  }
+    if(userMessageInput.length > 0){
+      const commentObj: Comment = {
+        userName: userNicknameInput,
+        questionId: currentScreen.id,
+        text: userMessageInput
+      }; 
+      setUserMessageInput('');
+      sendMessage(socket, 'viewerMessage', {
+        roomId: projectId, 
+        passedData: commentObj});
+      }
+    }
 
   useMessageListener(socket, 'viewerMessage', (message: Comment) => {
     setComments((prevComments) => [...prevComments, {
@@ -60,6 +64,10 @@ function GuestView() {
 
   function storeUserMessageInput(e: ChangeEvent<HTMLInputElement>){
     setUserMessageInput(e.target.value);
+  }
+
+  function storeUserNicknameInput(e: ChangeEvent<HTMLInputElement>){
+    setUserNicknameInput(e.target.value);
   }
 
   function sendUserAnswerToServer(answer:Option){
@@ -124,7 +132,16 @@ function GuestView() {
                 <FontAwesomeIcon icon={faThumbsDown} />
               </button>
               {/* Add more reaction buttons as needed */}
-            </div>             
+              <div className='user-nickname-input'>
+                <input
+                  type='text'
+                  placeholder="Choose nickname"
+                  className='nickname-input'
+                  value={userNicknameInput}
+                  onChange={(event) => storeUserNicknameInput(event)}
+                /> 
+              </div>
+            </div>
 
             <div id='messenger' className='input-group'>
               <input

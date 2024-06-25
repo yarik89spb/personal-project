@@ -23,6 +23,12 @@ div#comments-container.card-body{
   --bs-font-weight-base: 700;
 }
 
+.nickname-input{
+  margin-top: 8px;
+  border-radius: 5px;
+  vertical-align: middle;
+}
+
 .reaction-buttons {
   display: flex;
   gap: 10px; /* Adjust the space between buttons */
