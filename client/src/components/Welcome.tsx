@@ -1,10 +1,11 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import './Welcome.css';
 
 export default function WelcomePage(){
   const { isLogined, userId, userEmail, userName } = useContext(AuthContext);
+  const [isViewer, setIsViewer] = useState(false);
   const navigate = useNavigate();
 
 
@@ -19,7 +20,8 @@ export default function WelcomePage(){
   }
 
   const handleViewerClick = () => {
-    navigate('/guest')
+    setIsViewer(!isViewer);
+    // navigate('/guest')
   }
 
   return (

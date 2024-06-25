@@ -11,6 +11,26 @@ div#comments-container.card-body{
   border: 1px solid #262424;
 }
 
+/* Add this to your CSS file */
+#stand-by .tv-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  border: 10px solid #333;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  max-width: 80%; /* Adjust as needed */
+  margin: 0 auto; /* Center horizontally */
+}
+
+#stand-by .centered-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 .btn.btn-primary {
   /* Your custom styles */
   --bs-btn-bg: rgb(48, 101, 112);

@@ -111,6 +111,11 @@ function GuestView() {
         <div className={isHidden? 'd-none': 'none'}>
           <EventScreen question={currentScreen} onOptionClick={sendUserAnswerToServer}/>
         </div>
+        <div id='stand-by' className={isHidden ? 'none' : 'd-none'}>
+          <div className="tv-box">
+            <img src='/public/stand-by.jpg' className="centered-image" />
+          </div>
+        </div>
         <div className='card'>
           <h3 className='card-header chat'>Chat:</h3>
           <div className='card-body' style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }} id='comments-container'>
