@@ -38,9 +38,9 @@ function EventScreen( { question, onOptionClick } : EventScreenProps){
         <div className="mb-4">
           <div className="card" >
             <div className="card-body">
-              <h4 className="card-title"> {question.content} </h4>
+              <h4 className="card-title"> {currentQuestion.content} </h4>
               <div className="row">
-                {question.options.map((option, index)=>(
+                {currentQuestion.options.map((option, index)=>(
                   <div className="col-md-6 mb-2" key={index}>
                     <button 
                       key={index} 
