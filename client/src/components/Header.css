@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+.navbar {
+  background-color: rgb(48, 101, 112); /* Main color */
+  border-bottom: 2px solid rgb(234, 178, 206); /* Border color */
+}
+
+.nav-logo{
+  width: 100px;
+  height: auto;
+}
+
+a.nav-link {
+  color: rgb(238, 223, 231); /* Text color */
+  font-size: 2rem;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* Lighten on hover */
+  border-radius: 5px;
+}

@@ -1,0 +1,37 @@
+body {
+  background-image: url('/public/1989436.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh; /* Ensure the background covers the entire viewport height */
+}
+
+.container {
+  padding-top: 20px; /* Adjust as needed */
+  padding-bottom: 20px; /* Adjust as needed */
+}
+
+.welcome-logo{
+  max-width: 100%;
+  height: auto;
+}
+
+.box.p-3 {
+  position: relative; /* Ensure position relative for absolute positioning */
+  padding: 20px; /* Adjust padding as needed */
+  background-color: rgba(248, 249, 250, 0.5); /* Light background color */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add box shadow for depth */
+}
+
+.box.p-3::before {
+  content: '';
+  position: absolute;
+  top: -15px; /* Adjust to position triangle */
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px 10px 0;
+  border-style: solid;
+  border-color: #f8f9fa transparent transparent;
+}
+

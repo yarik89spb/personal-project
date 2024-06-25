@@ -9,6 +9,7 @@ export default function HostProfile(){
   const { userId } = useParams();
   const { userName} = useContext(AuthContext);
   const [projectsArray, setProjectsArray] = useState([]);
+  const [showConstructor, setShowConstructor] = useState(false);
 
   function renderProjectsList(){
     return (
@@ -65,10 +66,17 @@ export default function HostProfile(){
 
   return (
     <>
-      <h3>Hi, {userName}</h3>
+      <h3>Hi, {userName}!</h3>
       <h2>Your projects:</h2>
       <div>
         {renderProjectsList()}
+      </div>
+      <div>
+        <button 
+        type='button'
+        onClick={()=>{setShowConstructor(!showConstructor)}}>
+          Create project
+        </button>
       </div>
     </>
   )
