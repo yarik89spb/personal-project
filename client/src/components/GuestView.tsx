@@ -19,7 +19,12 @@ function GuestView() {
   let userComments = [
     {userName:'Bot', text:'請大家盡量留言和回答問題', questionId: 11} 
   ];
-  const { projectId } = useParams();
+  const { projectId } = useParams<{ projectId: string }>();
+
+  if (!projectId) {
+    throw new Error('Project ID is required');
+  }
+
   const [commentsArray, setComments] =  useState<Comment[]>(userComments);
   const [userMessageInput, setUserMessageInput] = useState('');
   const [currentScreen, setCurrentScreen] = useState<Question>({

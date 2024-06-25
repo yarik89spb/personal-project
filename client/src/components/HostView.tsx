@@ -1,6 +1,6 @@
 import { useState, useEffect} from 'react';
 import { useSocket, useMessageListener, sendCommand, useAnswerListener, useEmojiListener } from '../utils/websocket';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import AlwaysScrollToBottom from './AlwaysScrollToBottom';
@@ -14,7 +14,12 @@ function HostView(){
   let userComments = [
     {userName:'Bot', text:'請大家盡量留言和回答問題', questionId: 11}
   ];
-  const { projectId } = useParams();
+  const { projectId } = useParams<{ projectId: string }>();
+
+  if (!projectId) {
+    throw new Error('Project ID is required');
+  }
+
   const [projectData, setProjectData] = useState({
     projectName: 'Missing',
     projectId: null,

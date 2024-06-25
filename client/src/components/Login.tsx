@@ -1,16 +1,20 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../context/AuthContext"
 
 
 export default function Login(){
-  const { login, logout } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [hasAccount, setHasAccount] = useState(true);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const target = e.target as typeof e.target & {
+      userEmail: { value: string };
+      userPassword: { value: string };
+    };
     try {
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/signin`, {
         method: 'POST',
@@ -18,8 +22,8 @@ export default function Login(){
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userEmail: e.target.userEmail.value,
-          userPassword: e.target.userPassword.value,
+          userEmail: target.userEmail.value,
+          userPassword: target.userPassword.value,
         }),
       });
       if (!response.ok) {
@@ -31,17 +35,17 @@ export default function Login(){
       const userData = data.user;
       login(userJWT, userData);
       navigate(`/profile/${userData.userId}`);
-    } catch(error) {
+    } catch(error: any) {
       console.error('Login error:', error);
-      setError(error.message)
+      setError(error.message as string)
     }
   }
 
-  const handleLogout = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    logout();
-    navigate('/');
-  }
+  // const handleLogout = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   logout();
+  //   navigate('/');
+  // }
 
   function showRegistrationForm(){
     setHasAccount(!hasAccount)
@@ -49,6 +53,12 @@ export default function Login(){
 
   const handleRegistration = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const target = e.target as typeof e.target & {
+      userEmail: { value: string };
+      userName: { value: string };
+      userCompany: { value: string };
+      userPassword: { value: string };
+    };
     try {
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/signup`, {
         method: 'POST',
@@ -56,10 +66,10 @@ export default function Login(){
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userEmail: e.target.userEmail.value,
-          userName: e.target.userName.value,
-          userCompany: e.target.userCompany.value,
-          userPassword: e.target.userPassword.value,
+          userEmail: target.userEmail.value,
+          userName: target.userName.value,
+          userCompany: target.userCompany.value,
+          userPassword: target.userPassword.value,
         }),
       });
       if (!response.ok) {
@@ -71,9 +81,9 @@ export default function Login(){
       const userData = data.user;
       login(userJWT, userData);
       navigate('/profile');
-    } catch(error) {
+    } catch(error: any) {
       console.error('Login error:', error);
-      setError(error.message)
+      setError(error.message as string)
     }
   }
 

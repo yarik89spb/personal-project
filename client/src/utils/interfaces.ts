@@ -1,6 +1,12 @@
-interface EventPayload {
-  roomId: string;
-  passedData: object;
+export interface EventPayload {
+  roomId?: string;
+  passedData: object | string;
+}
+
+export interface ProjectObject{
+  projectId: string;
+  projectName: string;
+  description?: string;
 }
 
 export interface Comment{

@@ -23,7 +23,7 @@ export const AuthContext = createContext<AuthContextType>({
   userEmail: null,
   userName: null,
   userId: null,
-  login: (userJWT: string, userData: UserData) => {},
+  login: () => {},
   logout: () => {},
   getLoginStance: () => {},
 });

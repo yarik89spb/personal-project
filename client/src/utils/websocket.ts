@@ -1,7 +1,7 @@
 import io, { Socket } from 'socket.io-client';
 import { useEffect, useRef } from 'react';
 
-import { EventPayload, Comment, Option,  Answer } from '../utils/interfaces.ts';
+import { EventPayload, Comment, Option } from '../utils/interfaces.ts';
 
 export const useSocket = (url: string, roomId: string) => {
   const socket = useRef<Socket>();

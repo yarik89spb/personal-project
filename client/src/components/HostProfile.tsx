@@ -1,17 +1,18 @@
 import { useContext, useState, useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { ProjectObject } from '../utils/interfaces'
 
 
 export default function HostProfile(){
   const navigate = useNavigate();
   const { userId } = useParams();
-  const { userEmail, userName} = useContext(AuthContext);
+  const { userName} = useContext(AuthContext);
   const [projectsArray, setProjectsArray] = useState([]);
 
   function renderProjectsList(){
     return (
-      projectsArray.map((projectObj)=>{
+      projectsArray.map((projectObj:  ProjectObject)=>{
         return (
           <div 
             className='project-container'
@@ -54,11 +55,11 @@ export default function HostProfile(){
   }, [])
 
 
-  function handleEventStart(projectId){
+  function handleEventStart(projectId: string){
     navigate(`/host/${projectId}`)
   }
 
-  function handleStatsClick(projectId){
+  function handleStatsClick(projectId: string){
     navigate(`/stats/${projectId}`)
   }
 

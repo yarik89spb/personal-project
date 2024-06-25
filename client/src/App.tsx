@@ -5,12 +5,16 @@ import StatsView from './components/StatsView'
 import Header from './components/Header'
 import Login from './components/Login'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { ReactNode, useContext } from 'react';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import Welcome from './components/Welcome'
 import HostProfile from './components/HostProfile'
 
-function ProtectedRoute({ element: Component }){
+interface ProtectedRouteProps {
+  element: ReactNode
+}
+
+function ProtectedRoute({ element: Component }: ProtectedRouteProps){
   const { isLogined } = useContext(AuthContext);
 
   return isLogined ? Component : <Navigate to="/login" />;
