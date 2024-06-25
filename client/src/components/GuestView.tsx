@@ -35,7 +35,7 @@ function GuestView() {
   });
   const [isHidden, setIsHidden] = useState(true);
   const [selectedEmoji, setSelectedEmoji] = useState("");
-  const [nickname, setNickname] = useState('Viewer')
+  // const [nickname, setNickname] = useState('Viewer')
   const [userNicknameInput, setUserNicknameInput] = useState('Viewer')
 
   const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId);
