@@ -27,7 +27,7 @@ function App() {
           <Route path='profile/:userId' element={<ProtectedRoute element={<HostProfile />}/>} />
           <Route path='host/:projectId' element={<ProtectedRoute element={<HostView />}/>} />
           <Route path='guest/:projectId' element={<GuestView />} />
-          <Route path='stats' element={<ProtectedRoute element={<HostView />}/>} />
+          <Route path='stats/:projectId' element={<ProtectedRoute element={<StatsView />}/>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

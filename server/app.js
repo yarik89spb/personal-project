@@ -64,7 +64,9 @@ app.get('/api/user-projects', async (req, res)=>{
 
 app.get('/api/project-stats', async (req, res)=>{
   try{
-    const data = await getProjectStatistics(testProjectId);
+    const projectId = req.query.projectId;
+    console.log('Project id is ', projectId)
+    const data = await getProjectStatistics(projectId);
     res.status(200).json({data: data}) 
   }catch(error){
     res.status(400).json({error:'Failed to load data'})
@@ -73,7 +75,8 @@ app.get('/api/project-stats', async (req, res)=>{
 
 app.get('/api/word-counts', async (req, res)=>{
   try{
-    const data = await getWordCounts(testProjectId);
+    const projectId = req.query.projectId;
+    const data = await getWordCounts(projectId);
     res.status(200).json({data: data}) 
   }catch(error){
     res.status(400).json({error:'Failed to load data'})

@@ -21,7 +21,12 @@ export default function HostProfile(){
             <button 
             type='button'
             onClick={()=>handleEventStart(projectObj.projectId)}>
-              Start ! 
+              Start 
+            </button>
+            <button 
+            type='button'
+            onClick={()=>handleStatsClick(projectObj.projectId)}>
+              Summary 
             </button>
           </div>
           )
@@ -50,8 +55,11 @@ export default function HostProfile(){
 
 
   function handleEventStart(projectId){
-    console.log(projectId)
     navigate(`/host/${projectId}`)
+  }
+
+  function handleStatsClick(projectId){
+    navigate(`/stats/${projectId}`)
   }
 
   return (

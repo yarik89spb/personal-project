@@ -1,4 +1,5 @@
 import { useState,  useEffect} from 'react';
+import { useParams } from 'react-router-dom';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -22,6 +23,7 @@ export default function StatsView(){
     value: number;
   }
 
+  const { projectId } = useParams();
   const [projectStats, setProjectStats] = useState<ProjectStats>({
     projectName: 'No project',
     data: []
@@ -34,8 +36,8 @@ export default function StatsView(){
   useEffect(() => {
     async function fetchResponses(): Promise<void>{
       try{
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/project-stats`)
-        // response = await fetch('/api/project-stats')
+        console.log(projectId)
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/project-stats?projectId=${projectId}`)
         const responseJSON = await response.json();
         const responseData: ProjectStats = responseJSON.data;
         setProjectStats(responseData);
@@ -46,8 +48,7 @@ export default function StatsView(){
     }
     async function fetchWordCounts(){
       try{
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/word-counts`)
-        // const response = await fetch('/api/word-counts')
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/word-counts?projectId=${projectId}`)
         const responseJSON = await response.json();
         const wordCounts = responseJSON.data;
         setWordCounts(wordCounts);

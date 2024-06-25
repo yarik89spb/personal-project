@@ -168,8 +168,7 @@ export async function getUserActivity(projectId) {
   try {
     const reactionData = await ProjectResponses.findOne({ projectId: projectId });
     const userActivity = reactionData.questions;
-
-    const questionsData = await UserProject.findOne({ projectId: projectId });
+    const questionsData = await UserProject.findById(projectId);
     const projectName = questionsData.projectName;
     const questionsContent = questionsData.questions;
 
