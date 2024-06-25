@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import './ProjectConstructor.css'
 
 
 const ProjectConstructor = () => {
@@ -109,85 +110,87 @@ const ProjectConstructor = () => {
   }
 
   return (
-    <div>
-      <h2>Create New Project</h2>
+    <div className="container mt-4 p-4 bg-light rounded shadow-sm">
+      <h2 className="mb-4 constructor-title">Create New Project</h2>
       <form onSubmit={handleSubmit}>
-        <label>
-          Project Name:
+        <div className="form-group">
+          <label>Project Name:</label>
           <input
             type="text"
+            className="form-control"
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
             required
           />
-        </label>
-        <br />
-        <label>
-          Description:
+        </div>
+        <div className="form-group">
+          <label>Description:</label>
           <textarea
+            className="form-control"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
           />
-        </label>
-        <br />
-        {questions.map((question, index) => (
-          <div key={index}>
-            <label>
-              Question {index + 1} Title:
-              <input
-                type="text"
-                name="title"
-                value={question.title}
-                onChange={(e) => handleQuestionChange(index, e)}
-                required
-              />
-            </label>
-            <br />
-            <label>
-              Question {index + 1} Content:
-              <textarea
-                value={question.content}
-                name="content"
-                onChange={(e) => handleQuestionChange(index, e)}
-                required
-              />
-            </label>
-            <br />
-            {question.options.map((option, optionIndex) => (
-              <div key={optionIndex}>
-                <label>
-                  Option {optionIndex + 1}:
+        </div>
+        <div className="question-list">
+          {questions.map((question, index) => (
+            <div key={index} className="question-container p-2 mb-3 border rounded">
+              <div className="form-group">
+                <label>Question {index + 1} Title:</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="title"
+                  value={question.title}
+                  onChange={(e) => handleQuestionChange(index, e)}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Question {index + 1} Content:</label>
+                <textarea
+                  className="form-control"
+                  name="content"
+                  value={question.content}
+                  onChange={(e) => handleQuestionChange(index, e)}
+                  required
+                />
+              </div>
+              {question.options.map((option, optionIndex) => (
+                <div key={optionIndex} className="form-group d-flex align-items-center">
                   <input
                     type="text"
+                    className="form-control"
                     name={`option-${optionIndex}`}
                     value={option.text}
                     onChange={(e) => handleQuestionChange(index, e)}
                     required
                   />
-                </label>
-                <button
-                  type="button"
-                  onClick={() => removeOption(index, optionIndex)}
-                >
-                  Remove Option
-                </button>
-              </div>
-            ))}
-            <button type="button" onClick={() => addOption(index)}>
-              Add Option
-            </button>
-            <button type="button" onClick={() => removeQuestion(index)}>
-              Remove Question
-            </button>
-            <hr />
-          </div>
-        ))}
-        <button type="button" onClick={addQuestion}>
+                  <button
+                    type="button"
+                    className="btn btn-danger btn-sm ml-2"
+                    onClick={() => removeOption(index, optionIndex)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+              <button type="button" className="btn btn-secondary btn-sm" onClick={() => addOption(index)}>
+                Add Option
+              </button>
+              <button type="button" className="btn btn-danger btn-sm ml-2" onClick={() => removeQuestion(index)}>
+                Remove Question
+              </button>
+            </div>
+          ))}
+        </div>
+        <button type="button" className="btn btn-primary" onClick={addQuestion}>
           Add Question
         </button>
         <br />
-        <button type="submit">Create Project</button>
+        <button type="submit" className="btn btn-success mt-3">
+          Create Project
+        </button>
       </form>
     </div>
   );

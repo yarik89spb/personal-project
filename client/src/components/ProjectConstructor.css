@@ -1,0 +1,27 @@
+.question-list {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+.question-container {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.question-container .form-group {
+  margin-bottom: 0.5rem; 
+}
+
+.form-control {
+  font-size: 0.9rem; 
+  padding: 0.375rem 0.75rem; 
+}
+
+.btn {
+  font-size: 0.85rem;
+  padding: 0.25rem 0.5rem; 
+}
+
+.mb-4.constructor-title{
+  color: rgba(48, 101, 112, 0.8);
+}
