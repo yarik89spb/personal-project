@@ -1,3 +1,8 @@
+interface EventPayload {
+  roomId: string;
+  passedData: object;
+}
+
 export interface Comment{
   userName: string;
   questionId: number;

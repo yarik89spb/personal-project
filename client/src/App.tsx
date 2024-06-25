@@ -26,7 +26,7 @@ function App() {
           <Route path='login' element={<Login />} />
           <Route path='profile/:userId' element={<ProtectedRoute element={<HostProfile />}/>} />
           <Route path='host/:projectId' element={<ProtectedRoute element={<HostView />}/>} />
-          <Route path='guest' element={<GuestView />} />
+          <Route path='guest/:projectId' element={<GuestView />} />
           <Route path='stats' element={<ProtectedRoute element={<HostView />}/>} />
         </Routes>
       </BrowserRouter>

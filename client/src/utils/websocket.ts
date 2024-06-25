@@ -1,9 +1,9 @@
 import io, { Socket } from 'socket.io-client';
 import { useEffect, useRef } from 'react';
 
-import { Comment, Option,  Answer } from '../utils/interfaces.ts';
+import { EventPayload, Comment, Option,  Answer } from '../utils/interfaces.ts';
 
-export const useSocket = (url: string) => {
+export const useSocket = (url: string, roomId: string) => {
   const socket = useRef<Socket>();
 
   useEffect(() => {
@@ -11,10 +11,12 @@ export const useSocket = (url: string) => {
     
     socket.current.on('connect', () => {
       console.log('Connected to WebSocket server!');
+      joinRoom(socket, roomId);
     });
 
     socket.current.on('disconnect', () => {
       console.log('Disconnected from WebSocket server');
+      leaveRoom(socket, roomId);
     });
 
     return () => {
@@ -22,9 +24,28 @@ export const useSocket = (url: string) => {
         socket.current.disconnect();
       }
     };
-  }, [url]);
+  }, [url, roomId]);
 
   return socket;
+};
+
+export const joinRoom = (
+  socket: React.MutableRefObject<Socket | undefined>,
+  roomId: string
+) => {
+  console.log(roomId)
+  if (socket.current) {
+    socket.current.emit('joinRoom', { roomId });
+  }
+};
+
+export const leaveRoom = (
+  socket: React.MutableRefObject<Socket | undefined>,
+  roomId: string
+) => {
+  if (socket.current) {
+    socket.current.emit('leaveRoom', { roomId });
+  }
 };
 
 /* Host functions */
@@ -32,10 +53,10 @@ export const useSocket = (url: string) => {
 export const sendCommand = (
   socket: React.MutableRefObject<Socket | undefined>,
   eventName: string,
-  passedData: object,
+  eventPayload: EventPayload,
 ) => {
   if (socket.current) {
-    socket.current.emit(eventName, passedData);
+    socket.current.emit(eventName, eventPayload);
   }
 };
 
@@ -98,27 +119,27 @@ export const useEmojiListener = (
 export const sendMessage = (
   socket: React.MutableRefObject<Socket | undefined>, 
   eventName: string,
-  message: Comment) => {
+  eventPayload: EventPayload) => {
   if (socket.current) {
-    socket.current.emit(eventName, message);
+    socket.current.emit(eventName, eventPayload);
   }
 };
 
 export const sendUserAnswer = (
   socket: React.MutableRefObject<Socket | undefined>, 
   eventName: string,
-  userAnswer: Answer) => {
+  eventPayload: EventPayload) => {
   if (socket.current) {
-    socket.current.emit(eventName, userAnswer);
+    socket.current.emit(eventName, eventPayload);
   }
 };
 
 export const sendUserEmoji = (
   socket: React.MutableRefObject<Socket | undefined>, 
   eventName: string,
-  userEmoji: string) => {
+  eventPayload: EventPayload) => {
   if (socket.current) {
-    socket.current.emit(eventName, userEmoji);
+    socket.current.emit(eventName, eventPayload);
   }
 };
 

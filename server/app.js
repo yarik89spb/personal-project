@@ -2,7 +2,7 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import connectToDB from './models/db.js';
-import { getWordCounts } from './models/queries.js';
+import { insertAnswer, getWordCounts } from './models/queries.js';
 import { storeComment, storeCurrentBatch } from './controllers/commentController.js';
 import { getProjectStatistics } from './controllers/dashboard.js';
 import { signUp, signIn, validateJWT } from './controllers/userContoller.js'
@@ -142,38 +142,57 @@ app.get('*', (req, res) => {
 
 io.on("connection", (socket) => {
   console.log('User connected')
-  socket.on('viewerMessage', async (message)=>{
-    io.emit('viewerMessage', message)
-    await storeComment(testProjectId, message);
+
+  socket.on('joinRoom', ({ roomId }) => {
+    socket.join(roomId);
+    console.log(`User ${socket.id} joined room ${roomId}`);
+  });
+
+  socket.on('leaveRoom', ({ roomId }) => {
+    socket.leave(roomId);
+    console.log(`User ${socket.id} left room ${roomId}`);
+  });
+
+  socket.on('viewerMessage', async (eventPayload)=>{
+    const {roomId} = eventPayload; // roomId = projectId
+    const message = eventPayload.passedData;
+    io.to(roomId).emit('viewerMessage', message)
+    await storeComment(roomId, message);
   })
 
-  socket.on('changeScreen', async (passedData)=>{
-    console.log(passedData)
-    await storeCurrentBatch(testProjectId);
-    io.emit('changeScreen', passedData)
+  socket.on('changeScreen', async (eventPayload)=>{
+    const {roomId} = eventPayload; // roomId = projectId
+    const {passedData} = eventPayload;
+    await storeCurrentBatch(roomId);
+    io.to(roomId).emit('changeScreen', passedData)
   })
 
-  socket.on('startBroadcasting', (passedData)=>{
-    // console.log(passedData)
-    io.emit('startBroadcasting', passedData)
+  socket.on('startBroadcasting', (eventPayload)=>{
+    const {roomId} = eventPayload; // roomId = projectId
+    const {passedData} = eventPayload;
+    io.to(roomId).emit('startBroadcasting', passedData)
   })
 
-  socket.on('stopBroadcasting', (passedData)=>{
-    // console.log(passedData)
-    io.emit('stopBroadcasting', passedData)
-    addWordCounts(testProjectId);
+  socket.on('stopBroadcasting', (eventPayload)=>{
+    const {roomId} = eventPayload; // roomId = projectId
+    const {passedData} = eventPayload;
+    io.to(roomId).emit('stopBroadcasting', passedData)
+    addWordCounts(roomId);
   })
 
   // Create temporary id for a project:
 
-  socket.on('userAnswer', async (answerData)=>{
-    io.emit('userAnswer', answerData);
-    await insertAnswer(testProjectId, answerData)
+  socket.on('userAnswer', async (eventPayload)=>{
+    const {roomId} = eventPayload; // roomId = projectId
+    const answerData = eventPayload.passedData;
+    io.to(roomId).emit('userAnswer', answerData);
+    await insertAnswer(roomId, answerData)
   })
 
-  socket.on('userEmoji', async (emoji)=>{
-    console.log(emoji)
-    io.emit('userEmoji', emoji);
+  socket.on('userEmoji', async (eventPayload)=>{
+    const {roomId} = eventPayload; // roomId = projectId
+    const emoji = eventPayload.passedData;
+    io.to(roomId).emit('userEmoji', emoji);
   })
 
   

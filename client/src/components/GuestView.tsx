@@ -12,13 +12,14 @@ import AlwaysScrollToBottom from './AlwaysScrollToBottom';
 import './GuestView.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
-import { Option, Question, Comment } from '../utils/interfaces.ts';
+import { EventPayload, Option, Question, Comment } from '../utils/interfaces.ts';
+import { useParams } from 'react-router-dom';
 
 function GuestView() {
   let userComments = [
     {userName:'Bot', text:'請大家盡量留言和回答問題', questionId: 11} 
   ];
-
+  const { projectId } = useParams();
   const [commentsArray, setComments] =  useState<Comment[]>(userComments);
   const [userMessageInput, setUserMessageInput] = useState('');
   const [currentScreen, setCurrentScreen] = useState<Question>({
@@ -30,7 +31,7 @@ function GuestView() {
   const [isHidden, setIsHidden] = useState(true);
   const [selectedEmoji, setSelectedEmoji] = useState("");
 
-  const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`);
+  const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId);
   //const socket = useSocket(''); 
 
   function addMessageToChat(){
@@ -39,14 +40,13 @@ function GuestView() {
       questionId: currentScreen.id,
       text: userMessageInput
     }; 
-    console.log('Emmiting comment to WS', userMessageInput)
     setUserMessageInput('');
-    sendMessage(socket, 'viewerMessage', commentObj);
+    sendMessage(socket, 'viewerMessage', {
+      roomId: projectId, 
+      passedData: commentObj});
   }
 
   useMessageListener(socket, 'viewerMessage', (message: Comment) => {
-    console.log('Intercepted viewer comment', message.text)
-    console.log('Re-rendering comments')
     setComments((prevComments) => [...prevComments, {
       userName: message.userName, 
       text: message.text, 
@@ -58,14 +58,22 @@ function GuestView() {
   }
 
   function sendUserAnswerToServer(answer:Option){
-    sendUserAnswer(socket, 'userAnswer', {
-      id: currentScreen.id, 
-      title: currentScreen.title,
-      userAnswer: answer});
+    const eventPayload = {
+      roomId: projectId,
+      passedData: {
+        id: currentScreen.id, 
+        title: currentScreen.title,
+        userAnswer: answer}
+    } as EventPayload
+    sendUserAnswer(socket, 'userAnswer', eventPayload);
   }
 
   const handleEmojiClick = (emoji: string) => {
-    sendUserEmoji(socket, 'userEmoji', emoji)
+    const eventPayload = {
+      roomId: projectId,
+      passedData: emoji
+    }
+    sendUserEmoji(socket, 'userEmoji', eventPayload)
     setSelectedEmoji(emoji);
   };
 

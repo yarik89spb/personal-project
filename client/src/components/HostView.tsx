@@ -23,7 +23,7 @@ function HostView(){
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
   const [commentsArray, setComments] =  useState(userComments);
   const [answersArray, setAnswers] =  useState<Option[]>([]);
-  const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`);
+  const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId);
   const [selectedEmoji, setSelectedEmoji] = useState("");
 
   /* Project data rendering and broadcasting */
@@ -66,7 +66,10 @@ function HostView(){
   }
 
   function changeScreen(){
-    sendCommand(socket, 'changeScreen', projectData.questions[questionIndex])
+    sendCommand(socket, 'changeScreen', {
+      roomId: projectId,
+      passedData: projectData.questions[questionIndex]
+    })
   }
 
   useEffect(() => { 
@@ -76,10 +79,14 @@ function HostView(){
 
   function handleBroadcastingState(isBroadcasting = false){
     if(isBroadcasting){
-      sendCommand(socket, 'startBroadcasting', {data:null})
+      sendCommand(socket, 'startBroadcasting', {
+        roomId: projectId,
+        passedData:{}})
       changeScreen()
     }else{
-      sendCommand(socket, 'stopBroadcasting', {data:null})
+      sendCommand(socket, 'stopBroadcasting', {
+        roomId: projectId,
+        passedData:{}})
     }
   }
 
