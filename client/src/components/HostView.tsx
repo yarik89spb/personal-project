@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './HostView.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
+import CopyLink from './CopyLink.tsx';
 
 function HostView(){
   let userComments = [
@@ -142,6 +143,7 @@ function HostView(){
   
   return (
     <div className='container'> 
+      <CopyLink link={`http://54.211.88.216/guest/${projectId}`}/>
       <div className='row'>
         <div className='col-md-6'>
           <div className='card'> 
