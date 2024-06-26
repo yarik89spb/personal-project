@@ -8,7 +8,6 @@ import {
   useMessageListener} from '../utils/websocket';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
-import AlwaysScrollToBottom from './AlwaysScrollToBottom';
 import './GuestView.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
@@ -110,7 +109,7 @@ function GuestView() {
   return (
       <div className='container' id='chat-container'>
         <div className={isHidden? 'd-none': 'none'}>
-          <EventScreen question={currentScreen} onOptionClick={sendUserAnswerToServer}/>
+            <EventScreen question={currentScreen} onOptionClick={sendUserAnswerToServer}/>
         </div>
         <div id='stand-by' className={isHidden ? 'none' : 'd-none'}>
           <div className="tv-box">
@@ -120,9 +119,7 @@ function GuestView() {
         <div className='card'>
           <h3 className='card-header chat'>Chat:</h3>
           <div className='card-body' style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }} id='comments-container'>
-            <AlwaysScrollToBottom>
-              <ChatComments comments={commentsArray}/>
-            </AlwaysScrollToBottom>
+            <ChatComments comments={commentsArray}/>
           </div>
 
           

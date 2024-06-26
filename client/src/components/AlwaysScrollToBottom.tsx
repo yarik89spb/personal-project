@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 interface AlwaysScrollToBottomProps {
   children?: React.ReactNode;
@@ -7,7 +7,7 @@ interface AlwaysScrollToBottomProps {
 const AlwaysScrollToBottom: React.FC<AlwaysScrollToBottomProps> = ({ children }) => {
   const elementRef = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (elementRef.current) {
       elementRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
