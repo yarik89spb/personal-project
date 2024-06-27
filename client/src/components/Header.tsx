@@ -5,16 +5,13 @@ import { AuthContext } from '../context/AuthContext';
 import logo from '/public/project-logo-no-bg.png';
 
 export default function Header(){
-  const {isLogined, userId} = useContext(AuthContext);
+  const {userId} = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleNavClick = (page:string) => {
+  const handleNavClick = (event: React.MouseEvent<HTMLAnchorElement>, page:string) => {
+    event.preventDefault();
     if(page==='profile'){
-      if(isLogined && userId){
-        navigate(`/${page}/${userId}`)
-      }else{
-        navigate('/login')
-      }
+      navigate(`/${page}/${userId}`)
     }else{
       navigate(`/${page}`)
     }
@@ -33,10 +30,10 @@ export default function Header(){
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <a className="nav-link" href="" onClick={()=>handleNavClick('')}>Main page</a>
+                <a className="nav-link" href="" onClick={(e)=>handleNavClick(e, '')}>Main page</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href=""  onClick={()=>handleNavClick('profile')}>User profile</a>
+                <a className="nav-link" href=""  onClick={(e)=>handleNavClick(e,'profile')}>User profile</a>
               </li>
             </ul>
           </div>

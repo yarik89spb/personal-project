@@ -5,7 +5,7 @@ interface AuthContextType {
   isLogined: boolean;
   login: (userJWT: string, userData: UserData) => void;
   logout: () => void;
-  getLoginStance: () => void;
+  verifyToken: (jwt:string) => void;
   userId: string | null;
   userEmail: string | null;
   userName: string | null;
@@ -25,7 +25,7 @@ export const AuthContext = createContext<AuthContextType>({
   userId: null,
   login: () => {},
   logout: () => {},
-  getLoginStance: () => {},
+  verifyToken: () => {},
 });
 
 interface AuthProviderProps {
@@ -37,40 +37,42 @@ export function AuthProvider({ children } : AuthProviderProps){
   const [cookies, setCookie, removeCookie]  = useCookies(['jwt'])
   const [userData, setUserData] = useState<UserData | null>(null);
 
-  const getLoginStance = async () => {
-    if(cookies.jwt){
-      console.log('Found token')
-      try{
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/verify`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${cookies.jwt}`,
-          },
-        });
-        if (!response.ok) {
-          const errorData = await response.json(); 
-          throw new Error(`${errorData.text}`);
-        }
-        const jwtPayload = await response.json();
-        setIsLogined(true)
-        setUserData({
-          userId: jwtPayload.userId, 
-          userEmail: jwtPayload.userEmail,
-          userName: jwtPayload.userName,
-          userCompany: jwtPayload.userCompany})
-      } catch(error){
-        setIsLogined(false)
+  const verifyToken = async (jwt: string) => {
+    try{
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/verify`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${jwt}`,
+        },
+      });
+      if (!response.ok) {
+        const errorData = await response.json(); 
+        throw new Error(`${errorData.text}`);
       }
-      
-    }else{
-      console.error('Missing token')
+      const jwtPayload = await response.json();
+      setIsLogined(true)
+      setUserData({
+        userId: jwtPayload.userId, 
+        userEmail: jwtPayload.userEmail,
+        userName: jwtPayload.userName,
+        userCompany: jwtPayload.userCompany})
+    } catch(error){
+      console.error('Token verification error:', error);
       setIsLogined(false)
+      removeCookie('jwt', { path: '/' });
     }
   }
 
   useEffect(() => {
-    getLoginStance();
-  }, [cookies])
+    const jwt = cookies.jwt;
+    if(jwt){
+      console.log('Found token')
+      verifyToken(jwt);
+    }else{
+      console.log('No token found')
+      setIsLogined(false);
+    }
+  }, [cookies.jwt])
   
 
   const login = (userJWT: string, userData: UserData) => {
@@ -90,7 +92,7 @@ export function AuthProvider({ children } : AuthProviderProps){
       isLogined,
       login,
       logout,
-      getLoginStance,
+      verifyToken,
       userId: userData?.userId || null,
       userEmail: userData?.userEmail || null,
       userName: userData?.userName || null,
