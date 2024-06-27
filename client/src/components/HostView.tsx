@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import AlwaysScrollToBottom from './AlwaysScrollToBottom';
-import { Option,  Comment } from '../utils/interfaces.ts';
+import { Option,  Comment, Emoji } from '../utils/interfaces.ts';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './HostView.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -121,9 +121,8 @@ function HostView(){
     setTimeout(() => setSelectedEmoji(''), 1000); // Reset the selected emoji after animation
   };
 
-  useEmojiListener(socket, 'userEmoji', (emoji:string) => {
-    console.log(emoji)
-    handleEmojiClick(emoji);
+  useEmojiListener(socket, 'userEmoji', (emojiData:Emoji) => {
+    handleEmojiClick(emojiData.type);
     setTimeout(() => setSelectedEmoji(''), 1000);
   });
 

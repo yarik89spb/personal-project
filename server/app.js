@@ -4,6 +4,7 @@ import { Server } from 'socket.io';
 import connectToDB from './models/db.js';
 import { insertAnswer, getWordCounts } from './models/queries.js';
 import { storeComment, storeCurrentBatch } from './controllers/commentController.js';
+import { storeEmoji } from './controllers/emojiController.js'
 import { getProjectStatistics } from './controllers/dashboard.js';
 import { signUp, signIn, validateJWT } from './controllers/userContoller.js'
 import { addNewProject, getUserProjects, getProjectData } from './controllers/projectController.js'
@@ -183,8 +184,6 @@ io.on("connection", (socket) => {
     addWordCounts(roomId);
   })
 
-  // Create temporary id for a project:
-
   socket.on('userAnswer', async (eventPayload)=>{
     const {roomId} = eventPayload; // roomId = projectId
     const answerData = eventPayload.passedData;
@@ -194,8 +193,9 @@ io.on("connection", (socket) => {
 
   socket.on('userEmoji', async (eventPayload)=>{
     const {roomId} = eventPayload; // roomId = projectId
-    const emoji = eventPayload.passedData;
-    io.to(roomId).emit('userEmoji', emoji);
+    const emojiData = eventPayload.passedData;
+    io.to(roomId).emit('userEmoji', emojiData);
+    await storeEmoji(roomId, emojiData);
   })
 
   

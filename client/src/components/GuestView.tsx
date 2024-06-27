@@ -11,7 +11,7 @@ import ChatComments from './ChatComments';
 import './GuestView.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
-import { EventPayload, Option, Question, Comment } from '../utils/interfaces.ts';
+import { EventPayload, Option, Question, Comment, Emoji } from '../utils/interfaces.ts';
 import { useParams } from 'react-router-dom';
 import standBy from '/public/stand-by.jpg';
 
@@ -84,7 +84,10 @@ function GuestView() {
   const handleEmojiClick = (emoji: string) => {
     const eventPayload = {
       roomId: projectId,
-      passedData: emoji
+      passedData: {
+        userName: userNicknameInput,
+        questionId: currentScreen.id,
+        type:emoji} as Emoji
     }
     sendUserEmoji(socket, 'userEmoji', eventPayload)
     setSelectedEmoji(emoji);

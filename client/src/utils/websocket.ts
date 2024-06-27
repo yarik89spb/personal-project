@@ -1,7 +1,7 @@
 import io, { Socket } from 'socket.io-client';
 import { useEffect, useRef } from 'react';
 
-import { EventPayload, Comment, Option } from '../utils/interfaces.ts';
+import { EventPayload, Comment, Option, Emoji } from '../utils/interfaces.ts';
 
 export const useSocket = (url: string, roomId: string) => {
   const socket = useRef<Socket>();
@@ -99,7 +99,7 @@ export const useAnswerListener = (
 export const useEmojiListener = (
   socket: React.MutableRefObject<Socket | undefined>,
   eventName: string,
-  callback: (emoji: string) => void
+  callback: (emoji: Emoji) => void
 ) => {
   useEffect(() => {
     if (socket.current) {

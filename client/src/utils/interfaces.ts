@@ -15,6 +15,12 @@ export interface Comment{
   text: string;
 }
 
+export interface Emoji{
+  userName: string;
+  questionId: number;
+  type: string;
+}
+
 export interface Option{
   // 一個選擇
   _id: string,

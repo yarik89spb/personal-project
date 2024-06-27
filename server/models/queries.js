@@ -121,6 +121,48 @@ export async function insertComments(projectId, questionId, comments) {
   }
 }
 
+export async function insertEmoji(projectId, questionId, emojies) {
+  try {
+    console.log(`Inserting emojies into projectId: ${projectId}, questionId: ${questionId}`);
+    // Try to update the specific question's emojies if it exists
+    const result = await ProjectResponses.updateOne(
+      { projectId: projectId, 'questions.id': questionId },
+      { $push: { 'questions.$.reactions': { $each: emojies } } }
+    );
+
+    if (result.matchedCount === 0) {
+      // If the specific question was not found, update the project to add the question
+      const projectUpdateResult = await ProjectResponses.updateOne(
+        { projectId: projectId },
+        {
+          $addToSet: {
+            wordCounts: [],
+            questions: {
+              id: questionId,
+              comments: [],
+              reactions: emojies,
+              answers: []
+            }
+          }
+        },
+        { upsert: true } // Create the project if it doesn't exist
+      );
+
+
+
+      if (projectUpdateResult.matchedCount === 0 && projectUpdateResult.upsertedCount === 0) {
+        console.error('Project not found and not created');
+      } else {
+        console.log('Project or question created and emojies inserted successfully');
+      }
+    } else {
+      console.log('Emojies inserted into existing question successfully');
+    }
+  } catch (error) {
+    console.error('Insert error occurred:', error);
+  }
+}
+
 export async function insertAnswer(projectId, answerData){
   try {
     const { id: questionId, userAnswer } = answerData;
