@@ -30,9 +30,15 @@ export async function getProjectStatistics(projectId){
       let questionReactions = userActivity.find((q) => q.id == question.id).reactions;
       let reactionCounts = questionReactions.reduce((acc, val) => {
         const reactionType = val.type;
+        const isPositive = val.isPositive;
+        // Irrelevant to reduce, but utilize the for loop
         questionAnswersObj.totalReactions += 1;
         questionAnswersObj.totalPositiveReactions += val.isPositive ? 1 : 0;
-        acc[reactionType] = (acc[reactionType] || 0) + 1;
+        //
+        if (!acc[reactionType]) {
+          acc[reactionType] = { count: 0, sentiment: isPositive ? 'positive' : 'negative' };
+        }
+        acc[reactionType].count += 1;
         return acc;
       }, {})
       questionAnswersObj.reactions =  Object.entries(reactionCounts);

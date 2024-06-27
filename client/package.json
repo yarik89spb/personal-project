@@ -22,6 +22,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-cookie": "^7.1.4",
     "react-dom": "^18.2.0",
+    "react-google-charts": "^4.0.1",
     "react-router-dom": "^6.23.1",
     "react-wordcloud": "^1.2.7",
     "sass": "^1.77.4"

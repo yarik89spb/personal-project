@@ -6,6 +6,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ProjectStats } from '../utils/interfaces.ts'
 import { barChartOptions } from '../utils/chartOptions.ts'
 import WordCloud, { Options } from 'react-wordcloud';
+import { Chart } from "react-google-charts";
 import './StatsView.css';
 
 
@@ -31,6 +32,8 @@ export default function StatsView(){
   const [wordCounts, setWordCounts] = useState<WordCount[]>([{
     text:'nothing',
     value: 0}])
+  const [loading, setLoading] = useState(true);
+
 
 
   useEffect(() => {
@@ -41,6 +44,7 @@ export default function StatsView(){
         const responseJSON = await response.json();
         const responseData: ProjectStats = responseJSON.data;
         setProjectStats(responseData);
+        setLoading(false)
 
       } catch(error){
         console.error(`Failed to get project response. ${error}`)
@@ -82,6 +86,71 @@ export default function StatsView(){
     // barChartOptions is exported from chartOptions...
     return <Bar data={data} options={barChartOptions} className="custom-bar"/>;
   }
+
+  const renderSankeyDiagram = () => {
+    // Reshape data into: ["From", "To", "Weight"]
+    if (loading) {
+      return <div>No data available</div>;
+    }
+  
+    // Include links from total positive and total negative to individual reactions
+    const positiveReactions = projectStats.data[0].reactions.filter(([_, { sentiment }]) => sentiment === 'positive');
+    const negativeReactions = projectStats.data[0].reactions.filter(([_, { sentiment }]) => sentiment === 'negative');
+  
+    const positiveCount = positiveReactions.reduce((sum, [_, { count }]) => sum + count, 0);
+    const negativeCount = negativeReactions.reduce((sum, [_, { count }]) => sum + count, 0);
+  
+    const totalLinks = [
+      ["Total Reactions", "Total Positive Reactions", positiveCount],
+      ["Total Reactions", "Total Negative Reactions", negativeCount],
+      ...positiveReactions.map(([reactionType, { count }]) => ["Total Positive Reactions", reactionType, count]),
+      ...negativeReactions.map(([reactionType, { count }]) => ["Total Negative Reactions", reactionType, count]),
+    ];
+  
+    const data = [["From", "To", "Weight"], ...totalLinks];
+  
+    const options = {
+      sankey: {
+        node: {
+          colors: {
+            'Total Reactions': '#FFFFFF',
+            'Total Positive Reactions': '#FFFFFF',
+            'Total Negative Reactions': '#FFFFFF',
+            'like': '#FFFFFF',
+            'heart': '#FFFFFF',
+            'dislike': '#FFFFFF',
+          },
+          label: {
+            fontName: 'Arial',
+            fontSize: 12,
+            color: '#FFFFFFF',
+            bold: true,
+            italic: true,
+          }
+        },
+        link: {
+          colorMode: 'gradient', // Use 'source' or 'target' for single color, 'gradient' for gradient
+          colors: {
+            'Total Reactions->Total Positive Reactions': '#FFFFFF',
+            'Total Reactions->Total Negative Reactions': '#FFFFFF',
+            'Total Positive Reactions->like': '#FFFFFF',
+            'Total Positive Reactions->love': '#FFFFFF',
+            'Total Positive Reactions->heart': '#FFFFFF',
+          }
+        }
+      }
+    };
+  
+    return (
+      <Chart
+        chartType="Sankey"
+        width="100%"
+        height="500px"
+        data={data}
+        options={options}
+      />
+    );
+  };
 
   function renderAnswers() {
     return (
@@ -129,6 +198,7 @@ export default function StatsView(){
 
   return (
     <div className="container-fluid bg-dark text-white">
+      <div>{renderSankeyDiagram()}</div>
       <div className="container mt-5">
         <h2> Statistics for {projectStats.projectName} </h2>
         <div>{renderAnswers()}</div>
