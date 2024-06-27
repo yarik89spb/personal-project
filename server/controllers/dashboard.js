@@ -1,12 +1,4 @@
 import { getUserActivity } from '../models/queries.js'
-import jieba from 'node-jieba';
-import sw from 'stopword';
-
-// function sanitizeCommentsArray(commentsArray){
-//   const commentsTokenized = jieba.cut(commentsArray.join(''))
-//   const commentsSanitized = sw.removeStopwords(commentsTokenized, sw.zh);
-//   return commentsSanitized;
-// }
 
 export async function getProjectStatistics(projectId){
   const {projectName, questionsContent, userActivity} = await getUserActivity(projectId);
@@ -37,7 +29,6 @@ export async function getProjectStatistics(projectId){
       .map((c) => c.text);
       questionAnswersObj.comments = currentQuestionComments;
       questionAnswersObj.commentsAmount = currentQuestionComments.length;
-      // commentsAll.push(sanitizeCommentsArray(currentQuestionComments));
       answerCountsArray.push(questionAnswersObj);
     }
   } catch(error) {

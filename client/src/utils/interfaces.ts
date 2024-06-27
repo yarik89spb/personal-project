@@ -19,6 +19,7 @@ export interface Emoji{
   userName: string;
   questionId: number;
   type: string;
+  isPositive: boolean;
 }
 
 export interface Option{

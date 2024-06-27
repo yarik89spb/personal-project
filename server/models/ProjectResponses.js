@@ -14,7 +14,8 @@ const CommentSchema = new Schema({
 });
 
 const ReactionSchema = new Schema({
-  user: String,
+  userName: String,
+  questionId: Number,
   type: String,
   isPositive: Boolean
 });
