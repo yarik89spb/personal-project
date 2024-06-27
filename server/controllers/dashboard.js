@@ -10,11 +10,13 @@ export async function getProjectStatistics(projectId){
         title:question.title,
         totalAnswers:0, 
         totalCorrectAnswers: 0,
+        totalReactions: 0,
+        totalPositiveReactions: 0,
         comments:[],
         answers: [],
         reactions: []
       }
-      
+      // Answers
       let questionAnswers = userActivity.find((q) => q.id == question.id).answers;
       let answerCounts = questionAnswers.reduce((acc, val) => {
         const answerText = val.text;
@@ -24,6 +26,17 @@ export async function getProjectStatistics(projectId){
         return acc;
       }, {})
       questionAnswersObj.answers =  Object.entries(answerCounts);
+      // Reactions (emoji)
+      let questionReactions = userActivity.find((q) => q.id == question.id).reactions;
+      let reactionCounts = questionReactions.reduce((acc, val) => {
+        const reactionType = val.type;
+        questionAnswersObj.totalReactions += 1;
+        questionAnswersObj.totalPositiveReactions += val.isPositive ? 1 : 0;
+        acc[reactionType] = (acc[reactionType] || 0) + 1;
+        return acc;
+      }, {})
+      questionAnswersObj.reactions =  Object.entries(reactionCounts);
+
       const currentQuestionComments = userActivity
       .find((q) => q.id == question.id).comments
       .map((c) => c.text);
