@@ -112,20 +112,14 @@ export default function StatsView(){
     const options = {
       sankey: {
         node: {
-          colors: {
-            'Total Reactions': '#FFFFFF',
-            'Total Positive Reactions': '#FFFFFF',
-            'Total Negative Reactions': '#FFFFFF',
-            'like': '#FFFFFF',
-            'heart': '#FFFFFF',
-            'dislike': '#FFFFFF',
-          },
+          interactivity: true,
+          // [total, total positive, total negative, heart, like, dislike]
+          colors:  ['#3366CC', '#109618', '#DE2311', '#0FCD54', '#9CF86C', '#C61254'],
           label: {
-            fontName: 'Arial',
-            fontSize: 12,
-            color: '#FFFFFFF',
+            fontName: 'Roboto',
+            fontSize: 20,
+            color: 'white',
             bold: true,
-            italic: true,
           }
         },
         link: {
