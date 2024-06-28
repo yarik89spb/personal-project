@@ -152,6 +152,10 @@ export default function StatsView(){
     if(plotType==='answers'){
       return (<div> {renderAnswers()} </div>)
     }else if(plotType==='reactions'){
+      if(loading){
+        return <h2> Data is loading...</h2>
+      }
+
       return (
       <div>{projectStats.data.map((questionData, index) => (
         <div key={index}>
