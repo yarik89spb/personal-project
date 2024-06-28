@@ -3,6 +3,7 @@ import { useCookies } from 'react-cookie';
 
 interface AuthContextType {
   isLogined: boolean;
+  loading: boolean;
   login: (userJWT: string, userData: UserData) => void;
   logout: () => void;
   verifyToken: (jwt:string) => void;
@@ -20,6 +21,7 @@ interface UserData {
 
 export const AuthContext = createContext<AuthContextType>({
   isLogined: false,
+  loading: true,
   userEmail: null,
   userName: null,
   userId: null,
@@ -34,6 +36,7 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children } : AuthProviderProps){
   const [isLogined, setIsLogined] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [cookies, setCookie, removeCookie]  = useCookies(['jwt'])
   const [userData, setUserData] = useState<UserData | null>(null);
 
@@ -60,6 +63,8 @@ export function AuthProvider({ children } : AuthProviderProps){
       console.error('Token verification error:', error);
       setIsLogined(false)
       removeCookie('jwt', { path: '/' });
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -71,6 +76,7 @@ export function AuthProvider({ children } : AuthProviderProps){
     }else{
       console.log('No token found')
       setIsLogined(false);
+      setLoading(false);
     }
   }, [cookies.jwt])
   
@@ -90,6 +96,7 @@ export function AuthProvider({ children } : AuthProviderProps){
   return (
     <AuthContext.Provider value={{
       isLogined,
+      loading,
       login,
       logout,
       verifyToken,

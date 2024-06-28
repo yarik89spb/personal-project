@@ -5,7 +5,6 @@ const { Schema } = mongoose;
 const ProjectInfoSchema = new Schema({
   projectId: {
     type: String,
-    unique: true,
     required: true
   },
   projectName: {

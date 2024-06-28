@@ -16,7 +16,10 @@ interface ProtectedRouteProps {
 }
 
 function ProtectedRoute({ element: Component }: ProtectedRouteProps){
-  const { isLogined } = useContext(AuthContext);
+  const { isLogined, loading } = useContext(AuthContext);
+  if (loading) {
+    return <div>Loading...</div>; // Or a loading spinner
+  }
   return isLogined ? <> {Component} </> : <Navigate to="/login" />;
 }
 

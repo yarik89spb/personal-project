@@ -14,7 +14,7 @@ export async function addNewUser({userEmail, userName, userHashedPwd, userCompan
     throw new Error(`Could not add new user: ${error}`)
   }
   
-  const newUser = new User({userEmail, userName, userHashedPwd, userCompany});
+  const newUser = new User({userEmail, userName, userHashedPwd, userCompany, projects: []});
   const savedUser = await newUser.save();
   return savedUser._id;
 }
