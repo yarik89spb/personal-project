@@ -12,11 +12,11 @@ export async function storeEmoji(projectId, emojiObj){
   }
   // Insert every 20 emoji
   if(emojies[projectId] && emojies[projectId].length % 10 === 0){
-    await storeCurrentBatch(projectId, emojiObj.questionId)
+    await storeEmojiBatch(projectId, emojiObj.questionId)
   }
 }
 
-export async function storeCurrentBatch(projectId){
+export async function storeEmojiBatch(projectId){
   if(emojies[projectId] && emojies[projectId].length > 0){
     console.log('Sending emoji to DB...')
     await insertEmoji(projectId, QUESTION_ID, emojies[projectId])

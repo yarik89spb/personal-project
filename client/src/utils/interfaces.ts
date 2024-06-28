@@ -36,6 +36,8 @@ export interface Answer{
   userAnswer: Option;
 }
 
+export type ReactionTuple = [string, { count: number; sentiment: 'positive' | 'negative' }];
+
 export interface Question{
   // 題目的問題
   id: number;
@@ -51,7 +53,7 @@ interface QuestionStats{
   totalCorrectAnswers: number;
   answers: [string, string][];
   comments: string[];
-  reactions: string[];
+  reactions: ReactionTuple[];
 }
 
 export interface ProjectStats{

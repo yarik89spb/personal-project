@@ -3,8 +3,8 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import connectToDB from './models/db.js';
 import { insertAnswer, getWordCounts } from './models/queries.js';
-import { storeComment, storeCurrentBatch } from './controllers/commentController.js';
-import { storeEmoji } from './controllers/emojiController.js'
+import { storeComment, storeCommentBatch } from './controllers/commentController.js';
+import { storeEmoji, storeEmojiBatch } from './controllers/emojiController.js'
 import { getProjectStatistics } from './controllers/dashboard.js';
 import { signUp, signIn, validateJWT } from './controllers/userContoller.js'
 import { addNewProject, getUserProjects, getProjectData } from './controllers/projectController.js'
@@ -167,8 +167,9 @@ io.on("connection", (socket) => {
   socket.on('changeScreen', async (eventPayload)=>{
     const {roomId} = eventPayload; // roomId = projectId
     const {passedData} = eventPayload;
-    await storeCurrentBatch(roomId);
     io.to(roomId).emit('changeScreen', passedData)
+    await storeCommentBatch(roomId);
+    await storeEmojiBatch(roomId);
   })
 
   socket.on('startBroadcasting', (eventPayload)=>{

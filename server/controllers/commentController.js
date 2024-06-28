@@ -11,11 +11,11 @@ export async function storeComment(projectId, commentObj){
   }
   // Insert every 20 comments
   if(comments[projectId] && comments[projectId].length % 10 === 0){
-    await storeCurrentBatch(projectId, commentObj.questionId)
+    await storeCommentBatch(projectId, commentObj.questionId)
   }
 }
 
-export async function storeCurrentBatch(projectId){
+export async function storeCommentBatch(projectId){
   if(comments[projectId] && comments[projectId].length > 0){
     console.log('Sending comments to DB...')
     await insertComments(projectId, QUESTION_ID, comments[projectId])

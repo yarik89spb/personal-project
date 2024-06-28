@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { ProjectStats } from '../utils/interfaces.ts'
-import { barChartOptions } from '../utils/chartOptions.ts'
+import { ProjectStats, ReactionTuple } from '../utils/interfaces.ts'
+import { barChartOptions, sankeyOptions } from '../utils/chartOptions.ts'
 import WordCloud, { Options } from 'react-wordcloud';
 import { Chart } from "react-google-charts";
 import './StatsView.css';
@@ -32,6 +32,7 @@ export default function StatsView(){
   const [wordCounts, setWordCounts] = useState<WordCount[]>([{
     text:'nothing',
     value: 0}])
+  const [plotType, setPlotType] = useState<String>('answers');
   const [loading, setLoading] = useState(true);
 
 
@@ -87,62 +88,36 @@ export default function StatsView(){
     return <Bar data={data} options={barChartOptions} className="custom-bar"/>;
   }
 
-  const renderSankeyDiagram = () => {
+  const renderSankeyDiagram = (reactionArray: ReactionTuple[]) => {
     // Reshape data into: ["From", "To", "Weight"]
-    if (loading) {
-      return <div>No data available</div>;
-    }
-  
     // Include links from total positive and total negative to individual reactions
-    const positiveReactions = projectStats.data[0].reactions.filter(([_, { sentiment }]) => sentiment === 'positive');
-    const negativeReactions = projectStats.data[0].reactions.filter(([_, { sentiment }]) => sentiment === 'negative');
+    const positiveReactions = reactionArray.filter(([_, { sentiment }]) => sentiment === 'positive');
+    const negativeReactions = reactionArray.filter(([_, { sentiment }]) => sentiment === 'negative');
   
     const positiveCount = positiveReactions.reduce((sum, [_, { count }]) => sum + count, 0);
     const negativeCount = negativeReactions.reduce((sum, [_, { count }]) => sum + count, 0);
   
     const totalLinks = [
-      ["Total Reactions", "Total Positive Reactions", positiveCount],
-      ["Total Reactions", "Total Negative Reactions", negativeCount],
-      ...positiveReactions.map(([reactionType, { count }]) => ["Total Positive Reactions", reactionType, count]),
-      ...negativeReactions.map(([reactionType, { count }]) => ["Total Negative Reactions", reactionType, count]),
+      ["Total", "Positive", positiveCount],
+      ["Total", "Negative", negativeCount],
+      ...positiveReactions.map(([reactionType, { count }]) => ["Positive", reactionType, count]),
+      ...negativeReactions.map(([reactionType, { count }]) => ["Negative", reactionType, count]),
     ];
   
     const data = [["From", "To", "Weight"], ...totalLinks];
   
-    const options = {
-      sankey: {
-        node: {
-          interactivity: true,
-          // [total, total positive, total negative, heart, like, dislike]
-          colors:  ['#3366CC', '#109618', '#DE2311', '#0FCD54', '#9CF86C', '#C61254'],
-          label: {
-            fontName: 'Roboto',
-            fontSize: 20,
-            color: 'white',
-            bold: true,
-          }
-        },
-        link: {
-          colorMode: 'gradient', // Use 'source' or 'target' for single color, 'gradient' for gradient
-          colors: {
-            'Total Reactions->Total Positive Reactions': '#FFFFFF',
-            'Total Reactions->Total Negative Reactions': '#FFFFFF',
-            'Total Positive Reactions->like': '#FFFFFF',
-            'Total Positive Reactions->love': '#FFFFFF',
-            'Total Positive Reactions->heart': '#FFFFFF',
-          }
-        }
-      }
-    };
-  
     return (
-      <Chart
-        chartType="Sankey"
-        width="100%"
-        height="500px"
-        data={data}
-        options={options}
-      />
+      <div className="row mb-3">
+        <div className="col-12">
+          <Chart
+            chartType="Sankey"
+            width="100%"
+            height="300px"
+            data={data}
+            options={sankeyOptions}
+          />
+        </div>
+      </div>
     );
   };
 
@@ -173,6 +148,25 @@ export default function StatsView(){
     );
   }
 
+  function displayPlot(plotType:String){
+    if(plotType==='answers'){
+      return (<div> {renderAnswers()} </div>)
+    }else if(plotType==='reactions'){
+      return (
+      <div>{projectStats.data.map((questionData, index) => (
+        <div key={index}>
+          <div className="row">
+            <div className="col-12">
+              <h5>{questionData.title}</h5>
+            </div>
+          </div>
+          {renderSankeyDiagram(questionData.reactions)}
+        </div>
+      ))}</div>
+    )
+    }
+  }
+
   function renderWordCloud(){
     const options: Partial<Options> = {
       fontFamily: 'Arial',
@@ -192,10 +186,23 @@ export default function StatsView(){
 
   return (
     <div className="container-fluid bg-dark text-white">
-      <div>{renderSankeyDiagram()}</div>
       <div className="container mt-5">
         <h2> Statistics for {projectStats.projectName} </h2>
-        <div>{renderAnswers()}</div>
+        <div className='row'>
+          <div className='d-flex justify-content-start'>
+            <button 
+              className='btn btn-primary btn-lg mx-2'
+              onClick={() => {setPlotType('answers')}}>
+                Answers
+            </button>
+            <button 
+              className='btn btn-primary btn-lg mx-2'
+              onClick={() => {setPlotType('reactions')}}>
+                Reactions
+            </button>
+          </div>
+        </div>
+        <div>{displayPlot(plotType)}</div>
       </div>
       <div className="container mt-5">
         <div>{renderWordCloud()}</div>
