@@ -1,4 +1,4 @@
-import { insertComments } from '../models/queries.js'
+import { insertComments, findProjectComments } from '../models/queries.js'
 
 let commentCount = 0;
 let comments = {};
@@ -25,3 +25,13 @@ export async function storeCurrentBatch(projectId){
     comments[projectId] = [];
   }
 }
+
+export async function getProjectComments(projectId){
+  const questionResponses = await findProjectComments(projectId);
+  // Return flatten array of all comments
+  const projectComments = questionResponses.flatMap((question) => {
+    return question.comments;
+  })
+  return projectComments;
+}
+
