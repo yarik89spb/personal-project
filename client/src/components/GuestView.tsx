@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import { 
   useSocket, 
   sendMessage, 
@@ -14,6 +14,7 @@ import { faHeart, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-i
 import { EventPayload, Option, Question, Comment, Emoji } from '../utils/interfaces.ts';
 import { useParams } from 'react-router-dom';
 import standBy from '/public/stand-by.jpg';
+import { useCookies } from 'react-cookie';
 
 function GuestView() {
   let userComments = [
@@ -35,16 +36,26 @@ function GuestView() {
   });
   const [isHidden, setIsHidden] = useState(true);
   const [selectedEmoji, setSelectedEmoji] = useState("");
-  // const [nickname, setNickname] = useState('Viewer')
-  const [userNicknameInput, setUserNicknameInput] = useState('Viewer')
+  const [userNickname, setUserNickname] = useState('Viewer')
+  const [userNicknameInput, setUserNicknameInput] = useState('Viewer');
+  const [cookies, setCookie]  = useCookies(['userNickname']); // , removeCookie]
 
   const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId);
-  //const socket = useSocket(''); 
+  
+
+  useEffect(()=>{
+    const selectedNickname = cookies.userNickname;
+    if(selectedNickname){
+      setUserNickname(selectedNickname);
+      setUserNicknameInput(selectedNickname);
+    }
+  }, 
+  [])
 
   function addMessageToChat(){
     if(userMessageInput.length > 0){
       const commentObj: Comment = {
-        userName: userNicknameInput,
+        userName: userNickname,
         questionId: currentScreen.id,
         text: userMessageInput
       }; 
@@ -66,8 +77,9 @@ function GuestView() {
     setUserMessageInput(e.target.value);
   }
 
-  function storeUserNicknameInput(e: ChangeEvent<HTMLInputElement>){
-    setUserNicknameInput(e.target.value);
+  function saveUserNickName(){
+    setUserNickname(userNicknameInput);
+    setCookie('userNickname', userNicknameInput, { path: `/guest/${projectId}` });
   }
 
   function sendUserAnswerToServer(answer:Option){
@@ -122,14 +134,6 @@ function GuestView() {
           }
         </div>
 
-        {/* <div className={isHidden? 'd-none': 'none'}>
-            <EventScreen question={currentScreen} onOptionClick={sendUserAnswerToServer}/>
-        </di </dv>
-        <div id='stand-by' className={isHidden ? 'none' : 'd-none'}>
-          <div className="tv-box">
-            <img src={standBy} className="centered-image" />
-          </div>
-        </div> */}
         <div className='card'>
           <h3 className='card-header chat'>Chat:</h3>
           <div className='card-body' style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }} id='comments-container'>
@@ -155,8 +159,14 @@ function GuestView() {
                   placeholder="Choose nickname"
                   className='nickname-input'
                   value={userNicknameInput}
-                  onChange={(event) => storeUserNicknameInput(event)}
-                /> 
+                  onChange={(e) => setUserNicknameInput(e.target.value)}
+                />
+                <button type='button'
+                className='btn btn-primary save-nickname'
+                onClick={()=>saveUserNickName()}
+                >
+                Save
+                </button> 
               </div>
             </div>
 
