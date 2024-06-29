@@ -222,6 +222,17 @@ export async function getUserActivity(projectId) {
   }
 }
 
+export async function findProjectComments(projectId){
+  try{
+    const reactionData = await ProjectResponses.findOne({ projectId: projectId });
+    console.log(reactionData)
+    return reactionData.questions;
+  } catch (error) {
+    console.error('Fetch error occurred:', error);
+    throw error;
+  }
+}
+
 export async function getWordCounts(projectId) {
   try {
     const reactionData = await ProjectResponses.findOne({ projectId: projectId });

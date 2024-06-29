@@ -3,7 +3,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import connectToDB from './models/db.js';
 import { insertAnswer, getWordCounts } from './models/queries.js';
-import { storeComment, storeCommentBatch } from './controllers/commentController.js';
+import { storeComment, storeCurrentBatch, getProjectComments } from './controllers/commentController.js';
 import { storeEmoji, storeEmojiBatch } from './controllers/emojiController.js'
 import { getProjectStatistics } from './controllers/dashboard.js';
 import { signUp, signIn, validateJWT } from './controllers/userContoller.js'
@@ -62,6 +62,16 @@ app.get('/api/user-projects', async (req, res)=>{
   }
 })
 
+app.get('/api/project-comments', async (req, res) =>{
+  try{
+    const projectId = req.query.projectId;
+    const projectComments = await getProjectComments(projectId);
+    res.status(200).json({data: projectComments})
+  } catch(error){
+    console.log(error);
+    res.status(400).json({error: 'Failed to load comments'})
+  }
+})
 
 app.get('/api/project-stats', async (req, res)=>{
   try{
