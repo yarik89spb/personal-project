@@ -166,7 +166,6 @@ export async function insertEmoji(projectId, questionId, emojies) {
 export async function insertAnswer(projectId, answerData){
   try {
     const { id: questionId, userAnswer } = answerData;
-    console.log(userAnswer);
     const result = await ProjectResponses.updateOne(
       { projectId: projectId, 'questions.id': questionId },
       { $push: { 'questions.$.answers': userAnswer } }
@@ -225,7 +224,6 @@ export async function getUserActivity(projectId) {
 export async function findProjectComments(projectId){
   try{
     const reactionData = await ProjectResponses.findOne({ projectId: projectId });
-    console.log(reactionData)
     return reactionData.questions;
   } catch (error) {
     console.error('Fetch error occurred:', error);

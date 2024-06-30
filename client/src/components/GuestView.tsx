@@ -49,7 +49,6 @@ function GuestView() {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const commentsData = await response.json();
-        console.log(commentsData.data)
         setComments(commentsData.data);
       } catch(error){
         console.error(`Failed to get comments. ${error}`)
