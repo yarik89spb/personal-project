@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@400;700&display=swap');
+
 #chat-container{
   max-width: 70%;
   margin: 0 auto;
@@ -46,14 +48,37 @@ div.card-body{
   --bs-btn-hover-bg: rgb(20, 75, 85); 
   --bs-btn-hover-color: #fff; 
   --bs-btn-hover-border-color: #fff;
-  --bs-font-family-base: 'Roboto', sans-serif; 
+  --bs-font-family-base: 'Oxanium', sans-serif; 
   --bs-font-weight-base: 700;
 }
 
+.user-nickname-input, .user-nickname-display {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between input/button */
+}
+
+.user-nickname-text {
+  font-family: 'Oxanium', sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
 .nickname-input{
-  margin-top: 8px;
+  flex-grow: 1;
   border-radius: 5px;
   vertical-align: middle;
+  background-color: #f0f0f0;
+}
+
+.user-nickname-input button,
+.user-nickname-input .btn,
+.user-nickname-display button,
+.user-nickname-display .btn {
+  border-color:black;
+  font-family: 'Oxanium', sans-serif;
+  font-weight: 700;
+  letter-spacing: 2px;
 }
 
 .reaction-buttons {
@@ -71,7 +96,8 @@ div.card-body{
 }
 
 .reaction-button:hover {
-  background-color: #f0f0f0;
+  background-color: rgba(255, 251, 0, 0.3);
+  border-radius: 12px;
 }
 
 .reaction-button.selected {

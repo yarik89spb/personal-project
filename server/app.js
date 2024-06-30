@@ -3,7 +3,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import connectToDB from './models/db.js';
 import { insertAnswer, getWordCounts } from './models/queries.js';
-import { storeComment, storeCurrentBatch, getProjectComments, getProjectComments } from './controllers/commentController.js';
+import { storeComment, storeCommentBatch, getProjectComments } from './controllers/commentController.js';
 import { storeEmoji, storeEmojiBatch } from './controllers/emojiController.js'
 import { getProjectStatistics } from './controllers/dashboard.js';
 import { signUp, signIn, validateJWT } from './controllers/userContoller.js'

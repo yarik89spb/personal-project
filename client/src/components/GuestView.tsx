@@ -120,9 +120,9 @@ function GuestView() {
           </div>
           : 
           <div className='user-nickname-display'>
-            <div> {userNicknameInput} </div>
+            <div className='user-nickname-text'> {userNickname} </div>
             <button type='button'
-            className='btn btn-primary save-nickname'
+            className='btn btn-primary edit-nickname'
             onClick={()=>setIsEditingNickname(true)}
             >
             Edit
@@ -132,21 +132,7 @@ function GuestView() {
 
     return (
       <div className='user-nickname input-group'>
-        <div className='user-nickname-input'>
-          <input
-            type='text'
-            placeholder="Choose nickname"
-            className='nickname-input'
-            value={userNicknameInput}
-            onChange={(e) => setUserNicknameInput(e.target.value)}
-          />
-          <button type='button'
-          className='btn btn-primary save-nickname'
-          onClick={()=>saveUserNickName()}
-          >
-          Save
-          </button> 
-        </div>
+        {nicknameLayout}
       </div>
     )
   }

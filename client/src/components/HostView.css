@@ -30,8 +30,8 @@
 }
 
 .reaction-button.selected {
-  background-color: rgba(0, 123, 255, 0.4); /* Light blue background */
-  border-radius: 50%; /* Make button round */
+  background-color: rgba(251, 255, 0, 0.7); /* Light blue background */
+  border-radius: 35%; /* Make button round */
   animation: shine 1s ease-in-out;
 }
 
@@ -42,6 +42,7 @@
   border-radius: 8px;
   text-align: center;
 }
+
 
 /* Animation for the shine effect */
 @keyframes shine {
