@@ -38,6 +38,7 @@ function GuestView() {
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [userNickname, setUserNickname] = useState('Viewer')
   const [userNicknameInput, setUserNicknameInput] = useState('Viewer');
+  const [isEditingNickname, setIsEditingNickname] = useState(false);
   const [cookies, setCookie]  = useCookies(['userNickname']); // , removeCookie]
 
   const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId);
@@ -55,6 +56,16 @@ function GuestView() {
       }
     }
 
+  useEffect(()=>{
+    const selectedNickname = cookies.userNickname;
+    if(selectedNickname){
+      setUserNickname(selectedNickname);
+      setUserNicknameInput(selectedNickname);
+    }
+    fetchComments();
+  }, 
+  [])
+  
   useEffect(()=>{
     const selectedNickname = cookies.userNickname;
     if(selectedNickname){
@@ -85,6 +96,60 @@ function GuestView() {
       text: message.text, 
       questionId: message.questionId }]);
   });
+
+  function UserNickname(){
+    const nicknameLayout = (
+      isEditingNickname ? 
+        <div className='user-nickname-input'>
+            <input
+              type='text'
+              placeholder="Choose nickname"
+              className='nickname-input'
+              value={userNicknameInput}
+              onChange={(e) => setUserNicknameInput(e.target.value)}
+            />
+            <button type='button'
+            className='btn btn-primary save-nickname'
+            onClick={()=>{
+              saveUserNickName()
+              setIsEditingNickname(false)
+            }}
+            >
+            Save
+            </button> 
+          </div>
+          : 
+          <div className='user-nickname-display'>
+            <div> {userNicknameInput} </div>
+            <button type='button'
+            className='btn btn-primary save-nickname'
+            onClick={()=>setIsEditingNickname(true)}
+            >
+            Edit
+            </button>
+          </div>
+    )
+
+    return (
+      <div className='user-nickname input-group'>
+        <div className='user-nickname-input'>
+          <input
+            type='text'
+            placeholder="Choose nickname"
+            className='nickname-input'
+            value={userNicknameInput}
+            onChange={(e) => setUserNicknameInput(e.target.value)}
+          />
+          <button type='button'
+          className='btn btn-primary save-nickname'
+          onClick={()=>saveUserNickName()}
+          >
+          Save
+          </button> 
+        </div>
+      </div>
+    )
+  }
 
   function storeUserMessageInput(e: ChangeEvent<HTMLInputElement>){
     setUserMessageInput(e.target.value);
@@ -166,21 +231,7 @@ function GuestView() {
                 <FontAwesomeIcon icon={faThumbsDown} />
               </button>
               {/* Add more reaction buttons as needed */}
-              <div className='user-nickname-input'>
-                <input
-                  type='text'
-                  placeholder="Choose nickname"
-                  className='nickname-input'
-                  value={userNicknameInput}
-                  onChange={(e) => setUserNicknameInput(e.target.value)}
-                />
-                <button type='button'
-                className='btn btn-primary save-nickname'
-                onClick={()=>saveUserNickName()}
-                >
-                Save
-                </button> 
-              </div>
+              {UserNickname()}
             </div>
 
             <div id='messenger' className='input-group'>
