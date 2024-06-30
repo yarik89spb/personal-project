@@ -34,6 +34,20 @@ function HostView(){
 
   /* Project data rendering and broadcasting */
 
+  async function fetchComments(){
+    try{
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/project-comments?projectId=${projectId}`)
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const commentsData = await response.json();
+        console.log(commentsData.data)
+        setComments(commentsData.data);
+      } catch(error){
+        console.error(`Failed to get comments. ${error}`)
+      }
+    }
+
   useEffect(() => {
     async function fetchData(){
       try{
@@ -50,6 +64,7 @@ function HostView(){
       }
     }
     fetchData();
+    fetchComments()
   }, [])
 
   function handleQuestionIndexChange(isForward = true){

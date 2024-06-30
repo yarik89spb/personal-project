@@ -42,6 +42,19 @@ function GuestView() {
 
   const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId);
   
+  async function fetchComments(){
+    try{
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/project-comments?projectId=${projectId}`)
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const commentsData = await response.json();
+        console.log(commentsData.data)
+        setComments(commentsData.data);
+      } catch(error){
+        console.error(`Failed to get comments. ${error}`)
+      }
+    }
 
   useEffect(()=>{
     const selectedNickname = cookies.userNickname;
@@ -49,6 +62,7 @@ function GuestView() {
       setUserNickname(selectedNickname);
       setUserNicknameInput(selectedNickname);
     }
+    fetchComments();
   }, 
   [])
 
