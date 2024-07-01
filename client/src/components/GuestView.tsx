@@ -166,6 +166,7 @@ function GuestView() {
         type:emoji,
         isPositive} as Emoji
     }
+
     sendUserEmoji(socket, 'userEmoji', eventPayload)
     setSelectedEmoji(emoji);
   };
@@ -207,13 +208,13 @@ function GuestView() {
           
           <div className='card-footer chat'>
             <div className='reaction-buttons'>
-              <button className={`reaction-button ${selectedEmoji=== 'heart' ? 'selected' : ''}`} onClick={() => handleEmojiClick('heart', true)}>
+              <button className={`reaction-button ${selectedEmoji=== 'heart' ? 'selected' : 'deselected'}`} onClick={() => handleEmojiClick('heart', true)}>
                 <FontAwesomeIcon icon={faHeart} />
               </button>
-              <button className={`reaction-button ${selectedEmoji === 'like' ? 'selected' : ''}`} onClick={() => handleEmojiClick('like', true)}>
+              <button className={`reaction-button ${selectedEmoji === 'like' ? 'selected' : 'deselected'}`} onClick={() => handleEmojiClick('like', true)}>
                 <FontAwesomeIcon icon={faThumbsUp} />
               </button>
-              <button className={`reaction-button ${selectedEmoji === 'dislike' ? 'selected' : ''}`} onClick={() => handleEmojiClick('dislike', false)}>
+              <button className={`reaction-button ${selectedEmoji === 'dislike' ? 'selected' : 'deselected'}`} onClick={() => handleEmojiClick('dislike', false)}>
                 <FontAwesomeIcon icon={faThumbsDown} />
               </button>
               {/* Add more reaction buttons as needed */}

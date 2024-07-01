@@ -67,3 +67,9 @@ export interface Task{
   type?: String;
   isInteractive: Boolean;
 }
+
+export interface Viewer{
+  id: string;
+  userName: string;
+  isBot: boolean;
+}

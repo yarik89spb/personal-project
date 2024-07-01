@@ -50,6 +50,7 @@ div.card-body{
   --bs-btn-hover-border-color: #fff;
   --bs-font-family-base: 'Oxanium', sans-serif; 
   --bs-font-weight-base: 700;
+  outline: none;
 }
 
 .user-nickname-input, .user-nickname-display {
@@ -79,6 +80,7 @@ div.card-body{
   font-family: 'Oxanium', sans-serif;
   font-weight: 700;
   letter-spacing: 2px;
+  outline: none;
 }
 
 .reaction-buttons {
@@ -92,14 +94,21 @@ div.card-body{
   cursor: pointer;
   padding: 5px;
   outline: none;
+  border-radius: 80%; /* Ensure it's fully opaque when selected */
   transition: background-color 0.3s ease;
 }
 
 .reaction-button:hover {
   background-color: rgba(255, 251, 0, 0.3);
-  border-radius: 12px;
+  border-radius: 16px;
 }
 
 .reaction-button.selected {
-  border-radius: 50%; 
+  background-color: rgba(251, 255, 0, 0.7); /* Light yellow background */
+  animation: shine 1s ease-in-out;
+  box-shadow: 0 0 10px rgba(251, 255, 0, 0.7);
+}
+
+.reaction-button.deselected {
+  background-color: transparent; /* Transparent background when deselected */
 }
