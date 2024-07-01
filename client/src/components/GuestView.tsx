@@ -6,16 +6,19 @@ import {
   useCommandListener,
   sendUserEmoji, 
   useMessageListener,
-  reportUsernameChange} from '../utils/websocket';
+  reportUsernameChange,
+  useRoomListener,
+  useNicknameListener} from '../utils/websocket';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import './GuestView.css'
-import { EventPayload, Option, Question, Comment, Emoji } from '../utils/interfaces.ts';
-import { fetchComments } from '../utils/fetchFunctions.ts';
+import { EventPayload, Option, Question, Comment, Emoji, Viewer } from '../utils/interfaces.ts';
+import { fetchComments, fetchViewers } from '../utils/fetchFunctions.ts';
 import { useParams } from 'react-router-dom';
 import standBy from '/public/stand-by.jpg';
 import { useCookies } from 'react-cookie';
 import ReactionButtons from './ReactionButtons.tsx';
+import ViewerList from './ViewerList.tsx';
 
 function GuestView() {
   let userComments = [
@@ -40,12 +43,15 @@ function GuestView() {
   const [userNickname, setUserNickname] = useState('Viewer')
   const [userNicknameInput, setUserNicknameInput] = useState('Viewer');
   const [isEditingNickname, setIsEditingNickname] = useState(false);
+  const [viewersArray, setViewers] = useState<Viewer[]>([])
   const [cookies, setCookie]  = useCookies(['userNickname']); // , removeCookie]
 
   const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId, userNickname);
   
   async function fetchData(){
     try{
+        const viewersData = await fetchViewers(projectId) as Viewer[];
+        setViewers(viewersData);
         const commentsData = await fetchComments(projectId) as Comment[];;
         setComments(commentsData);
       } catch(error){
@@ -63,11 +69,25 @@ function GuestView() {
         roomId: projectId,
         passedData: {oldUsername: userNickname, newUsername: selectedNickname}
       };
-      console.log(selectedNickname)
       reportUsernameChange(socket, 'userNameChange', eventPayload);
     }
   }, 
   [])
+
+  function addViewerToList(viewer: Viewer){
+    setViewers((currentViewers) => [...currentViewers, viewer]);
+  }
+
+  function removeViewerFromList(id:string){
+    setViewers((currentViewers) => [...currentViewers.filter((v) => {
+      return v.id != id})]);
+  }
+
+  useRoomListener(socket, 'joinRoom', (viewer: Viewer) => {
+    addViewerToList(viewer)});
+
+  useRoomListener(socket, 'leaveRoom', (viewer: Viewer) => {
+    removeViewerFromList(viewer.id)});
   
 
   function addMessageToChat(){
@@ -202,11 +222,16 @@ function GuestView() {
 
         <div className='card'>
           <h3 className='card-header chat'>Chat:</h3>
-          <div className='card-body' style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }} id='comments-container'>
-            <ChatComments comments={commentsArray}/>
+          <div className='card-body'>
+          <div className='row'>
+            <div className='col-8' id='comments-container' style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }}>
+              <ChatComments comments={commentsArray} />
+            </div>
+            <div className='col-4' id='viewers-container' style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }}>
+              <ViewerList viewers={viewersArray} />
+            </div>
           </div>
-
-          
+        </div>
           <div className='card-footer chat'>
             < ReactionButtons handleEmojiClick={handleEmojiClick} selectedEmoji={selectedEmoji}/>
             {UserNickname()}

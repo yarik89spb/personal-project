@@ -3,8 +3,9 @@ import { useSocket, useMessageListener, sendCommand, useAnswerListener, useEmoji
 import { useParams } from 'react-router-dom';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
+import ViewerList from './ViewerList.tsx';
 import { Option,  Comment, Emoji, Viewer } from '../utils/interfaces.ts';
-import { fetchComments } from '../utils/fetchFunctions.ts';
+import { fetchComments, fetchViewers } from '../utils/fetchFunctions.ts';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './HostView.css';
 import CopyLink from './CopyLink.tsx';
@@ -44,12 +45,15 @@ function HostView(){
         const newProjectData = await response.json();
         setIsLoadingQuestions(false);
         setProjectData(newProjectData.data);
+        const viewersData = await fetchViewers(projectId) as Viewer[];
+        setViewers(viewersData);
+        const commentsData = await fetchComments(projectId) as Comment[];
+        setComments(commentsData);
       } catch(error){
         console.error(`Failed to get project data. ${error}`)
         setIsLoadingQuestions(false);
       } finally{
-        const commentsData = await fetchComments(projectId) as Comment[];
-        setComments(commentsData);
+        console.log('Data loading has finished...')
       }
     }
     fetchData();
@@ -194,6 +198,7 @@ function HostView(){
             {renderAnswers()}
           </div>
           < ReactionButtons handleEmojiClick={handleEmojiClick} selectedEmoji={selectedEmoji}/>
+          <ViewerList viewers={viewersArray}/>
         </div>
       </div>
       <div className="d-flex justify-content-center">

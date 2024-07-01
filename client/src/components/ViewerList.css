@@ -1,0 +1,17 @@
+#viewers-container {
+  background-color: rgba(48, 101, 112, 0.6);
+  border-left: 1px solid #ddd;
+  padding-left: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: #f8f0f0
+}
+
+.viewer-username-item {
+  font-family: 'Oxanium', sans-serif;
+  color: #f8f0f0; 
+  font-weight: 600; 
+  padding-top: 4px; 
+  line-height: 1.4; 
+  font-size: 1.5rem;
+}
