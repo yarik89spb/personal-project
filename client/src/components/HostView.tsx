@@ -1,20 +1,20 @@
 import { useState, useEffect} from 'react';
-import { useSocket, useMessageListener, sendCommand, useAnswerListener, useEmojiListener } from '../utils/websocket';
+import { useSocket, useMessageListener, sendCommand, useAnswerListener, useEmojiListener, useRoomListener, useNicknameListener } from '../utils/websocket';
 import { useParams } from 'react-router-dom';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
-import AlwaysScrollToBottom from './AlwaysScrollToBottom';
-import { Option,  Comment, Emoji } from '../utils/interfaces.ts';
+import { Option,  Comment, Emoji, Viewer } from '../utils/interfaces.ts';
+import { fetchComments } from '../utils/fetchFunctions.ts';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './HostView.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import CopyLink from './CopyLink.tsx';
+import ReactionButtons from './ReactionButtons.tsx';
 
 function HostView(){
   let userComments = [
     {userName:'Bot', text:'請大家盡量留言和回答問題', questionId: 11}
   ];
+
   const { projectId } = useParams<{ projectId: string }>();
 
   if (!projectId) {
@@ -27,26 +27,12 @@ function HostView(){
     questions:[]});
   const [questionIndex, setQuestionIndex] =  useState(0);
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
-  const [commentsArray, setComments] =  useState(userComments);
+  const [viewersArray, setViewers] = useState<Viewer[]>([])
+  const [commentsArray, setComments] =  useState<Comment[]>(userComments);
   const [answersArray, setAnswers] =  useState<Option[]>([]);
-  const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId);
+  const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId, 'HOST');
   const [selectedEmoji, setSelectedEmoji] = useState("");
-
   /* Project data rendering and broadcasting */
-
-  async function fetchComments(){
-    try{
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/project-comments?projectId=${projectId}`)
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const commentsData = await response.json();
-        console.log(commentsData.data)
-        setComments(commentsData.data);
-      } catch(error){
-        console.error(`Failed to get comments. ${error}`)
-      }
-    }
 
   useEffect(() => {
     async function fetchData(){
@@ -61,10 +47,13 @@ function HostView(){
       } catch(error){
         console.error(`Failed to get project data. ${error}`)
         setIsLoadingQuestions(false);
+      } finally{
+        const commentsData = await fetchComments(projectId) as Comment[];
+        setComments(commentsData);
       }
     }
     fetchData();
-    fetchComments()
+    
   }, [])
 
   function handleQuestionIndexChange(isForward = true){
@@ -114,6 +103,35 @@ function HostView(){
 
   /* Receiving viewers' comments and reactions */
 
+  function addViewerToList(viewer: Viewer){
+    setViewers((currentViewers) => [...currentViewers, viewer]);
+  }
+
+  function removeViewerFromList(id:string){
+    setViewers((currentViewers) => [...currentViewers.filter((v) => {
+      return v.id != id})]);
+  }
+
+  useEffect(() => {
+    console.log(viewersArray)
+  }, [viewersArray])
+
+  useRoomListener(socket, 'joinRoom', (viewer: Viewer) => {
+    addViewerToList(viewer)});
+
+  useNicknameListener(socket, 'userNameChange', (usernameData) => {
+    removeViewerFromList(usernameData.id)
+    addViewerToList({
+      id: usernameData.id,
+      userName: usernameData.newUsername,
+      isBot: false
+    })
+    console.log(`User ${usernameData.oldUsername} changed username to ${usernameData.newUsername}`)
+  });
+
+  useRoomListener(socket, 'leaveRoom', (viewer: Viewer) => {
+    removeViewerFromList(viewer.id)});
+
   useMessageListener(socket, 'viewerMessage', (message: Comment) => {
     addMessageToChat({
       userName: message.userName, 
@@ -127,7 +145,6 @@ function HostView(){
 
   useAnswerListener(socket, 'userAnswer', (userAnswer:Option) => {
     setAnswers((prevAnswers) => [...prevAnswers, userAnswer]);
-    //console.log(answersArray);
     renderAnswers();
   });
 
@@ -149,12 +166,6 @@ function HostView(){
       </div>
     )
   }
-
-  // useEffect(() =>{
-  //   renderAnswers();
-  // }, [answersArray])
-
-  
   return (
     <div className='container'> 
       <CopyLink link={`http://54.211.88.216/guest/${projectId}`}/>
@@ -163,9 +174,7 @@ function HostView(){
           <div className='card'> 
             <h3 className='card-header' >User comments:</h3>
             <div className='card-body' style={{ height: '300px', maxHeight: '300px', overflowY: 'auto' }}>
-              <AlwaysScrollToBottom>
-                <ChatComments comments={commentsArray}/>
-              </AlwaysScrollToBottom>
+              <ChatComments comments={commentsArray}/>
             </div>
           </div>
         </div>
@@ -184,17 +193,7 @@ function HostView(){
           <div>
             {renderAnswers()}
           </div>
-          <div className='user-emoji-container'>
-            <button className={`reaction-button ${selectedEmoji === 'heart' ? 'selected' : ''}`} onClick={() => handleEmojiClick('heart')}>
-              <FontAwesomeIcon icon={faHeart} />
-            </button>
-            <button className={`reaction-button ${selectedEmoji === 'like' ? 'selected' : ''}`} onClick={() => handleEmojiClick('like')}>
-              <FontAwesomeIcon icon={faThumbsUp} />
-            </button>
-            <button className={`reaction-button ${selectedEmoji === 'dislike' ? 'selected' : ''}`} onClick={() => handleEmojiClick('dislike')}>
-              <FontAwesomeIcon icon={faThumbsDown} />
-            </button>
-          </div>
+          < ReactionButtons handleEmojiClick={handleEmojiClick} selectedEmoji={selectedEmoji}/>
         </div>
       </div>
       <div className="d-flex justify-content-center">

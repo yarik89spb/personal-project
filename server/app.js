@@ -7,6 +7,7 @@ import { storeComment, storeCommentBatch, getProjectComments } from './controlle
 import { storeEmoji, storeEmojiBatch } from './controllers/emojiController.js'
 import { getProjectStatistics } from './controllers/dashboard.js';
 import { signUp, signIn, validateJWT } from './controllers/userContoller.js'
+import { addViewer, renameViewer, removeViewer, getViewers } from './controllers/viewerController.js';
 import { addNewProject, getUserProjects, getProjectData } from './controllers/projectController.js'
 import { addWordCounts } from './utils/callPython.js'
 import path from 'path';
@@ -62,31 +63,32 @@ app.get('/api/user-projects', async (req, res)=>{
   }
 })
 
-app.get('/api/project-comments', async (req, res) =>{
+app.get('/api/project-viewers', async (req, res) =>{
   try{
     const projectId = req.query.projectId;
-    const projectComments = await getProjectComments(projectId);
-    res.status(200).json({data: projectComments})
+    const projectViewers = getViewers(projectId)
+    res.status(200).json({data: projectViewers})
   } catch(error){
-    console.log(error);
-    res.status(400).json({error: 'Failed to load comments'})
+    console.error(error);
+    res.status(400).json({error: 'Failed to get list of viewers'})
   }
 })
+
 app.get('/api/project-comments', async (req, res) =>{
   try{
     const projectId = req.query.projectId;
     const projectComments = await getProjectComments(projectId);
     res.status(200).json({data: projectComments})
   } catch(error){
-    console.log(error);
+    console.error(error);
     res.status(400).json({error: 'Failed to load comments'})
   }
 })
 
+
 app.get('/api/project-stats', async (req, res)=>{
   try{
     const projectId = req.query.projectId;
-    console.log('Project id is ', projectId)
     const data = await getProjectStatistics(projectId);
     res.status(200).json({data: data}) 
   }catch(error){
@@ -167,15 +169,46 @@ app.get('*', (req, res) => {
 io.on("connection", (socket) => {
   console.log('User connected')
 
-  socket.on('joinRoom', ({ roomId }) => {
-    socket.join(roomId);
-    console.log(`User ${socket.id} joined room ${roomId}`);
+  socket.on('joinRoom', (userPayload) => {
+    socket.join(userPayload.roomId);
+    const viewerId = socket.id;
+    const viewer = {
+      id: viewerId,
+      userName: userPayload.userName,
+      isBot: false
+    }
+    addViewer(userPayload.roomId, viewer)
+    console.log(`User ${userPayload.userName} (id: ${viewerId}) joined room ${userPayload.roomId}`);
+    io.to(userPayload.roomId).emit('joinRoom', viewer);
   });
 
-  socket.on('leaveRoom', ({ roomId }) => {
-    socket.leave(roomId);
-    console.log(`User ${socket.id} left room ${roomId}`);
+  socket.on('leaveRoom', (userPayload) => {
+    socket.leave(userPayload.roomId);
+    const viewerId = socket.id;
+    const viewer = {
+      id: viewerId,
+      userName: userPayload.userName,
+      isBot: false
+    }
+    // Does not work if user directly leave the page, need to double check
+    // using 'disconnect' event below:
+    console.log(`User ${userPayload.userName} left room ${userPayload.roomId}`);
+    removeViewer(userPayload.roomId, viewer.id)
+    io.to(userPayload.roomId).emit('leaveRoom', viewer);
   });
+
+  socket.on('userNameChange', (eventPayload) => {
+    const {roomId} = eventPayload;
+    console.log('Changing nickname...', eventPayload.passedData)
+    // Client does not know own (socket) id, it is assigned by server
+    const usernameData = {
+      id:socket.id,
+      oldUsername: eventPayload.passedData.oldUsername,
+      newUsername: eventPayload.passedData.newUsername,
+    }
+    renameViewer(roomId, usernameData)
+    io.to(roomId).emit('userNameChange', usernameData)
+  })
 
   socket.on('viewerMessage', async (eventPayload)=>{
     const {roomId} = eventPayload; // roomId = projectId

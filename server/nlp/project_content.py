@@ -15,6 +15,7 @@ def translate3(text):
   result = GoogleTranslator(source='auto', target='zh-TW').translate(text)
   print(result)
 
+
 def semanticImportance(text):
   nlp = spacy.load("en_core_web_md")
 

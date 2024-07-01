@@ -5,16 +5,17 @@ import {
   sendUserAnswer, 
   useCommandListener,
   sendUserEmoji, 
-  useMessageListener} from '../utils/websocket';
+  useMessageListener,
+  reportUsernameChange} from '../utils/websocket';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import './GuestView.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import { EventPayload, Option, Question, Comment, Emoji } from '../utils/interfaces.ts';
+import { fetchComments } from '../utils/fetchFunctions.ts';
 import { useParams } from 'react-router-dom';
 import standBy from '/public/stand-by.jpg';
 import { useCookies } from 'react-cookie';
+import ReactionButtons from './ReactionButtons.tsx';
 
 function GuestView() {
   let userComments = [
@@ -41,40 +42,33 @@ function GuestView() {
   const [isEditingNickname, setIsEditingNickname] = useState(false);
   const [cookies, setCookie]  = useCookies(['userNickname']); // , removeCookie]
 
-  const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId);
+  const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId, userNickname);
   
-  async function fetchComments(){
+  async function fetchData(){
     try{
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/project-comments?projectId=${projectId}`)
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const commentsData = await response.json();
-        setComments(commentsData.data);
+        const commentsData = await fetchComments(projectId) as Comment[];;
+        setComments(commentsData);
       } catch(error){
         console.error(`Failed to get comments. ${error}`)
       }
     }
 
   useEffect(()=>{
+    fetchData();
     const selectedNickname = cookies.userNickname;
     if(selectedNickname){
       setUserNickname(selectedNickname);
       setUserNicknameInput(selectedNickname);
+      const eventPayload = {
+        roomId: projectId,
+        passedData: {oldUsername: userNickname, newUsername: selectedNickname}
+      };
+      console.log(selectedNickname)
+      reportUsernameChange(socket, 'userNameChange', eventPayload);
     }
-    fetchComments();
   }, 
   [])
   
-  useEffect(()=>{
-    const selectedNickname = cookies.userNickname;
-    if(selectedNickname){
-      setUserNickname(selectedNickname);
-      setUserNicknameInput(selectedNickname);
-    }
-    fetchComments();
-  }, 
-  [])
 
   function addMessageToChat(){
     if(userMessageInput.length > 0){
@@ -144,6 +138,13 @@ function GuestView() {
   function saveUserNickName(){
     setUserNickname(userNicknameInput);
     setCookie('userNickname', userNicknameInput, { path: `/guest/${projectId}` });
+    const eventPayload = {
+      roomId: projectId,
+      passedData: {oldUsername: userNickname, newUsername: userNicknameInput}
+    };
+    if(userNickname !== userNicknameInput){
+      reportUsernameChange(socket, 'userNameChange', eventPayload);
+    }
   }
 
   function sendUserAnswerToServer(answer:Option){
@@ -207,19 +208,8 @@ function GuestView() {
 
           
           <div className='card-footer chat'>
-            <div className='reaction-buttons'>
-              <button className={`reaction-button ${selectedEmoji=== 'heart' ? 'selected' : 'deselected'}`} onClick={() => handleEmojiClick('heart', true)}>
-                <FontAwesomeIcon icon={faHeart} />
-              </button>
-              <button className={`reaction-button ${selectedEmoji === 'like' ? 'selected' : 'deselected'}`} onClick={() => handleEmojiClick('like', true)}>
-                <FontAwesomeIcon icon={faThumbsUp} />
-              </button>
-              <button className={`reaction-button ${selectedEmoji === 'dislike' ? 'selected' : 'deselected'}`} onClick={() => handleEmojiClick('dislike', false)}>
-                <FontAwesomeIcon icon={faThumbsDown} />
-              </button>
-              {/* Add more reaction buttons as needed */}
-              {UserNickname()}
-            </div>
+            < ReactionButtons handleEmojiClick={handleEmojiClick} selectedEmoji={selectedEmoji}/>
+            {UserNickname()}
 
             <div id='messenger' className='input-group'>
               <input

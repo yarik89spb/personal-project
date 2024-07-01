@@ -6,7 +6,7 @@ import ProjectConstructor from './ProjectConstructor';
 import './HostProfile.css';
 
 
-export default function HostProfile(){
+export default function HostProfile(){94
   const navigate = useNavigate();
   const { userId } = useParams();
   const { userName} = useContext(AuthContext);
