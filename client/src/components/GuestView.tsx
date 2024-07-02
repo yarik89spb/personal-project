@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect } from 'react';
+import { useState, ChangeEvent, useEffect, useContext } from 'react';
 import { 
   useSocket, 
   sendMessage, 
@@ -19,6 +19,7 @@ import standBy from '/public/stand-by.jpg';
 import { useCookies } from 'react-cookie';
 import ReactionButtons from './ReactionButtons.tsx';
 import ViewerList from './ViewerList.tsx';
+import { EventContext } from '../context/EventContext.tsx';
 
 function GuestView() {
   let userComments = [
@@ -29,7 +30,7 @@ function GuestView() {
   if (!projectId) {
     throw new Error('Project ID is required');
   }
-
+  const { hostId } = useContext(EventContext);
   const [commentsArray, setComments] =  useState<Comment[]>(userComments);
   const [userMessageInput, setUserMessageInput] = useState('');
   const [currentScreen, setCurrentScreen] = useState<Question>({
@@ -167,6 +168,20 @@ function GuestView() {
     }
   }
 
+  useNicknameListener(socket, 'userNameChange', (usernameData) => {
+    removeViewerFromList(usernameData.id)
+    addViewerToList({
+      id: usernameData.id,
+      userName: usernameData.newUsername,
+      isBot: false
+    })
+    console.log(`User ${usernameData.oldUsername} changed username to ${usernameData.newUsername}`)
+  });
+
+  useEffect(()=>{
+    console.log(hostId)
+  }, [hostId])
+
   useEffect(()=>{
     console.log(viewersArray)
   }, [viewersArray])
@@ -232,7 +247,7 @@ function GuestView() {
               <ChatComments comments={commentsArray} />
             </div>
             <div className='col-4' id='viewers-container' style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }}>
-              <ViewerList viewers={viewersArray} />
+              <ViewerList viewers={viewersArray} hostId={hostId}/>
             </div>
           </div>
         </div>

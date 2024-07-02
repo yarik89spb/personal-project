@@ -1,4 +1,5 @@
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useContext} from 'react';
+import { EventContext } from '../context/EventContext.tsx'
 import { useSocket, useMessageListener, sendCommand, useAnswerListener, useEmojiListener, useRoomListener, useNicknameListener } from '../utils/websocket';
 import { useParams } from 'react-router-dom';
 import EventScreen from './EventScreen';
@@ -32,6 +33,7 @@ function HostView(){
   const [viewersArray, setViewers] = useState<Viewer[]>([]);
   const [commentsArray, setComments] =  useState<Comment[]>(userComments);
   const [answersArray, setAnswers] =  useState<Option[]>([]);
+  const { hostId, setHostId } = useContext(EventContext);
   const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId, 'HOST');
   const [selectedEmoji, setSelectedEmoji] = useState("");
   /* Project data rendering and broadcasting */
@@ -90,7 +92,13 @@ function HostView(){
   useEffect(() => { 
     changeScreen();
     setAnswers([]);
+    console.log(hostId)
   }, [questionIndex]);
+
+  const toggleView = (event: any) => {
+    const newPanel= event.target.getAttribute('data-view');
+    setHostPanel(newPanel);
+  };
 
   function handleBroadcastingState(isBroadcasting = false){
     if(isBroadcasting){
@@ -119,10 +127,14 @@ function HostView(){
 
   useEffect(() => {
     console.log(viewersArray)
+    console.log(hostId)
   }, [viewersArray])
 
   useRoomListener(socket, 'joinRoom', (viewer: Viewer) => {
     console.log(`User ${viewer.userName} joined the room`)
+    if(hostId===null){
+      setHostId(viewer.id);
+    }
     addViewerToList(viewer)});
 
   useNicknameListener(socket, 'userNameChange', (usernameData) => {
@@ -178,8 +190,7 @@ function HostView(){
       <CopyLink link={`/guest/${projectId}`}/>
       <div className='row'>
         <div className='col-md-6'>
-            <button type='button'>Comments</button>
-            <button type='button'>Viewers</button>
+  
             {hostPanel === 'comments' ? (
               <div className='card host-panel' > 
                 <h3 className='card-header' >User comments:</h3>
@@ -191,10 +202,20 @@ function HostView(){
               <div className='card host-panel' > 
                 <h3 className='card-header' >Viewers:</h3>
                 <div className='card-body' style={{ height: '300px', maxHeight: '300px', overflowY: 'auto' }}>
-                  <ViewerList viewers={viewersArray} />
+                  <ViewerList viewers={viewersArray} hostId={hostId}/>
                 </div>
               </div>
             )}
+            <button type='button'
+            className='btn host-panel-toggle' 
+            data-view='comments' 
+            onClick={toggleView}
+            >Comments</button>
+            <button type='button'
+            className='btn host-panel-toggle'  
+            data-view='viewers' 
+            onClick={toggleView}
+            >Viewers</button>
         </div>
         <div className='col-md-6'>
           <div className='event-screen'>

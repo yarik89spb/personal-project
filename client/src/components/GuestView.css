@@ -15,6 +15,10 @@ div.card-body{
   height: 100%;
 }
 
+/* #viewers-container {
+  margin-left: 1px;
+} */
+
 /* Add this txo your CSS file */
 .tv-box {
   display: flex;
