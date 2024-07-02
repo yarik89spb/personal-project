@@ -203,9 +203,6 @@ io.on("connection", (socket) => {
       userName: userPayload.userName,
       isBot: false
     }
-    // Does not work if user directly leave the page, need to double check
-    // using 'disconnect' event below:
-    console.log(`User ${userPayload.userName} left room ${userPayload.roomId}`);
     removeViewer(userPayload.roomId, viewer.id)
     io.to(userPayload.roomId).emit('leaveRoom', viewer);
   });
@@ -242,12 +239,18 @@ io.on("connection", (socket) => {
     const {roomId} = eventPayload; // roomId = projectId
     const {passedData} = eventPayload;
     io.to(roomId).emit('startBroadcasting', passedData)
+    const bot = useBot(roomId);
+    const botMessage = bot.start();
+    emitBotMessage(roomId, botMessage)
   })
 
   socket.on('stopBroadcasting', (eventPayload)=>{
     const {roomId} = eventPayload; // roomId = projectId
     const {passedData} = eventPayload;
     io.to(roomId).emit('stopBroadcasting', passedData)
+    const bot = useBot(roomId);
+    const botMessage = bot.stop();
+    emitBotMessage(roomId, botMessage)
     addWordCounts(roomId);
   })
 

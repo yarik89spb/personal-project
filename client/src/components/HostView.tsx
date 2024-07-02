@@ -34,6 +34,7 @@ function HostView(){
   const [answersArray, setAnswers] =  useState<Option[]>([]);
   const [hostId, setHostId ] = useState<string | null>(null);
   const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId, 'HOST');
+  const [isBroadcasting, setIsBroadcasting] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState("");
   /* Project data rendering and broadcasting */
 
@@ -89,8 +90,10 @@ function HostView(){
     })
   }
 
-  useEffect(() => { 
-    changeScreen();
+  useEffect(() => {
+    if(isBroadcasting){
+      changeScreen();
+    }
     setAnswers([]);
     console.log(hostId)
   }, [questionIndex]);
@@ -100,16 +103,18 @@ function HostView(){
     setHostPanel(newPanel);
   };
 
-  function handleBroadcastingState(isBroadcasting = false){
-    if(isBroadcasting){
+  function handleBroadcastingState(){
+    if(!isBroadcasting){
       sendCommand(socket, 'startBroadcasting', {
         roomId: projectId,
         passedData:{}})
       changeScreen()
+      setIsBroadcasting(true);
     }else{
       sendCommand(socket, 'stopBroadcasting', {
         roomId: projectId,
         passedData:{}})
+      setIsBroadcasting(false);
     }
   }
 
@@ -240,10 +245,10 @@ function HostView(){
         <button type="button" className="btn btn-primary btn-lg mx-2" onClick={() => handleQuestionIndexChange(false)}>
           &lt;
         </button>
-        <button type="button" className="btn btn-success btn-lg mx-2" onClick={() => handleBroadcastingState(true)}>
+        <button type="button" className="btn btn-success btn-lg mx-2" onClick={() => handleBroadcastingState()}>
           Start
         </button>
-        <button type="button" className="btn btn-danger btn-lg mx-2" onClick={() => handleBroadcastingState(false)}>
+        <button type="button" className="btn btn-danger btn-lg mx-2" onClick={() => handleBroadcastingState()}>
           Stop
         </button>
         <button type="button" className="btn btn-primary btn-lg mx-2" onClick={() => handleQuestionIndexChange(true)}>

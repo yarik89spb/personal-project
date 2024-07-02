@@ -4,6 +4,7 @@ class PorkoBot {
   }
 
   #isSpawned = false;
+  #isStarted = false;
 
   get isSpawned() {
     return this.#isSpawned;
@@ -13,12 +14,31 @@ class PorkoBot {
     this.#isSpawned = x;
   }
 
+  get isStarted() {
+    return this.#isStarted;
+  }
+
+  set isStarted(x) {
+    this.#isStarted = x;
+  }
+
   spawn(){
     if(!this.#isSpawned){
       const botMessage = '₍ᐢ･⚇･ᐢ₎ Porko bot 報道了';
       this.#isSpawned = true;
       return botMessage
     }
+  }
+
+  start(){
+    const botMessage = !this.#isStarted ? '開始了! 請仔細看上面的熒幕' : '繼續我們的會議，請看熒幕';
+    this.#isStarted = true;
+    return botMessage
+  }
+
+  stop(){
+    const botMessage = '會議暫停了。請稍後 ヾ(；ﾟ(OO)ﾟ)ﾉ'
+    return botMessage
   }
 }
 
