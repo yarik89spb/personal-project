@@ -13,6 +13,7 @@ import { addWordCounts } from './utils/callPython.js'
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import PorkoBot, { useBot } from './controllers/chatBot.js';
 
 
 dotenv.config();
@@ -166,10 +167,19 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-io.on("connection", (socket) => {
-  console.log('User connected')
+function emitBotMessage(roomId, botMessage){
+  if(botMessage){
+    io.to(roomId).emit('viewerMessage', {
+      userName: 'PorkoBot',
+      questionId: 0,
+      text: botMessage
+    })
+  }
+}
 
+io.on("connection", (socket) => {
   socket.on('joinRoom', (userPayload) => {
+    const roomId = userPayload.roomId;
     socket.join(userPayload.roomId);
     const viewerId = socket.id;
     const viewer = {
@@ -177,9 +187,12 @@ io.on("connection", (socket) => {
       userName: userPayload.userName,
       isBot: false
     }
-    addViewer(userPayload.roomId, viewer)
-    console.log(`User ${userPayload.userName} (id: ${viewerId}) joined room ${userPayload.roomId}`);
-    io.to(userPayload.roomId).emit('joinRoom', viewer);
+    addViewer(roomId, viewer)
+    io.to(roomId).emit('joinRoom', viewer);
+    // Bot reporting
+    const bot = useBot(roomId);
+    const botMessage = bot.spawn();
+    emitBotMessage(roomId, botMessage)
   });
 
   socket.on('leaveRoom', (userPayload) => {
