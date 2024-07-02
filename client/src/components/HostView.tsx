@@ -48,15 +48,15 @@ function HostView(){
         const newProjectData = await response.json();
         setIsLoadingQuestions(false);
         setProjectData(newProjectData.data);
-        const viewersData = await fetchViewers(projectId);
-        setHostId(viewersData.hostId);
-        setViewers(viewersData.data);
         const commentsData = await fetchComments(projectId) as Comment[];
         setComments(commentsData);
       } catch(error){
         console.error(`Failed to get project data. ${error}`)
         setIsLoadingQuestions(false);
       } finally{
+        const viewersData = await fetchViewers(projectId);
+        setHostId(viewersData.hostId);
+        setViewers(viewersData.data);
         console.log('Data loading has finished...')
       }
     }
@@ -245,12 +245,13 @@ function HostView(){
         <button type="button" className="btn btn-primary btn-lg mx-2" onClick={() => handleQuestionIndexChange(false)}>
           &lt;
         </button>
-        <button type="button" className="btn btn-success btn-lg mx-2" onClick={() => handleBroadcastingState()}>
+        {!isBroadcasting ? <button type="button" className="btn btn-success btn-lg mx-2" onClick={() => handleBroadcastingState()}>
           Start
         </button>
+        :
         <button type="button" className="btn btn-danger btn-lg mx-2" onClick={() => handleBroadcastingState()}>
-          Stop
-        </button>
+        Stop
+        </button>}
         <button type="button" className="btn btn-primary btn-lg mx-2" onClick={() => handleQuestionIndexChange(true)}>
           &gt;
         </button>

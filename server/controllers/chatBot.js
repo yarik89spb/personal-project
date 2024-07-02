@@ -31,7 +31,7 @@ class PorkoBot {
   }
 
   start(){
-    const botMessage = !this.#isStarted ? '開始了! 請仔細看上面的熒幕' : '繼續我們的會議，請看熒幕';
+    const botMessage = !this.#isStarted ? '開始了! 請仔細看上面的螢幕' : '繼續我們的會議，請看螢幕';
     this.#isStarted = true;
     return botMessage
   }

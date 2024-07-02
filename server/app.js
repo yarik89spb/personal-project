@@ -14,6 +14,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import PorkoBot, { useBot } from './controllers/chatBot.js';
+import { setDefaultHighWaterMark } from 'stream';
+import { setTimeout } from 'timers/promises';
 
 
 dotenv.config();
@@ -167,18 +169,20 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-function emitBotMessage(roomId, botMessage){
-  if(botMessage){
+function emitBotMessage(roomId, botMessage) {
+  if (botMessage) {
+    console.log('emitting message')
     io.to(roomId).emit('viewerMessage', {
       userName: 'PorkoBot',
       questionId: 0,
       text: botMessage
-    })
+    });
   }
 }
 
 io.on("connection", (socket) => {
   socket.on('joinRoom', (userPayload) => {
+
     const roomId = userPayload.roomId;
     socket.join(userPayload.roomId);
     const viewerId = socket.id;
@@ -187,6 +191,7 @@ io.on("connection", (socket) => {
       userName: userPayload.userName,
       isBot: false
     }
+    console.log(`User ${viewer.userName} joined room ${roomId}`)
     addViewer(roomId, viewer)
     io.to(roomId).emit('joinRoom', viewer);
     // Bot reporting
