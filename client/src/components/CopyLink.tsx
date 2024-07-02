@@ -5,9 +5,12 @@ interface CopyLinkProps {
 }
 
 const CopyLink: React.FC<CopyLinkProps> = ({ link }) => {
-
+  const rootUrl = window.location.protocol + "//" 
+  + window.location.hostname 
+  + (window.location.port ? ":" + window.location.port : "");
+  const fullUrl = rootUrl + link;
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(link).then(() => {
+    navigator.clipboard.writeText(fullUrl).then(() => {
       alert('Link copied to clipboard!');
     }, () => {
       alert('Failed to copy link');
@@ -18,7 +21,7 @@ const CopyLink: React.FC<CopyLinkProps> = ({ link }) => {
     <div className='copy-link-container'>
       <input
         type='text'
-        value={link}
+        value={fullUrl}
         readOnly
         className='copy-link-input'
       />

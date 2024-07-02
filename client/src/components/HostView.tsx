@@ -22,13 +22,14 @@ function HostView(){
     throw new Error('Project ID is required');
   }
 
+  const [hostPanel, setHostPanel] = useState('comments');
   const [projectData, setProjectData] = useState({
     projectName: 'Missing',
     projectId: null,
     questions:[]});
   const [questionIndex, setQuestionIndex] =  useState(0);
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
-  const [viewersArray, setViewers] = useState<Viewer[]>([])
+  const [viewersArray, setViewers] = useState<Viewer[]>([]);
   const [commentsArray, setComments] =  useState<Comment[]>(userComments);
   const [answersArray, setAnswers] =  useState<Option[]>([]);
   const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId, 'HOST');
@@ -121,6 +122,7 @@ function HostView(){
   }, [viewersArray])
 
   useRoomListener(socket, 'joinRoom', (viewer: Viewer) => {
+    console.log(`User ${viewer.userName} joined the room`)
     addViewerToList(viewer)});
 
   useNicknameListener(socket, 'userNameChange', (usernameData) => {
@@ -134,6 +136,7 @@ function HostView(){
   });
 
   useRoomListener(socket, 'leaveRoom', (viewer: Viewer) => {
+    console.log(`User ${viewer.userName} left the room`)
     removeViewerFromList(viewer.id)});
 
   useMessageListener(socket, 'viewerMessage', (message: Comment) => {
@@ -172,15 +175,26 @@ function HostView(){
   }
   return (
     <div className='container'> 
-      <CopyLink link={`http://54.211.88.216/guest/${projectId}`}/>
+      <CopyLink link={`/guest/${projectId}`}/>
       <div className='row'>
         <div className='col-md-6'>
-          <div className='card'> 
-            <h3 className='card-header' >User comments:</h3>
-            <div className='card-body' style={{ height: '300px', maxHeight: '300px', overflowY: 'auto' }}>
-              <ChatComments comments={commentsArray}/>
-            </div>
-          </div>
+            <button type='button'>Comments</button>
+            <button type='button'>Viewers</button>
+            {hostPanel === 'comments' ? (
+              <div className='card host-panel' > 
+                <h3 className='card-header' >User comments:</h3>
+                <div className='card-body' style={{ height: '300px', maxHeight: '300px', overflowY: 'auto' }}>
+                  <ChatComments comments={commentsArray}/>
+                </div>
+              </div>
+            ) : (
+              <div className='card host-panel' > 
+                <h3 className='card-header' >Viewers:</h3>
+                <div className='card-body' style={{ height: '300px', maxHeight: '300px', overflowY: 'auto' }}>
+                  <ViewerList viewers={viewersArray} />
+                </div>
+              </div>
+            )}
         </div>
         <div className='col-md-6'>
           <div className='event-screen'>
@@ -198,7 +212,6 @@ function HostView(){
             {renderAnswers()}
           </div>
           < ReactionButtons handleEmojiClick={handleEmojiClick} selectedEmoji={selectedEmoji}/>
-          <ViewerList viewers={viewersArray}/>
         </div>
       </div>
       <div className="d-flex justify-content-center">

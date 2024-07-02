@@ -60,19 +60,19 @@ function GuestView() {
     }
 
   useEffect(()=>{
-    fetchData();
-    const selectedNickname = cookies.userNickname;
-    if(selectedNickname){
-      setUserNickname(selectedNickname);
-      setUserNicknameInput(selectedNickname);
-      const eventPayload = {
-        roomId: projectId,
-        passedData: {oldUsername: userNickname, newUsername: selectedNickname}
-      };
-      reportUsernameChange(socket, 'userNameChange', eventPayload);
-    }
-  }, 
-  [])
+    fetchData().then(()=>{
+      const selectedNickname = cookies.userNickname;
+      if(selectedNickname){
+        setUserNickname(selectedNickname);
+        setUserNicknameInput(selectedNickname);
+        const eventPayload = {
+          roomId: projectId,
+          passedData: {oldUsername: userNickname, newUsername: selectedNickname}
+        };
+        reportUsernameChange(socket, 'userNameChange', eventPayload);
+      }
+    })
+  }, [])
 
   function addViewerToList(viewer: Viewer){
     setViewers((currentViewers) => [...currentViewers, viewer]);
@@ -166,6 +166,10 @@ function GuestView() {
       reportUsernameChange(socket, 'userNameChange', eventPayload);
     }
   }
+
+  useEffect(()=>{
+    console.log(viewersArray)
+  }, [viewersArray])
 
   function sendUserAnswerToServer(answer:Option){
     const eventPayload = {
