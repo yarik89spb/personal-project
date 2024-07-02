@@ -224,6 +224,9 @@ export async function getUserActivity(projectId) {
 export async function findProjectComments(projectId){
   try{
     const reactionData = await ProjectResponses.findOne({ projectId: projectId });
+    if(reactionData === null){
+      return []
+    }
     return reactionData.questions;
   } catch (error) {
     console.error('Fetch error occurred:', error);

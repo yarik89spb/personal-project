@@ -1,10 +1,12 @@
 class PorkoBot {
   constructor(roomId) {
     this.roomId = roomId;
+    this.#isSpawned = false;
+    this.#isStarted = false;
   }
 
-  #isSpawned = false;
-  #isStarted = false;
+  #isSpawned;
+  #isStarted;
 
   get isSpawned() {
     return this.#isSpawned;
@@ -26,19 +28,26 @@ class PorkoBot {
     if(!this.#isSpawned){
       const botMessage = '₍ᐢ･⚇･ᐢ₎ Porko bot 報道了';
       this.#isSpawned = true;
-      return botMessage
+      return botMessage;
     }
   }
 
   start(){
     const botMessage = !this.#isStarted ? '開始了! 請仔細看上面的螢幕' : '繼續我們的會議，請看螢幕';
     this.#isStarted = true;
-    return botMessage
+    return botMessage;
   }
 
   stop(){
     const botMessage = '會議暫停了。請稍後 ヾ(；ﾟ(OO)ﾟ)ﾉ'
-    return botMessage
+    return botMessage;
+  }
+
+  readNote(text){
+    if(text){
+      const botMessage = `主持人的備注：“${text}”`
+      return botMessage;
+    }
   }
 }
 

@@ -171,7 +171,7 @@ app.get('*', (req, res) => {
 
 function emitBotMessage(roomId, botMessage) {
   if (botMessage) {
-    console.log('emitting message')
+    console.log('Emitting message')
     io.to(roomId).emit('viewerMessage', {
       userName: 'PorkoBot',
       questionId: 0,
@@ -235,7 +235,11 @@ io.on("connection", (socket) => {
   socket.on('changeScreen', async (eventPayload)=>{
     const {roomId} = eventPayload; // roomId = projectId
     const {passedData} = eventPayload;
+    
     io.to(roomId).emit('changeScreen', passedData)
+    const bot = useBot(roomId);
+    const botMessage = bot.readNote(passedData.botNote);
+    emitBotMessage(roomId, botMessage)
     await storeCommentBatch(roomId);
     await storeEmojiBatch(roomId);
   })
