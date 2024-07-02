@@ -50,8 +50,9 @@ function GuestView() {
   
   async function fetchData(){
     try{
-        const viewersData = await fetchViewers(projectId) as Viewer[];
-        setViewers(viewersData);
+        const viewersData = await fetchViewers(projectId);
+        setHostId(viewersData.hostId);
+        setViewers(viewersData.data);
         const commentsData = await fetchComments(projectId) as Comment[];;
         setComments(commentsData);
       } catch(error){

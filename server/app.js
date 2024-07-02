@@ -66,8 +66,8 @@ app.get('/api/user-projects', async (req, res)=>{
 app.get('/api/project-viewers', async (req, res) =>{
   try{
     const projectId = req.query.projectId;
-    const projectViewers = getViewers(projectId)
-    res.status(200).json({data: projectViewers})
+    const [hostId, projectViewers] = getViewers(projectId)
+    res.status(200).json({hostId, data: projectViewers})
   } catch(error){
     console.error(error);
     res.status(400).json({error: 'Failed to get list of viewers'})

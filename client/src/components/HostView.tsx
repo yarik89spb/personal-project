@@ -47,8 +47,9 @@ function HostView(){
         const newProjectData = await response.json();
         setIsLoadingQuestions(false);
         setProjectData(newProjectData.data);
-        const viewersData = await fetchViewers(projectId) as Viewer[];
-        setViewers(viewersData);
+        const viewersData = await fetchViewers(projectId);
+        setHostId(viewersData.hostId);
+        setViewers(viewersData.data);
         const commentsData = await fetchComments(projectId) as Comment[];
         setComments(commentsData);
       } catch(error){

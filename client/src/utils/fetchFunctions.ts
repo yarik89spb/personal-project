@@ -1,4 +1,4 @@
-import { Comment, Viewer } from "./interfaces";
+import { Comment } from "./interfaces";
 
 export async function fetchComments(projectId: string | undefined){
   try{
@@ -20,7 +20,7 @@ export async function fetchViewers(projectId: string | undefined){
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const viewersData = await response.json();
-      return viewersData.data as Viewer[];
+      return viewersData;
     } catch(error){
       console.error(`Failed to get viewers ${error}`)
     }
