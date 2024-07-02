@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect, useContext } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import { 
   useSocket, 
   sendMessage, 
@@ -19,7 +19,6 @@ import standBy from '/public/stand-by.jpg';
 import { useCookies } from 'react-cookie';
 import ReactionButtons from './ReactionButtons.tsx';
 import ViewerList from './ViewerList.tsx';
-import { EventContext } from '../context/EventContext.tsx';
 
 function GuestView() {
   let userComments = [
@@ -30,7 +29,7 @@ function GuestView() {
   if (!projectId) {
     throw new Error('Project ID is required');
   }
-  const { hostId } = useContext(EventContext);
+  const [hostId, setHostId ] = useState<string | null>(null);
   const [commentsArray, setComments] =  useState<Comment[]>(userComments);
   const [userMessageInput, setUserMessageInput] = useState('');
   const [currentScreen, setCurrentScreen] = useState<Question>({

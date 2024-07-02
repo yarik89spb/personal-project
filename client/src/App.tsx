@@ -10,7 +10,6 @@ import { ReactNode, useContext } from 'react';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import Welcome from './components/Welcome'
 import HostProfile from './components/HostProfile'
-import { EventProvider } from './context/EventContext'
 
 interface ProtectedRouteProps {
   element: ReactNode
@@ -27,24 +26,22 @@ function ProtectedRoute({ element: Component }: ProtectedRouteProps){
 function App() {
   return (
     <AuthProvider>
-      <EventProvider>
-        <BrowserRouter>
-          <div className="app-container">
-            <Header/>
-            <main className="content">
-            <Routes>
-              <Route path='' element={<Welcome />} />
-              <Route path='login' element={<Login />} />
-              <Route path='profile/:userId' element={<ProtectedRoute element={<HostProfile />}/>} />
-              <Route path='host/:projectId' element={<ProtectedRoute element={<HostView />}/>} />
-              <Route path='guest/:projectId' element={<GuestView />} />
-              <Route path='stats/:projectId' element={<ProtectedRoute element={<StatsView />}/>} />
-            </Routes>
-            </main>
-            <Footer/>
-          </div>
-        </BrowserRouter>
-      </EventProvider>
+      <BrowserRouter>
+        <div className="app-container">
+          <Header/>
+          <main className="content">
+          <Routes>
+            <Route path='' element={<Welcome />} />
+            <Route path='login' element={<Login />} />
+            <Route path='profile/:userId' element={<ProtectedRoute element={<HostProfile />}/>} />
+            <Route path='host/:projectId' element={<ProtectedRoute element={<HostView />}/>} />
+            <Route path='guest/:projectId' element={<GuestView />} />
+            <Route path='stats/:projectId' element={<ProtectedRoute element={<StatsView />}/>} />
+          </Routes>
+          </main>
+          <Footer/>
+        </div>
+      </BrowserRouter>
     </AuthProvider>
     
   )

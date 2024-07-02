@@ -1,5 +1,4 @@
-import { useState, useEffect, useContext} from 'react';
-import { EventContext } from '../context/EventContext.tsx'
+import { useState, useEffect } from 'react';
 import { useSocket, useMessageListener, sendCommand, useAnswerListener, useEmojiListener, useRoomListener, useNicknameListener } from '../utils/websocket';
 import { useParams } from 'react-router-dom';
 import EventScreen from './EventScreen';
@@ -33,7 +32,7 @@ function HostView(){
   const [viewersArray, setViewers] = useState<Viewer[]>([]);
   const [commentsArray, setComments] =  useState<Comment[]>(userComments);
   const [answersArray, setAnswers] =  useState<Option[]>([]);
-  const { hostId, setHostId } = useContext(EventContext);
+  const [hostId, setHostId ] = useState<string | null>(null);
   const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId, 'HOST');
   const [selectedEmoji, setSelectedEmoji] = useState("");
   /* Project data rendering and broadcasting */
