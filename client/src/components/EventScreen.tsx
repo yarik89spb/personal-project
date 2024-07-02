@@ -48,7 +48,7 @@ function EventScreen( { question, onOptionClick } : EventScreenProps){
                       value={option.id}
                       className={`btn btn-custom w-100 ${selectedAnswerId == option.id ? 'selected' : ''}`}
                       disabled={
-                        selectedAnswerId && selectedAnswerId != option.id ? true : false}
+                        selectedAnswerId ? true : false}
                       onClick={(e)=> handleOptionClick(e)}
                     >
                       {option.text}
