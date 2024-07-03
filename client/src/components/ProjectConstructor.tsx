@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import './ProjectConstructor.css'
 
@@ -12,27 +12,35 @@ const ProjectConstructor = () => {
       id: 1,
       title: '',
       content: '',
+      botNote: '',
       options: [{ id: 11, text: '', isCorrect: false }],
     },
   ]);
   const [nextQuestionId, setNextQuestionId] = useState(2); // To manage unique IDs for questions
 
+  useEffect(()=>{
+    console.log(questions)
+  },[questions])
+
   const handleQuestionChange = (index: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
-    if (name === 'title') {
-      let newQuestions = [...questions];
-      newQuestions[index].title = value;
-      setQuestions(newQuestions);
-    } else if (name === 'content') {
-      let newQuestions = [...questions];
-      newQuestions[index].content = value;
-      setQuestions(newQuestions);
-    } else if (name.includes('option')) {
-      let optionIndex = parseInt(name.split('-')[1], 10);
-      let newQuestions = [...questions];
+    let newQuestions = [...questions];
+
+    if (name.includes('option')) {
+      const optionIndex = parseInt(name.split('-')[1], 10);
       newQuestions[index].options[optionIndex].text = value;
-      setQuestions(newQuestions);
+    } else if (name === 'title') {
+      newQuestions[index].title = value;
+    } else if (name === 'content') {
+      newQuestions[index].content = value;
+    } else if (name === 'botNote') {
+      newQuestions[index].botNote = value;
+    }  else if (name.startsWith('correct')) {
+      const optionIndex = parseInt(name.split('-')[1], 10);
+      newQuestions[index].options[optionIndex].isCorrect = event.target.checked;
     }
+
+    setQuestions(newQuestions);
   };
 
   const addQuestion = () => {
@@ -42,7 +50,8 @@ const ProjectConstructor = () => {
         id: nextQuestionId,
         title: '',
         content: '',
-        options: [{ id: nextQuestionId * 10 + 1, text: '', isCorrect: false }],
+        botNote: '',
+        options: [{ id: nextQuestionId * 10 + 1, text: '', isCorrect: false}],
       },
     ]);
     setNextQuestionId(nextQuestionId + 1);
@@ -53,7 +62,7 @@ const ProjectConstructor = () => {
     let nextOptionId = newQuestions[questionIndex].options.length
       ? newQuestions[questionIndex].options[newQuestions[questionIndex].options.length - 1].id + 1
       : newQuestions[questionIndex].id * 10 + 1;
-    newQuestions[questionIndex].options.push({ id: nextOptionId, text: '', isCorrect: false });
+    newQuestions[questionIndex].options.push({ id: nextOptionId, text: '', isCorrect: false});
     setQuestions(newQuestions);
   };
 
@@ -80,6 +89,7 @@ const ProjectConstructor = () => {
         id: question.id,
         title: question.title,
         content: question.content,
+        botnote: question.botNote,
         options: question.options.map((option) => ({
           id: option.id,
           text: option.text,
@@ -92,7 +102,7 @@ const ProjectConstructor = () => {
     // Reset form after submission
     setProjectName('');
     setDescription('');
-    setQuestions([{ id: 1, title: '', content: '', options: [{ id: 11, text: '', isCorrect: false }] }]);
+    setQuestions([{ id: 1, title: '', content: '', botNote: '', options: [{ id: 11, text: '', isCorrect: false }] }]);
   };
 
   async function addProjectData(projectObject: object){
@@ -120,6 +130,7 @@ const ProjectConstructor = () => {
             className="form-control"
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
+            placeholder='專案標題'
             required
           />
         </div>
@@ -129,6 +140,7 @@ const ProjectConstructor = () => {
             className="form-control"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            placeholder='簡單説明專案的主題和目標'
             required
           />
         </div>
@@ -143,6 +155,7 @@ const ProjectConstructor = () => {
                   name="title"
                   value={question.title}
                   onChange={(e) => handleQuestionChange(index, e)}
+                  placeholder='限做主持人看到'
                   required
                 />
               </div>
@@ -153,6 +166,18 @@ const ProjectConstructor = () => {
                   name="content"
                   value={question.content}
                   onChange={(e) => handleQuestionChange(index, e)}
+                  placeholder='觀衆看到的内容'
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Question {index + 1} bot note:</label>
+                <textarea
+                  className="form-control"
+                  name="botNote"
+                  value={question.botNote}
+                  onChange={(e) => handleQuestionChange(index, e)}
+                  placeholder='注意：當時内容會被機器人貼在聊天室'
                   required
                 />
               </div>
@@ -166,6 +191,12 @@ const ProjectConstructor = () => {
                     onChange={(e) => handleQuestionChange(index, e)}
                     required
                   />
+                  <input
+                    type="checkbox"
+                    name={`correct-${optionIndex}`}
+                    checked={option.isCorrect}
+                    onChange={(e) => handleQuestionChange(index, e)}
+                    />
                   <button
                     type="button"
                     className="btn btn-danger btn-sm ml-2"
