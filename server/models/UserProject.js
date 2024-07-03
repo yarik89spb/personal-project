@@ -12,6 +12,7 @@ const QuestionSchema = new Schema({
   id: Number,
   title: String,
   content: String,
+  botNote: String,
   options: [OptionSchema], 
 });
 

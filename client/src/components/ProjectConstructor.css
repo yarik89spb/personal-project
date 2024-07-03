@@ -9,12 +9,29 @@
 }
 
 .question-container .form-group {
-  margin-bottom: 0.5rem; 
+  margin-bottom: 0.5rem;
+  max-width: 100%; 
 }
 
 .form-control {
   font-size: 0.9rem; 
-  padding: 0.375rem 0.75rem; 
+  padding: 0.375rem 0.75rem;
+  max-width: 50%;
+  resize: vertical;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-left: 10px; /* Optional: Adjust spacing as needed */
+}
+
+.correct-option-text {
+  margin: 5px; /* Space between label and checkbox */
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 10px; /* Adjust spacing as needed */
 }
 
 .btn {
@@ -25,3 +42,4 @@
 .mb-4.constructor-title{
   color: rgba(48, 101, 112, 0.8);
 }
+

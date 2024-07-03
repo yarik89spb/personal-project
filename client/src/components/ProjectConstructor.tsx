@@ -37,7 +37,7 @@ const ProjectConstructor = () => {
       newQuestions[index].botNote = value;
     }  else if (name.startsWith('correct')) {
       const optionIndex = parseInt(name.split('-')[1], 10);
-      newQuestions[index].options[optionIndex].isCorrect = event.target.checked;
+      newQuestions[index].options[optionIndex].isCorrect = (event.target as HTMLInputElement).checked;
     }
 
     setQuestions(newQuestions);
@@ -185,18 +185,21 @@ const ProjectConstructor = () => {
                 <div key={optionIndex} className="form-group d-flex align-items-center">
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control text-area-auto-grow"
                     name={`option-${optionIndex}`}
                     value={option.text}
                     onChange={(e) => handleQuestionChange(index, e)}
                     required
                   />
-                  <input
-                    type="checkbox"
-                    name={`correct-${optionIndex}`}
-                    checked={option.isCorrect}
-                    onChange={(e) => handleQuestionChange(index, e)}
-                    />
+                  <div className='checkbox-group d-flex align-items-center'>
+                    <div className='correct-option-text'>Correct answer</div>
+                    <input
+                      type="checkbox"
+                      name={`correct-${optionIndex}`}
+                      checked={option.isCorrect}
+                      onChange={(e) => handleQuestionChange(index, e)}
+                      />
+                  </div>
                   <button
                     type="button"
                     className="btn btn-danger btn-sm ml-2"
