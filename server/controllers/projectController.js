@@ -1,4 +1,4 @@
-import { insertProjectData, searchUserById, searchProjectById } from '../models/queries.js'
+import { insertProjectData, searchUserById, searchProjectById, deleteProjectData } from '../models/queries.js'
 
 export async function addNewProject(projectData){
   try{
@@ -6,6 +6,15 @@ export async function addNewProject(projectData){
     return projectId;
   } catch(error){
     throw new Error(`Failed to insert new project data ${error}`)
+  }
+}
+
+export async function deleteProject(userId, projectId){
+  try{
+    const result = await deleteProjectData(userId, projectId)
+    return result;
+  } catch(error){
+    throw new Error(`Failed to delete project ${error}`)
   }
 }
 

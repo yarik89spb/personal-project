@@ -8,15 +8,12 @@ import { storeEmoji, storeEmojiBatch } from './controllers/emojiController.js'
 import { getProjectStatistics } from './controllers/dashboard.js';
 import { signUp, signIn, validateJWT } from './controllers/userContoller.js'
 import { addViewer, renameViewer, removeViewer, getViewers } from './controllers/viewerController.js';
-import { addNewProject, getUserProjects, getProjectData } from './controllers/projectController.js'
+import { addNewProject, deleteProject, getUserProjects, getProjectData } from './controllers/projectController.js'
 import { addWordCounts } from './utils/callPython.js'
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import PorkoBot, { useBot } from './controllers/chatBot.js';
-import { setDefaultHighWaterMark } from 'stream';
-import { setTimeout } from 'timers/promises';
-
 
 dotenv.config();
 
@@ -40,6 +37,16 @@ app.post('/api/add-project', async (req, res)=>{
     const projectData = req.body;
     const projectId = await addNewProject(projectData);
     res.status(200).json({projectId}) 
+  }catch(error){
+    res.status(400).json({error:'Failed to add project data'})
+  }
+})
+
+app.post('/api/delete-project', async (req, res)=>{
+  try{
+    const {userId, projectId} = req.body;
+    await deleteProject(userId, projectId);
+    res.status(200).json({message:'Ok'}) 
   }catch(error){
     res.status(400).json({error:'Failed to add project data'})
   }
@@ -171,7 +178,6 @@ app.get('*', (req, res) => {
 
 function emitBotMessage(roomId, botMessage) {
   if (botMessage) {
-    console.log('Emitting message')
     io.to(roomId).emit('viewerMessage', {
       userName: 'PorkoBot',
       questionId: 0,
@@ -197,7 +203,7 @@ io.on("connection", (socket) => {
     // Bot reporting
     const bot = useBot(roomId);
     const botMessage = bot.spawn();
-    emitBotMessage(roomId, botMessage)
+    setTimeout(() => emitBotMessage(roomId, botMessage), 3000)
   });
 
   socket.on('leaveRoom', (userPayload) => {

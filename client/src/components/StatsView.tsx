@@ -105,6 +105,14 @@ export default function StatsView(){
     ];
   
     const data = [["From", "To", "Weight"], ...totalLinks];
+
+    if(!projectStats || !projectStats.data){
+      return (
+        <div className="container">
+          <h4> No reaction submitted...</h4>
+        </div>
+    )
+    }
   
     return (
       <div className="row mb-3">
@@ -122,6 +130,14 @@ export default function StatsView(){
   };
 
   function renderAnswers() {
+    if(!projectStats || !projectStats.data){
+      return (
+        <div className="container">
+          <h4> No answers submitted...</h4>
+        </div>
+    )
+    }
+
     return (
       <div className="container">
         <div className="row">
@@ -152,8 +168,12 @@ export default function StatsView(){
     if(plotType==='answers'){
       return (<div> {renderAnswers()} </div>)
     }else if(plotType==='reactions'){
-      if(loading){
-        return <h2> Data is loading...</h2>
+      if(loading || !projectStats){
+        return (
+          <div className='container'>
+            <h4> Data is loading...</h4>
+          </div> 
+          )
       }
 
       return (
@@ -179,9 +199,11 @@ export default function StatsView(){
       scale: 'sqrt',
       fontSizes: [20, 50],
     };
-
-  
+    if(!wordCounts){
+      return <h4> No word counts avaialble</h4>
+    }
     return (
+
       <div style={{ width: '100%', height: '100%' }}>
         <WordCloud options={options} words={wordCounts} />
       </div>
@@ -191,7 +213,9 @@ export default function StatsView(){
   return (
     <div className="container-fluid bg-dark text-white">
       <div className="container mt-5">
-        <h2> Statistics for {projectStats.projectName} </h2>
+        {projectStats && projectStats.projectName ? 
+          <h2> Statistics for {projectStats.projectName} </h2> : 
+          <h2> No Statistics available</h2>}
         <div className='row'>
           <div className='d-flex justify-content-start'>
             <button 

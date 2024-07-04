@@ -14,6 +14,9 @@ export default function HostProfile(){94
   const [showConstructor, setShowConstructor] = useState(false);
 
   function renderProjectsList(){
+    if(!projectsArray || projectsArray.length === 0){
+      return <h4>No projects found... Maybe add one?</h4>
+    }
     return (
       projectsArray.map((projectObj:  ProjectObject)=>{
         return (
@@ -27,12 +30,18 @@ export default function HostProfile(){94
             className="btn btn-primary mr-2"
             onClick={()=>handleEventStart(projectObj.projectId)}>
               Start 
-            </button>
+            </button> 
             <button 
             type='button'
             className="btn btn-secondary"
             onClick={()=>handleStatsClick(projectObj.projectId)}>
               Summary 
+            </button>
+            <button 
+            type='button'
+            className="btn btn-danger"
+            onClick={()=>deleteProject(projectObj.projectId)}>
+              Delete 
             </button>
           </div>
           )
@@ -59,6 +68,27 @@ export default function HostProfile(){94
     }
   }, [userId])
 
+  async function deleteProject(projectId: string){
+    try{
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/delete-project`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          projectId
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const projectsData = await response.json();
+      setProjectsArray(projectsData.data);
+    } catch(error){
+      console.error(`Failed to delete project ${error}`)
+    }
+  }
 
   function handleEventStart(projectId: string){
     navigate(`/host/${projectId}`)

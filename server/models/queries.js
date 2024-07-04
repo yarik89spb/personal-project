@@ -55,6 +55,31 @@ export async function insertProjectData(dataObj) {
   }
 }
 
+export async function deleteProjectData(userId, projectId) {
+  try {
+    // Delete project questions and info
+    const projectToDelete = await UserProject.findByIdAndDelete(projectId);
+    if (!projectToDelete) {
+      throw new Error(`Project with ID ${projectId} does not exist`);
+    }
+    // Delete project from projects list in user profile
+    const user = await User.findById(userId);
+    if(!user){
+      throw new Error(`User with id ${userId} does not exist`)
+    }
+    user.projects = user.projects.filter((project)=>project.projectId !== projectId);
+    await user.save();
+    // Delete project responses
+    const deletedDocument = await ProjectResponses.findOneAndDelete({projectId});
+    if(!deletedDocument){
+      console.error(`Project ${userId} had no responses recorded`)
+    }
+    return projectId;
+  } catch (error) {
+    console.error(`Deletion error occurred: ${error}`);
+  }
+}
+
 export async function searchUserById(userId) {
   try {
     const userData = await User.findById(userId);
