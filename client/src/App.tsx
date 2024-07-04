@@ -5,9 +5,10 @@ import StatsView from './components/StatsView'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Login from './components/Login'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom';
 import { ReactNode, useContext } from 'react';
 import { AuthProvider, AuthContext } from './context/AuthContext';
+import { EventProvider, EventContext } from './context/EventContext';
 import Welcome from './components/Welcome'
 import HostProfile from './components/HostProfile'
 
@@ -18,9 +19,26 @@ interface ProtectedRouteProps {
 function ProtectedRoute({ element: Component }: ProtectedRouteProps){
   const { isLogined, loading } = useContext(AuthContext);
   if (loading) {
-    return <div>Loading...</div>; // Or a loading spinner
+    return <div>Loading...</div>;
   }
   return isLogined ? <> {Component} </> : <Navigate to="/login" />;
+}
+
+function EventRoute({ element: Component }: ProtectedRouteProps){
+  const { online, loading } = useContext(EventContext);
+  if (loading) {
+    return <div>Loading...</div>; 
+  }
+  return online ? <>{Component}</>: <Navigate to="/"/>;
+}
+
+function GuestRouteWrapper({ element: Component }: ProtectedRouteProps) {
+  const { projectId } = useParams<{ projectId: string }>();
+  return (
+    <EventProvider projectId={projectId!}>
+      <EventRoute element={Component} />
+    </EventProvider>
+  );
 }
 
 function App() {
@@ -35,7 +53,7 @@ function App() {
             <Route path='login' element={<Login />} />
             <Route path='profile/:userId' element={<ProtectedRoute element={<HostProfile />}/>} />
             <Route path='host/:projectId' element={<ProtectedRoute element={<HostView />}/>} />
-            <Route path='guest/:projectId' element={<GuestView />} />
+            <Route path="guest/:projectId" element={<GuestRouteWrapper element={<GuestView />} />} />
             <Route path='stats/:projectId' element={<ProtectedRoute element={<StatsView />}/>} />
           </Routes>
           </main>
@@ -43,7 +61,6 @@ function App() {
         </div>
       </BrowserRouter>
     </AuthProvider>
-    
   )
 }
 

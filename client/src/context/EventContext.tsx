@@ -1,24 +1,43 @@
-import React, { createContext, useState, ReactNode } from 'react';
+import { createContext, useEffect, useState, ReactNode } from 'react';
+import { isOnline } from '../utils/fetchFunctions.ts'
 
 interface EventContextType  {
-  hostId: string | null;
-  setHostId: React.Dispatch<React.SetStateAction<string | null>>;
+  online: boolean;
+  loading: boolean;
 }
 
 export const EventContext = createContext<EventContextType>({
-  hostId: null,
-  setHostId: () => {},
+  online: false,
+  loading: true,
 });
 
-interface EventContextProps {
+interface EventProviderProps {
   children: ReactNode;
+  projectId?: string;
 }
 
-export const EventProvider = ({ children }: EventContextProps) => {
-  const [hostId, setHostId] = useState<string | null>(null);
+export const EventProvider = ({ children, projectId}: EventProviderProps) => {
+  const [loading, setLoading] = useState(true);
+  const [online, setOnline] = useState(false);
+
+  const checkOnlineStatus = async () => {
+    try{
+      const onlineStatus = await isOnline(projectId);
+      setOnline(onlineStatus);
+    } catch(error){
+      console.error('Server request error:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    checkOnlineStatus();
+
+  }, [projectId])
 
   return (
-    <EventContext.Provider value={{ hostId, setHostId }}>
+    <EventContext.Provider value={{ loading, online }}>
       {children}
     </EventContext.Provider>
   );
