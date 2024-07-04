@@ -8,12 +8,12 @@ import { storeEmoji, storeEmojiBatch } from './controllers/emojiController.js'
 import { getProjectStatistics } from './controllers/dashboard.js';
 import { signUp, signIn, validateJWT } from './controllers/userContoller.js'
 import { addViewer, renameViewer, removeViewer, getViewers } from './controllers/viewerController.js';
-import { addNewProject, deleteProject, getUserProjects, getProjectData, toggleBroadcasting } from './controllers/projectController.js'
+import { addNewProject, deleteProject, getUserProjects, getProjectData, toggleBroadcasting, getBroadcastingStatus } from './controllers/projectController.js'
 import { addWordCounts } from './utils/callPython.js'
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
-import PorkoBot, { useBot } from './controllers/chatBot.js';
+import { useBot } from './controllers/chatBot.js';
 
 dotenv.config();
 
@@ -128,6 +128,17 @@ app.post('/api/toggle-broadcasting', async (req, res)=>{
     const {userId} = validateJWT(userJWT);
     const broadcastingStatus = await toggleBroadcasting(userId, projectId, broadcasting);
     res.status(200).json(broadcastingStatus) 
+
+  }catch(error){
+    res.status(400).json({error:`Failed to toggle broadcasting. ${error}`})
+  }
+})
+
+app.get('/api/broadcasting', async (req, res)=>{
+  try{
+    const {projectId} = req.query;
+    const isBroadcasting = await getBroadcastingStatus(projectId);
+    res.status(200).json({isBroadcasting});
 
   }catch(error){
     res.status(400).json({error:`Failed to toggle broadcasting. ${error}`})

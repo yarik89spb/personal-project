@@ -89,7 +89,7 @@ const ProjectConstructor = () => {
         id: question.id,
         title: question.title,
         content: question.content,
-        botnote: question.botNote,
+        botNote: question.botNote,
         options: question.options.map((option) => ({
           id: option.id,
           text: option.text,

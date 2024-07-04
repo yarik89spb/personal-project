@@ -15,6 +15,15 @@ export async function startBroadcasting(projectId){
   }
 }
 
+export async function getBroadcastingData(projectId){
+  try{
+    const broadcastingObj = await BroadcastingStatus.findOne({ projectId });
+    return broadcastingObj;
+  } catch (error){
+    throw new Error(`Could not get broadcasting data. ${error}`)
+  }
+}
+
 export async function stopBroadcasting(projectId){
   try{
     const broadcastingObj = await BroadcastingStatus.findOne({ projectId });

@@ -25,3 +25,34 @@ export async function fetchViewers(projectId: string | undefined){
       console.error(`Failed to get viewers ${error}`)
     }
   }
+
+export async function isOnline(projectId: string | undefined){
+  try{
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/broadcasting?projectId=${projectId}`)
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const onlineStatus = await response.json();
+    return onlineStatus.isBroadcasting;
+  } catch(error){
+    console.error(`Failed to get online status ${error}`)
+  }
+}
+
+export async function changeOnlineStatus(jwt:string, projectId: string | undefined, isOnline: boolean | string){
+  try{
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/toggle-broadcasting?projectId=${projectId}&broadcasting=${isOnline}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${jwt}`,
+        },
+      })
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const onlineStatus = await response.json();
+      return onlineStatus.isBroadcasting;
+    } catch(error){
+      console.error(`Failed to toggle project visibility ${error}`)
+    }
+  }

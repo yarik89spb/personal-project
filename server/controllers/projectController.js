@@ -4,7 +4,8 @@ import {
   insertProjectData, 
   searchUserById, 
   searchProjectById, 
-  deleteProjectData
+  deleteProjectData,
+  getBroadcastingData
 } from '../models/queries.js'
 
 export async function toggleBroadcasting(userId, projectId, broadcasting){
@@ -20,6 +21,11 @@ export async function toggleBroadcasting(userId, projectId, broadcasting){
     currentState = await stopBroadcasting(projectId);
   }
   return {isBroadcasting: currentState}
+}
+
+export async function getBroadcastingStatus(projectId){
+  const broadcastingObj = await getBroadcastingData(projectId);
+  return broadcastingObj.isBroadcasting;
 }
 
 export async function addNewProject(projectData){

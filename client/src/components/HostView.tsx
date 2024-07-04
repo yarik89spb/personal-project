@@ -4,8 +4,10 @@ import { useParams } from 'react-router-dom';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import ViewerList from './ViewerList.tsx';
+import ConfirmationModal from './ConfirmationModal.tsx';
 import { Option,  Comment, Emoji, Viewer } from '../utils/interfaces.ts';
-import { fetchComments, fetchViewers } from '../utils/fetchFunctions.ts';
+import { fetchComments, fetchViewers, changeOnlineStatus, isOnline } from '../utils/fetchFunctions.ts';
+import { useCookies } from 'react-cookie';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './HostView.css';
 import CopyLink from './CopyLink.tsx';
@@ -17,11 +19,13 @@ function HostView(){
   ];
 
   const { projectId } = useParams<{ projectId: string }>();
-
+  const [cookies]  = useCookies(['jwt'])
   if (!projectId) {
     throw new Error('Project ID is required');
   }
 
+  const [online, setOnline] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [hostPanel, setHostPanel] = useState('comments');
   const [projectData, setProjectData] = useState({
     projectName: 'Missing',
@@ -41,6 +45,8 @@ function HostView(){
   useEffect(() => {
     async function fetchData(){
       try{
+        const currentOnlineStatus = await isOnline(projectId);
+        setOnline(currentOnlineStatus)
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/project-data?projectId=${projectId}`)
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -63,6 +69,18 @@ function HostView(){
     fetchData();
     
   }, [])
+
+  async function toggleOnline(status: boolean){
+    const jwt = cookies.jwt;
+    const currentOnlineStatus = await changeOnlineStatus(jwt, projectId, status);
+    if(currentOnlineStatus === true){
+      setOnline(true)
+      console.log(`You're on the air! Now everyone can join ${projectData.projectName}`);
+    } else if(currentOnlineStatus === false) {
+      setOnline(false)
+      console.log(`${projectData.projectName} is offline`);
+    }
+  }
 
   function handleQuestionIndexChange(isForward = true){
     const maxIndex = projectData.questions.length - 1;
@@ -191,8 +209,27 @@ function HostView(){
     )
   }
   return (
-    <div className='container'> 
-      <CopyLink link={`/guest/${projectId}`}/>
+    <div className='container'>
+      {online? <div> 
+        <button onClick={() => setShowModal(true)}>Stop event</button>
+        <ConfirmationModal
+          show={showModal}
+          onConfirm={() => {toggleOnline(false); setShowModal(false)}}
+          onCancel={() => setShowModal(false)}
+          message="Are you sure you want to stop event?"
+        /> 
+      </div> 
+      : 
+      <div> 
+        <button onClick={() => setShowModal(true)}>Go online</button>
+        <ConfirmationModal
+          show={showModal}
+          onConfirm={() => {toggleOnline(true); setShowModal(false)}}
+          onCancel={() => setShowModal(false)}
+          message="Are you sure you want to start event?"
+        /> 
+      </div>} 
+      <CopyLink link={`/guest/${projectId}`}/> 
       <div className='row'>
         <div className='col-md-6'>
   
@@ -246,11 +283,11 @@ function HostView(){
           &lt;
         </button>
         {!isBroadcasting ? <button type="button" className="btn btn-success btn-lg mx-2" onClick={() => handleBroadcastingState()}>
-          Start
+          Show screen
         </button>
         :
         <button type="button" className="btn btn-danger btn-lg mx-2" onClick={() => handleBroadcastingState()}>
-        Stop
+        Hide screen
         </button>}
         <button type="button" className="btn btn-primary btn-lg mx-2" onClick={() => handleQuestionIndexChange(true)}>
           &gt;
