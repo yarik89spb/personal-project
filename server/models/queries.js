@@ -2,6 +2,29 @@ import ViewerResponse from './ViewerResponse.js';
 import UserProject from './UserProject.js';
 import ProjectResponses from './ProjectResponses.js'
 import User from './User.js'
+import BroadcastingStatus from './BroadcastingStatus.js';
+
+export async function startBroadcasting(projectId){
+  try{
+    const broadcastingObj = await BroadcastingStatus.findOne({ projectId });
+    broadcastingObj.isBroadcasting = true;
+    await broadcastingObj.save();
+    return true;
+  } catch (error){
+    throw new Error(`Could not start broadcasting ${error}`)
+  }
+}
+
+export async function stopBroadcasting(projectId){
+  try{
+    const broadcastingObj = await BroadcastingStatus.findOne({ projectId });
+    broadcastingObj.isBroadcasting = false;
+    await broadcastingObj.save();
+    return false;
+  } catch (error){
+    throw new Error(`Could not stop broadcasting ${error}`)
+  }
+}
 
 export async function addNewUser({userEmail, userName, userHashedPwd, userCompany}){
   try{
@@ -37,18 +60,30 @@ export async function insertProjectData(dataObj) {
     // Project data
     const result = await UserProject.create(dataObj);
     const projectId = result._id;
+    const {userId} = dataObj;
+    const {projectName} = dataObj;
     console.log('Project inserted id:', projectId); 
     // Add project to the corresponding user projects
-    const user = await User.findById(dataObj.userId);
+    const user = await User.findById(userId);
+    const {userEmail} = user
     if (!user) {
       throw new Error('User not found');
     }
     user.projects.push({
       projectId, 
-      projectName: dataObj.projectName,
+      projectName: projectName,
       description: dataObj.description
     });
     await user.save();
+    // Create record in broadcasting-status collection
+    await BroadcastingStatus.create({
+      isBroadcasting: false,
+      userId,
+      userEmail,
+      projectId,
+      projectName
+    });
+
     return projectId;
   } catch (error) {
     console.error(`Insert error occurred: ${error}`);
@@ -72,7 +107,12 @@ export async function deleteProjectData(userId, projectId) {
     // Delete project responses
     const deletedDocument = await ProjectResponses.findOneAndDelete({projectId});
     if(!deletedDocument){
-      console.error(`Project ${userId} had no responses recorded`)
+      console.error(`Project ${userId} has no responses`)
+    }
+    // Delete broadcasting object
+    const broadcastingObj = await BroadcastingStatus.findOneAndDelete({projectId});
+    if(!broadcastingObj){
+      console.error(`Project ${userId} has no broadcasting records`)
     }
     return projectId;
   } catch (error) {

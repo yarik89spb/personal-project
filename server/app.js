@@ -8,7 +8,7 @@ import { storeEmoji, storeEmojiBatch } from './controllers/emojiController.js'
 import { getProjectStatistics } from './controllers/dashboard.js';
 import { signUp, signIn, validateJWT } from './controllers/userContoller.js'
 import { addViewer, renameViewer, removeViewer, getViewers } from './controllers/viewerController.js';
-import { addNewProject, deleteProject, getUserProjects, getProjectData } from './controllers/projectController.js'
+import { addNewProject, deleteProject, getUserProjects, getProjectData, toggleBroadcasting } from './controllers/projectController.js'
 import { addWordCounts } from './utils/callPython.js'
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -113,6 +113,24 @@ app.get('/api/word-counts', async (req, res)=>{
     res.status(200).json({data: data}) 
   }catch(error){
     res.status(400).json({error:'Failed to load data'})
+  }
+})
+
+app.post('/api/toggle-broadcasting', async (req, res)=>{
+  try{
+    const {projectId} = req.query;
+    const {broadcasting} = req.query;
+    const authHeader = req.headers.authorization;
+    const userJWT = authHeader.split(' ')[1];
+    if(!userJWT){
+      throw new Error('Missing JWT')
+    }
+    const {userId} = validateJWT(userJWT);
+    const broadcastingStatus = await toggleBroadcasting(userId, projectId, broadcasting);
+    res.status(200).json(broadcastingStatus) 
+
+  }catch(error){
+    res.status(400).json({error:`Failed to toggle broadcasting. ${error}`})
   }
 })
 
