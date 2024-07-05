@@ -2,9 +2,10 @@ import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 export function addWordCounts(projectId) {
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
   const pythonScriptPath = path.join(__dirname, '../nlp/user_comments.py');
 
   const pythonProcess = spawn('python', [pythonScriptPath, projectId]);

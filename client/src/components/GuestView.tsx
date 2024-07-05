@@ -29,6 +29,7 @@ function GuestView() {
   if (!projectId) {
     throw new Error('Project ID is required');
   }
+
   const [hostId, setHostId ] = useState<string | null>(null);
   const [commentsArray, setComments] =  useState<Comment[]>(userComments);
   const [userMessageInput, setUserMessageInput] = useState('');

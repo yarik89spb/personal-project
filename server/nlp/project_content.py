@@ -1,11 +1,17 @@
 import spacy
-from googletrans import Translator
 from deep_translator import GoogleTranslator
+from bson.objectid import ObjectId
+from python_atlas import atlas_client;
 
-def translate(text):
-  translator = Translator()
-  result = translator.translate(text)
-  print(result)
+def fetch_questions_data(atlas_client, project_id):
+    project_data = atlas_client.find('user-projects', filter={'_id': ObjectId(project_id)}, limit=1)
+    if project_data:
+        return project_data[0]['questions']
+    return None
+
+temp_project_id = '6687b8e4829a6a99c034b330'
+
+print(fetch_questions_data(atlas_client, temp_project_id))
 
 def translate2(text):
   result = GoogleTranslator(source='auto', target='en').translate(text)
@@ -43,10 +49,11 @@ def wordNER(text):
 text = "Overall quality is high, however feel too pricey \
   and the service was subpar"
 text2 = "總是説品質很好不過有一點太貴而且服務不是很好"
+text22 = "...generally説品質很好不過有一點very貴而且服務不是很good!"
 text3 = "Barack Obama was born on August 4, 1961, in Honolulu, \
   Hawaii. He served as the 44th President of the United States."
-semanticImportance(text)
-wordNER(text3)
-translate2(text2)
-translate3(text)
+# semanticImportance(text)
+# wordNER(text3)
+# translate2(text22)
+# translate3(text)
 

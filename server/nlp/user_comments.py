@@ -1,7 +1,3 @@
-import os
-from dotenv import load_dotenv
-from pathlib import Path
-from pymongo import MongoClient
 import pandas as pd
 import numpy as np
 import jieba
@@ -9,41 +5,9 @@ import string
 import stopwordsiso as sw
 from collections import Counter
 import sys
+from python_atlas import atlas_client
 
-# Load environment variables
-env_path = Path('..') / '.env'
-load_dotenv(dotenv_path=env_path)
-database_name = os.getenv('MONGO_DATABASE_NAME')
-database_connection_string = os.getenv('MONGO_CONNECTION_STRING')
-
-class AtlasClient:
-    def __init__(self, connection_string, database_name):
-        self.mongodb_client = MongoClient(connection_string)
-        self.database = self.mongodb_client[database_name]
-
-    def ping(self):
-        self.mongodb_client.admin.command('ping')
-
-    def get_collection(self, collection_name):
-        collection = self.database[collection_name]
-        return collection
-
-    def find(self, collection_name, filter={}, limit=0):
-        collection = self.database[collection_name]
-        items = list(collection.find(filter=filter, limit=limit))
-        return items
-    
-    def insert_word_count(self, collection_name, project_id, word_counts_list):
-        collection = self.database[collection_name]
-        collection.update_one(
-            {"projectId": project_id}, 
-            {"$set": {"wordCounts": word_counts_list}}
-        )
-
-def initialize_atlas_client(connection_string, database_name):
-    return AtlasClient(connection_string, database_name)
-
-def fetch_project_data(atlas_client, project_id):
+def fetch_comments_data(atlas_client, project_id):
     project_data = atlas_client.find('project-responses', filter={'projectId': project_id}, limit=1)
     if project_data:
         return project_data[0]
@@ -78,11 +42,9 @@ def process_comments_and_generate_word_counts(comments):
     return word_counts
 
 def main(project_id):
-    # Initialize Atlas client
-    atlas_client = initialize_atlas_client(database_connection_string, database_name)
     
     # Fetch project data
-    project_data = fetch_project_data(atlas_client, project_id)
+    project_data = fetch_comments_data(atlas_client, project_id)
     
     if not project_data:
         print(f"No data found for project_id: {project_id}")
