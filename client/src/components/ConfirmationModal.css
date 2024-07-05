@@ -1,0 +1,35 @@
+.modal-overlay{
+  max-width: 30%;
+  border-radius: 10px;
+  border: 3px solid rgb(51, 50, 46);
+}
+
+.modal-content{
+  max-width: 100%;
+  border-radius: 10px;
+  border: 3px solid rgba(15, 21, 22, 0.5);
+}
+
+.card-header.modal-alert-message{
+  background-color: rgba(241, 226, 86, 0.5);
+  font-family: 'Oxanium', sans-serif;
+  font-weight: 600;
+  border: 2px solid rgba(15, 21, 22, 0.5);
+}
+
+.card-body.buttons{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(223, 198, 215, 0.7);
+  border-radius: 8px;
+}
+
+.btn-primary.modal-yes,
+.btn-secondary.modal-no{
+  max-width: 100%;
+  height: auto;
+  border: 2px solid rgba(15, 21, 22, 0.5);
+  font-family: 'Oxanium', sans-serif;
+  font-weight: 600;
+}

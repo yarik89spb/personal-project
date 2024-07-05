@@ -211,7 +211,8 @@ function HostView(){
   return (
     <div className='container'>
       {online? <div> 
-        <button onClick={() => setShowModal(true)}>Stop event</button>
+        <button className='btn toggle-online stop'
+          onClick={() => setShowModal(true)}>Stop</button>
         <ConfirmationModal
           show={showModal}
           onConfirm={() => {toggleOnline(false); setShowModal(false)}}
@@ -221,7 +222,8 @@ function HostView(){
       </div> 
       : 
       <div> 
-        <button onClick={() => setShowModal(true)}>Go online</button>
+        <button className='btn toggle-online start'
+        onClick={() => setShowModal(true)}>Go online</button>
         <ConfirmationModal
           show={showModal}
           onConfirm={() => {toggleOnline(true); setShowModal(false)}}

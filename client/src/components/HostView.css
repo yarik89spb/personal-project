@@ -17,6 +17,17 @@
   font-size: 1rem;
 }
 
+.btn.toggle-online.start,
+.btn.toggle-online.stop{
+  width: 20%;
+  background-color: rgba(48, 101, 112, 0.5);
+  border: 2px dashed rgb(37, 34, 36);
+  font-size: 2rem;
+  color: rgba(226, 228, 120, 1);
+  font-family: 'Oxanium', sans-serif;
+  font-weight: 900;
+}
+
 /* Basic button styles */
 .reaction-buttons {
   display: flex;
