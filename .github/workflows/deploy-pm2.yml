@@ -22,12 +22,8 @@ jobs:
                 ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.SERVER_IP_ADDRESS }} << 'EOF'
                   echo "Hello from github action, start deploy main to ec2"
                   cd ~/porko/personal-project
-                  git switch main
+                  git switch action
+                  git touch test
                   git pull
                   cd server
-                  export PATH=$PATH:/home/ubuntu/.nvm/versions/node/v22.3.0/bin
-                  which npm
-                  which pm2
-                  npm install
-                  pm2 restart index
                 EOF
