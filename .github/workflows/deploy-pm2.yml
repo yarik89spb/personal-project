@@ -22,8 +22,8 @@ jobs:
                 ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.SERVER_IP_ADDRESS }} << 'EOF'
                   echo "Hello from github action, start deploy main to ec2"
                   cd ~/porko/personal-project
-                  touch test
                   git switch action
+                  git touch test
                   git pull
                   cd server
                 EOF
