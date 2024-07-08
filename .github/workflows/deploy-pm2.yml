@@ -17,13 +17,38 @@ jobs:
               with:
                 ssh-private-key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
 
-            - name: deploy to ec2
+            - name: Cache spaCy model
+              id: cache-spacy
+              uses: actions/cache@v2
+              with:
+                path: ~/.cache/spacy
+                key: ${{ runner.os }}-spacy-en_core_web_md
+                restore-keys: |
+                  ${{ runner.os }}-spacy
+
+            - name: Update code
               run: |
                 ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.SERVER_IP_ADDRESS }} << 'EOF'
                   echo "Hello from github action, start deploy main to ec2"
                   cd ~/porko/personal-project
                   git switch action
-                  git touch test
                   git pull
                   cd server
+
+                  # Activate Python venv and install modules
+                  source ./myvenv/bin/activate
+                  python -m pip install --upgrade pip
+                  pip install -r requirements.txt
+
+                  # Download model if not cached
+                  python download_model.py
+
+                  # Node dependencies
+                  npm install
+                  npm install pm2 -g
+
+                  # Start server
+                  pm2 stop all || true
+                  pm2 start app.js --name "porko"
+                  pm2 save
                 EOF
