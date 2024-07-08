@@ -6,7 +6,7 @@ import ProjectConstructor from './ProjectConstructor';
 import './HostProfile.css';
 
 
-export default function HostProfile(){94
+export default function HostProfile(){
   const navigate = useNavigate();
   const { userId } = useParams();
   const { userName} = useContext(AuthContext);
@@ -31,6 +31,12 @@ export default function HostProfile(){94
             onClick={()=>handleEventStart(projectObj.projectId)}>
               Start 
             </button> 
+            <button 
+            type='button'
+            className="btn btn-secondary"
+            onClick={()=>handlePreviewClick(projectObj.projectId)}>
+              Details  
+            </button>
             <button 
             type='button'
             className="btn btn-secondary"
@@ -88,6 +94,10 @@ export default function HostProfile(){94
     } catch(error){
       console.error(`Failed to delete project ${error}`)
     }
+  }
+
+  function handlePreviewClick(projectId: string){
+    navigate(`/preview/${projectId}`)
   }
 
   function handleEventStart(projectId: string){

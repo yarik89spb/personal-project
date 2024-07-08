@@ -7,6 +7,8 @@ export interface ProjectObject{
   projectId: string;
   projectName: string;
   description?: string;
+  keyWordsEng:[String];
+  keyWordsCn:[String];
 }
 
 export interface Comment{

@@ -6,7 +6,7 @@ import ChatComments from './ChatComments';
 import ViewerList from './ViewerList.tsx';
 import ConfirmationModal from './ConfirmationModal.tsx';
 import { Option,  Comment, Emoji, Viewer } from '../utils/interfaces.ts';
-import { fetchComments, fetchViewers, changeOnlineStatus, isOnline } from '../utils/fetchFunctions.ts';
+import { fetchComments, fetchViewers, changeOnlineStatus, isOnline, fetchProjectData } from '../utils/fetchFunctions.ts';
 import { useCookies } from 'react-cookie';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './HostView.css';
@@ -30,7 +30,10 @@ function HostView(){
   const [projectData, setProjectData] = useState({
     projectName: 'Missing',
     projectId: null,
-    questions:[]});
+    description: String,
+    questions:[],
+    keyWordsEng: [String],
+    keyWordsCn: [String]});
   const [questionIndex, setQuestionIndex] =  useState(0);
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
   const [viewersArray, setViewers] = useState<Viewer[]>([]);
@@ -47,17 +50,13 @@ function HostView(){
       try{
         const currentOnlineStatus = await isOnline(projectId);
         setOnline(currentOnlineStatus)
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/project-data?projectId=${projectId}`)
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const newProjectData = await response.json();
+        const newProjectData = await fetchProjectData(projectId);
         setIsLoadingQuestions(false);
-        setProjectData(newProjectData.data);
+        setProjectData(newProjectData);
         const commentsData = await fetchComments(projectId) as Comment[];
         setComments(commentsData);
       } catch(error){
-        console.error(`Failed to get project data. ${error}`)
+        console.error(`Failed to fetch piece of data. ${error}`)
         setIsLoadingQuestions(false);
       } finally{
         const viewersData = await fetchViewers(projectId);

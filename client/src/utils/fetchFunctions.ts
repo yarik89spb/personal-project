@@ -1,5 +1,19 @@
 import { Comment } from "./interfaces";
 
+export async function fetchProjectData(projectId: string | undefined){
+  try{
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/project-data?projectId=${projectId}`)
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const newProjectData = await response.json();
+        return newProjectData.data
+  }
+  catch(error){
+    console.error(`Failed to get project data. ${error}`)
+  }
+}
+
 export async function fetchComments(projectId: string | undefined){
   try{
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/project-comments?projectId=${projectId}`)

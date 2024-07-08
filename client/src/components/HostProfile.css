@@ -31,6 +31,10 @@
   border-color:  rgba(14, 13, 13, 0.8);
 }
 
+.btn {
+  margin: 5px;
+}
+
 .username-projects-title{
   color: rgb(48, 101, 112);
 }

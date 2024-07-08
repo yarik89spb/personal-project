@@ -11,6 +11,7 @@ import { AuthProvider, AuthContext } from './context/AuthContext';
 import { EventProvider, EventContext } from './context/EventContext';
 import Welcome from './components/Welcome'
 import HostProfile from './components/HostProfile'
+import ProjectPreview from './components/ProjectPreview'
 
 interface ProtectedRouteProps {
   element: ReactNode
@@ -55,6 +56,7 @@ function App() {
             <Route path='host/:projectId' element={<ProtectedRoute element={<HostView />}/>} />
             <Route path="guest/:projectId" element={<GuestRouteWrapper element={<GuestView />} />} />
             <Route path='stats/:projectId' element={<ProtectedRoute element={<StatsView />}/>} />
+            <Route path='preview/:projectId' element={<ProtectedRoute element={<ProjectPreview />}/>} />
           </Routes>
           </main>
           <Footer/>

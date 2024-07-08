@@ -39,7 +39,7 @@ export const barChartOptions: ChartOptions<'bar'> = {
         display: false,
       },
       ticks: {
-        color: 'white', 
+        color: 'dark-grey', 
         font: {
           size: 16, 
           weight: 'bold',

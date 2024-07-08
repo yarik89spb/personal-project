@@ -1,0 +1,61 @@
+
+.project-information > * {
+  padding: 5px;
+  margin: 10px;
+}
+
+.btn {
+  margin: 5px;
+}
+
+.btn.btn-primary.mr-2.back {
+  width: 15%;
+  height: auto;
+  border: 2px dashed #ccc;
+  font-style: oblique;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.project-information > .element {
+  font-size: 1.4rem;
+  font-weight: 500;
+  font-family: 'Oxanium', sans-serif;
+}
+
+.project-information > .title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: 'Oxanium', sans-serif;
+}
+
+.project-information {
+  background-color: rgba(240, 248, 255, 0.6);
+  border-radius: 8px;
+}
+
+.key-words-container {
+  margin-bottom: 15px;
+}
+
+.key-words-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.project-key-word {
+  font-family: 'Oxanium', sans-serif;
+  font-weight: 600;
+  padding: 10px 15px;
+  background-color: rgba(48, 101, 112, 0.8);
+  color: white;
+  border-radius: 20px;
+  font-size: 14px;
+  border: 1px dashed #f8d254;
+}
+
+.project-preview.container{
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+}
