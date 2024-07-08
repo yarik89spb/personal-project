@@ -60,7 +60,7 @@ def main(project_id):
     word_counts = process_comments_and_generate_word_counts(comments_flat)
     
     # Insert word counts into database
-    atlas_client.insert_word_count('project-responses', project_id, word_counts)
+    atlas_client.insert_word_count(project_id, word_counts)
 
 # Example usage
 if __name__ == "__main__":

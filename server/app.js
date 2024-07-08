@@ -9,7 +9,7 @@ import { getProjectStatistics } from './controllers/dashboard.js';
 import { signUp, signIn, validateJWT } from './controllers/userContoller.js'
 import { addViewer, renameViewer, removeViewer, getViewers } from './controllers/viewerController.js';
 import { addNewProject, deleteProject, getUserProjects, getProjectData, toggleBroadcasting, getBroadcastingStatus } from './controllers/projectController.js'
-import { addWordCounts } from './utils/callPython.js'
+import { addWordCounts, addKeyWords } from './utils/callPython.js'
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
@@ -36,6 +36,7 @@ app.post('/api/add-project', async (req, res)=>{
   try{
     const projectData = req.body;
     const projectId = await addNewProject(projectData);
+    addKeyWords(projectId)
     res.status(200).json({projectId}) 
   }catch(error){
     res.status(400).json({error:'Failed to add project data'})

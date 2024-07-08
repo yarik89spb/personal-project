@@ -30,7 +30,11 @@ export async function getBroadcastingStatus(projectId){
 
 export async function addNewProject(projectData){
   try{
-    const projectId = await insertProjectData(projectData)
+    const projectId = await insertProjectData({
+      ...projectData,
+      keyWordsEng: [],
+      keyWordsCn: []
+    })
     return projectId;
   } catch(error){
     throw new Error(`Failed to insert new project data ${error}`)

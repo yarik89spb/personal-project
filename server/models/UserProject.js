@@ -27,8 +27,9 @@ const UserProjectSchema = new Schema({
   },
   
   description: String,
-
   questions: [QuestionSchema],
+  keyWordsEng: [String],
+  keyWordsCn: [String]
 }, {
   collection: 'user-projects' // Specify the collection name explicitly
 });

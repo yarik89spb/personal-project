@@ -19,3 +19,17 @@ export function addWordCounts(projectId) {
   });
 }
 
+export function addKeyWords(projectId) {
+  const pythonScriptPath = path.join(__dirname, '../nlp/project_content.py');
+
+  const pythonProcess = spawn('python', [pythonScriptPath, projectId]);
+
+  pythonProcess.stdout.on('data', (data) => {
+      console.log(`stdout: ${data}`);
+  });
+
+  pythonProcess.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+  });
+}
+
