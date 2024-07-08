@@ -37,11 +37,11 @@ jobs:
 
                   # Activate Python venv and install modules
                   source ./myvenv/bin/activate
-                  python -m pip install --upgrade pip
+                  python3 -m pip install --upgrade pip
                   pip install -r requirements.txt
 
                   # Download model if not cached
-                  python download_model.py
+                  python3 download_model.py
 
                   # Node dependencies
                   npm install
