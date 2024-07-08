@@ -13,7 +13,6 @@ const BroadcastingStatusSchema = new Schema({
   },
   userEmail: {
     type: String,
-    unique: true,
     required: true
   },
   projectId: {
