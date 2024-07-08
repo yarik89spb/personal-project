@@ -1,0 +1,33 @@
+name: Deploy to EC2 on merge
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Install SSH key
+              uses: webfactory/ssh-agent@v0.6.0
+              with:
+                ssh-private-key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
+
+            - name: deploy to ec2
+              run: |
+                ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.SERVER_IP_ADDRESS }} << 'EOF'
+                  echo "Hello from github action, start deploy main to ec2"
+                  cd ~/porko/personal-project
+                  git switch main
+                  git pull
+                  cd server
+                  export PATH=$PATH:/home/ubuntu/.nvm/versions/node/v22.3.0/bin
+                  which npm
+                  which pm2
+                  npm install
+                  pm2 restart index
+                EOF
