@@ -194,10 +194,10 @@ export default function StatsView(){
   function renderWordCloud(){
     const options: Partial<Options> = {
       fontFamily: 'Arial',
-      rotations: 2,
+      rotations: 4,
       rotationAngles: [-90, 0],
       scale: 'sqrt',
-      fontSizes: [20, 50],
+      fontSizes: [50, 80],
     };
     if(!wordCounts){
       return <h4> No word counts avaialble</h4>
