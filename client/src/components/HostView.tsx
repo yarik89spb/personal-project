@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import { useSocket, useMessageListener, sendCommand, useAnswerListener, useEmojiListener, useRoomListener, useNicknameListener } from '../utils/websocket';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import ViewerList from './ViewerList.tsx';
@@ -24,7 +25,9 @@ function HostView(){
     throw new Error('Project ID is required');
   }
 
+  const { userId } = useContext(AuthContext);
   const [online, setOnline] = useState(false);
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [hostPanel, setHostPanel] = useState('comments');
   const [projectData, setProjectData] = useState({
@@ -79,6 +82,10 @@ function HostView(){
       setOnline(false)
       console.log(`${projectData.projectName} is offline`);
     }
+  }
+
+  function handleBackClick(){
+    navigate(`/profile/${userId}`)
   }
 
   function handleQuestionIndexChange(isForward = true){
@@ -209,6 +216,7 @@ function HostView(){
   }
   return (
     <div className='container'>
+      <button className='btn btn-primary mr-2 back' onClick={() => handleBackClick()}> Back to Profile</button>
       {online? <div> 
         <button className='btn toggle-online stop'
           onClick={() => setShowModal(true)}>Stop</button>
