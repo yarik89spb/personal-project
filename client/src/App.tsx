@@ -3,7 +3,6 @@ import HostView from './components/HostView'
 import GuestView from './components/GuestView'
 import StatsView from './components/StatsView'
 import Header from './components/Header'
-import Footer from './components/Footer'
 import Login from './components/Login'
 import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom';
 import { ReactNode, useContext } from 'react';
@@ -59,7 +58,6 @@ function App() {
             <Route path='preview/:projectId' element={<ProtectedRoute element={<ProjectPreview />}/>} />
           </Routes>
           </main>
-          <Footer/>
         </div>
       </BrowserRouter>
     </AuthProvider>

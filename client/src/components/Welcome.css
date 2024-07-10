@@ -1,6 +1,6 @@
 body {
   background-color: rgba(49, 35, 48);
-  background-image: url('/public/1989436.jpg');
+  background-image: url('/public/1989436-clean.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -17,9 +17,14 @@ body {
   height: auto;
 }
 
+.row.welcome-options{
+  margin: 0px 0px;
+}
+
+
 .box.p-3 {
   position: relative; /* Ensure position relative for absolute positioning */
-  padding: 20px; /* Adjust padding as needed */
+  width: 80%;
   background-color: rgba(248, 249, 250, 0.5); /* Light background color */
   border-radius: 10px; /* Rounded corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add box shadow for depth */
@@ -36,3 +41,49 @@ body {
   border-color: #f8f9fa transparent transparent;
 }
 
+.selection-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-family: 'Oxanium', sans-serif;
+  letter-spacing: 0.2rem;
+}
+
+.join-room {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background-color: rgba(48, 101, 112, 0.3);
+  border-radius: 8px;
+  border: 2px solid rgba(29, 22, 29, 0.9);
+  width: 46%;
+  height: 4rem;
+}
+
+.join-input-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.1);  /* Example border */
+  padding: 0.5rem;  /* Add padding for better appearance */
+}
+
+input.join.input {
+  padding: 0.5rem;
+  flex-grow: 1;  
+  border-radius: 6px;
+  border: 2px solid rgba(0, 0, 0, 0.9);
+  background-color: rgba(225, 233, 235, 0.788);
+  color: rgb(42, 17, 83);
+  font-style: italic;
+  font-family: 'Oxanium', sans-serif;
+}
+
+button.join.button {
+  background-color: rgb(207, 193, 207);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: 'Oxanium', sans-serif;
+}
