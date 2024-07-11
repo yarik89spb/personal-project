@@ -15,11 +15,11 @@ const ChatComments: React.FC<ChatCommentsProps> = ({ comments }) => {
   const listRef = useRef<null | HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    listRef.current?.scrollTo(0, listRef.current?.scrollHeight)
+    listRef.current?.scrollTo({ left: 0, top: listRef.current?.scrollHeight, behavior: 'smooth' } )
   }
 
   return (
-    <div className='col-8' id='comments-container' ref={listRef} style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }}>
+    <div className='card-body col-4' id='comments-container' ref={listRef} style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }}>
       <ul className='comment-list'>
         {comments.map((comment, index) => (
           <li key={index} className='comment-container'>
