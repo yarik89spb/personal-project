@@ -245,9 +245,7 @@ function HostView(){
             {hostPanel === 'comments' ? (
               <div className='card host-panel' > 
                 <h3 className='card-header' >User comments:</h3>
-                <div className='card-body' style={{ height: '300px', maxHeight: '300px', overflowY: 'auto' }}>
-                  <ChatComments comments={commentsArray}/>
-                </div>
+                <ChatComments comments={commentsArray}/>
               </div>
             ) : (
               <div className='card host-panel' > 

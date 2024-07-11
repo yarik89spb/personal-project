@@ -1,3 +1,7 @@
+.host-panel > .card-body.col-4 {
+  width: 100%;
+}
+
 .btn-primary {
   --bs-btn-bg: rgb(48, 101, 112); /* Background color */
   --bs-btn-border-color: rgb(48, 101, 112); /* Border color */
