@@ -135,6 +135,24 @@ app.post('/api/toggle-broadcasting', async (req, res)=>{
   }
 })
 
+app.post('/api/toggle-sharing', async (req, res)=>{
+  try{
+    const {projectId} = req.query;
+    const {sharing} = req.query;
+    const authHeader = req.headers.authorization;
+    const userJWT = authHeader.split(' ')[1];
+    if(!userJWT){
+      throw new Error('Missing JWT')
+    }
+    const {userId} = validateJWT(userJWT);
+    const broadcastingStatus = await toggleBroadcasting(userId, projectId, broadcasting);
+    res.status(200).json(broadcastingStatus) 
+
+  }catch(error){
+    res.status(400).json({error:`Failed to toggle broadcasting. ${error}`})
+  }
+})
+
 app.get('/api/broadcasting', async (req, res)=>{
   try{
     const {projectId} = req.query;
@@ -265,6 +283,7 @@ io.on("connection", (socket) => {
     const {roomId} = eventPayload; // roomId = projectId
     const message = eventPayload.passedData;
     io.to(roomId).emit('viewerMessage', message)
+    console.log('viewerMessage')
     await storeComment(roomId, message);
   })
 
