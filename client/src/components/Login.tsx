@@ -81,7 +81,7 @@ export default function Login(){
       const { userJWT } = data;
       const userData = data.user;
       login(userJWT, userData);
-      navigate('/profile');
+      navigate(`/profile/${userData.userId}`);
     } catch(error: any) {
       console.error('Login error:', error);
       setError(error.message as string)
