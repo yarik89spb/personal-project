@@ -131,7 +131,7 @@ function HostView(){
     if(!isBroadcasting){
       sendCommand(socket, 'startBroadcasting', {
         roomId: projectId,
-        passedData:{}})
+        passedData: projectData.questions[questionIndex]})
       changeScreen()
       setIsBroadcasting(true);
     }else{
@@ -155,8 +155,11 @@ function HostView(){
   }
 
   useEffect(() => {
-    console.log(viewersArray)
-    console.log(hostId)
+    sendCommand(socket, 'startBroadcasting', {
+      roomId: projectId,
+      passedData:{}})
+
+
   }, [viewersArray])
 
   useRoomListener(socket, 'joinRoom', (viewer: Viewer) => {
