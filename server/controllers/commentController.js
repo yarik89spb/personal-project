@@ -26,9 +26,10 @@ export async function storeCommentBatch(projectId){
 export async function getProjectComments(projectId){
   const questionResponses = await findProjectComments(projectId);
   // Return flatten array of all comments
-  const projectComments = questionResponses.flatMap((question) => {
-    return question.comments;
-  })
-  return projectComments;
+  // const projectComments = questionResponses.flatMap((question) => {
+  //   return question.comments;
+  // })
+  //return projectComments;
+  return questionResponses;
 }
 

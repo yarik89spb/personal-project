@@ -158,8 +158,8 @@ export async function insertComments(projectId, questionId, comments) {
     console.log(`Inserting comments into projectId: ${projectId}, questionId: ${questionId}`);
     // Try to update the specific question's comments if it exists
     const result = await ProjectResponses.updateOne(
-      { projectId: projectId, 'questions.id': questionId },
-      { $push: { 'questions.$.comments': { $each: comments } } }
+      { projectId: projectId },
+      { $push: { 'comments': { $each: comments } } }
     );
 
     if (result.matchedCount === 0) {
@@ -168,6 +168,7 @@ export async function insertComments(projectId, questionId, comments) {
         { projectId: projectId },
         {
           $addToSet: {
+            comments: comments,
             wordCounts: [],
             questions: {
               id: questionId,
@@ -301,7 +302,7 @@ export async function findProjectComments(projectId){
     if(reactionData === null){
       return []
     }
-    return reactionData.questions;
+    return reactionData.comments;
   } catch (error) {
     console.error('Fetch error occurred:', error);
     throw error;

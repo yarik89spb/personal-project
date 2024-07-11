@@ -40,6 +40,7 @@ const ProjectResponsesSchema = new Schema({
     required: true,
     unique: true,
   },
+  comments: [CommentSchema],
   wordCounts: [WordCountsSchema],
   questions: [QuestionSchema]
 }, {
