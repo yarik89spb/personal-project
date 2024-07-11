@@ -230,6 +230,7 @@ function GuestView() {
 
   return (
       <div className='container' id='chat-container'>
+        <button id="go-to-top">Go to bottom</button>
         <div className="tv-box">
           {isHidden?
           <div id='stand-by'>

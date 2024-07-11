@@ -92,7 +92,7 @@ export default function WelcomePage(){
             <div className='box p-3 d-flex flex-column align-items-center justify-content-center'>
               <button type='button'
               className='btn btn-primary mb-2 i-am'
-              onClick={handleViewerClick}>I AM VIEWER </button>
+              onClick={(handleViewerClick)}>I AM VIEWER </button>
               <div className='welcome selection-text'>立即加入由主持人組織的活動</div>
             </div>
           </div>

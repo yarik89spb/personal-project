@@ -5,9 +5,12 @@
   margin: 0 auto;
 }
 
-div#comments-container.card-body{
-  border: 1px solid #262424;
+div#comments-container{
+  border: 1px solid rgba(38, 36, 36, 0.5);
+  border-radius: 6px;
+  overflow-y: auto;
 }
+
 
 div.card-body{
   background-color: rgba(240, 240, 240, 0.8);
@@ -115,4 +118,10 @@ div.card-body{
 
 .reaction-button.deselected {
   background-color: transparent; /* Transparent background when deselected */
+}
+
+#go-to-top {
+  position: absolute;
+  bottom: 10px;
+  scroll-margin-bottom: 0;
 }

@@ -13,10 +13,14 @@ const ChatComments: React.FC<ChatCommentsProps> = ({ comments }) => {
 
   const messagesEndRef = useRef<null | HTMLDivElement>(null)
 
+  // const scrollToBottom = () => {
+  //   messagesEndRef.current?.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'end'})
+  // }
+
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }
-  
+
   return (
     <ul className='comment-list'>
       {comments.map((comment, index) => (
@@ -27,9 +31,10 @@ const ChatComments: React.FC<ChatCommentsProps> = ({ comments }) => {
           <div className="comment-content">
             <p>{comment.text}</p>
           </div>
-          <div ref={messagesEndRef} />
+          
         </li>
       ))}
+      <div ref={messagesEndRef} />
     </ul>
   );
 };
