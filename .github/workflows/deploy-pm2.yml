@@ -44,7 +44,7 @@ jobs:
                   pip install --upgrade bson
 
                   # Download model if not cached
-                  python3 download_model.py
+                  python3 nlp/download_model.py
 
                   # Node dependencies
                   export PATH=$PATH:/home/ubuntu/.nvm/versions/node/v20.15.0/bin
