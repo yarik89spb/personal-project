@@ -157,9 +157,11 @@ export async function insertComments(projectId, questionId, comments) {
   try {
     console.log(`Inserting comments into projectId: ${projectId}, questionId: ${questionId}`);
     // Try to update the specific question's comments if it exists
+    
+    
     const result = await ProjectResponses.updateOne(
-      { projectId: projectId },
-      { $push: { 'comments': { $each: comments } } }
+      { projectId: projectId, 'questions.id': questionId },
+      { $push: { 'questions.$.comments': { $each: comments } } }
     );
 
     if (result.matchedCount === 0) {
@@ -181,7 +183,12 @@ export async function insertComments(projectId, questionId, comments) {
         { upsert: true } // Create the project if it doesn't exist
       );
 
-
+      // Duplicate comments batch in big comments array
+      await ProjectResponses.updateOne(
+        { projectId: projectId },
+        { $push: { 'comments': { $each: comments } } }
+      );
+      
 
       if (projectUpdateResult.matchedCount === 0 && projectUpdateResult.upsertedCount === 0) {
         console.error('Project not found and not created');
