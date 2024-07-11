@@ -8,9 +8,9 @@ export default function Header(){
   const {userId} = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleNavClick = (event: React.MouseEvent<HTMLAnchorElement>, page:string) => {
+  const handleNavClick = (event: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLImageElement>, page:string) => {
     event.preventDefault();
-    if(page==='profile'){
+    if(page==='profile'){ 
       navigate(`/${page}/${userId}`)
     }else{
       navigate(`/${page}`)
@@ -22,7 +22,7 @@ export default function Header(){
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container">
           <a className="navbar-brand" href="#">
-            <img src={logo} alt="Logo" className="nav-logo d-inline-block align-top mr-2" />
+            <img src={logo} onClick={(e)=>handleNavClick(e, '')} alt="Logo" className="nav-logo d-inline-block align-top mr-2" />
           </a>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
