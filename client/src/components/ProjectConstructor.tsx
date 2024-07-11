@@ -73,12 +73,22 @@ const ProjectConstructor = () => {
   };
 
   const removeQuestion = (index: number) => {
+    if(!questions || questions.length === 1){
+      alert('Project must have at least one question');
+      throw new Error('Cannot remove the last question');
+    }
+
     let newQuestions = [...questions];
     newQuestions.splice(index, 1);
     setQuestions(newQuestions);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    if(!questions || questions.length === 0){
+      alert('Please, add at least one question');
+      throw new Error('No questions added');
+    }
+
     e.preventDefault();
     // Prepare the project object in the desired format
     const projectObject = {
@@ -97,7 +107,6 @@ const ProjectConstructor = () => {
         })),
       })),
     };
-    console.log(projectObject);
     await addProjectData(projectObject);
     // Reset form after submission
     setProjectName('');

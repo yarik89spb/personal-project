@@ -30,6 +30,10 @@ export async function getBroadcastingStatus(projectId){
 
 export async function addNewProject(projectData){
   try{
+    if(!projectData.questions || projectData.questions.length === 0){
+      throw new Error('Project has no questions')
+    }
+
     const projectId = await insertProjectData({
       ...projectData,
       keyWordsEng: [],

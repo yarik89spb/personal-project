@@ -46,7 +46,7 @@ export default function HostProfile(){
             <button 
             type='button'
             className="btn btn-danger"
-            onClick={()=>deleteProject(projectObj.projectId)}>
+            onClick={(e)=>deleteProject(e, projectObj.projectId)}>
               Delete 
             </button>
           </div>
@@ -74,7 +74,9 @@ export default function HostProfile(){
     }
   }, [userId])
 
-  async function deleteProject(projectId: string){
+  async function deleteProject(e:any, projectId: string){
+    e.preventDefault();
+
     try{
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/delete-project`, {
         method: 'POST',
