@@ -90,21 +90,22 @@ export default function Login(){
 
   return (
     <div className='login-container'>
+      <h4>Login</h4>
       <form onSubmit={handleLogin} className="login-form">
         {error && <p> {error} </p>}
         <input
           type='text'
           placeholder='E-mail'
           name='userEmail'
-          className="form-control mb-2"
+          className="form-control mb-2 credentials"
         />
         <input
           type='password'
           placeholder='Password'
           name='userPassword'
-          className="form-control mb-2"
+          className="form-control mb-2 credentials"
         />
-        <button type='submit' className="btn btn-primary btn-block"> Login </button>
+        <button type='submit' className="btn btn-primary btn-block submit-credentials"> Login </button>
       </form>
       <div className="text-center mt-3">
         <button
@@ -114,38 +115,37 @@ export default function Login(){
           Create account
         </button>
       </div>
-      {!hasAccount && <div className="register-form">
-        <form onSubmit={handleRegistration}>
-        <input
-          type='text'
-          placeholder='E-mail'
-          name='userEmail'
-          className="form-control mb-2"
-          required
-        />
-        <input
-          type='text'
-          placeholder='Username'
-          name='userName'
-          className="form-control mb-2"
-        />
-        <input
-          type='text'
-          placeholder='Company name'
-          name='userCompany'
-          className="form-control mb-2"
-          required
-        />
-        <input
-          type='password'
-          placeholder='Password'
-          name='userPassword'
-          className="form-control mb-2"
-          required
-        />
-        <button type='submit' className="btn btn-primary btn-block"> Register </button>
+      {!hasAccount &&
+        <form className="register-form" onSubmit={handleRegistration}>
+          <input
+            type='text'
+            placeholder='E-mail'
+            name='userEmail'
+            className="form-control mb-2 credentials"
+            required
+          />
+          <input
+            type='text'
+            placeholder='Username'
+            name='userName'
+            className="form-control mb-2 credentials"
+          />
+          <input
+            type='text'
+            placeholder='Company name'
+            name='userCompany'
+            className="form-control mb-2 credentials"
+          />
+          <input
+            type='password'
+            placeholder='Password'
+            name='userPassword'
+            className="form-control mb-2 credentials"
+            required
+          />
+          <button type='submit' className="btn btn-primary btn-block submit-credentials"> Register </button>
         </form>
-      </div>}
+      }
     </div>
   )
 }

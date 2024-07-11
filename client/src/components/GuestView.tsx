@@ -245,9 +245,7 @@ function GuestView() {
           <h3 className='card-header chat'>Chat:</h3>
           <div className='card-body'>
           <div className='row'>
-            <div className='col-8' id='comments-container' style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }}>
-              <ChatComments comments={commentsArray} />
-            </div>
+            <ChatComments comments={commentsArray} />
             <div className='col-4' id='viewers-container' style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }}>
               <ViewerList viewers={viewersArray} hostId={hostId}/>
             </div>
