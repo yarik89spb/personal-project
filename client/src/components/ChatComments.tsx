@@ -12,30 +12,28 @@ const ChatComments: React.FC<ChatCommentsProps> = ({ comments }) => {
   }, [comments])
 
   const messagesEndRef = useRef<null | HTMLDivElement>(null)
-
-  // const scrollToBottom = () => {
-  //   messagesEndRef.current?.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'end'})
-  // }
+  const listRef = useRef<null | HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    listRef.current?.scrollTo(0, listRef.current?.scrollHeight)
   }
 
   return (
-    <ul className='comment-list'>
-      {comments.map((comment, index) => (
-        <li key={index} className='comment-container'>
-          <div className="comment-header">
-            <span className="user-name">{comment.userName}</span>
-          </div>
-          <div className="comment-content">
-            <p>{comment.text}</p>
-          </div>
-          
-        </li>
-      ))}
-      <div ref={messagesEndRef} />
-    </ul>
+    <div className='col-8' id='comments-container' ref={listRef} style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }}>
+      <ul className='comment-list'>
+        {comments.map((comment, index) => (
+          <li key={index} className='comment-container'>
+            <div className="comment-header">
+              <span className="user-name">{comment.userName}</span>
+            </div>
+            <div className="comment-content">
+              <p>{comment.text}</p>
+            </div>
+          </li>
+        ))}
+        <div ref={messagesEndRef} />
+      </ul>
+    </div>
   );
 };
 

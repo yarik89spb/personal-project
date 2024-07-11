@@ -1,15 +1,35 @@
 .login-container {
-  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  max-width: 500px;
   margin: auto;
-  padding: 20px;
+  margin-top: 50px;
+  padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fff;
+  border-radius: 8px;
+  background-color: rgb(250, 244, 244, 0.8);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.login-form {
+.login-form,
+.register-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
   margin-bottom: 20px;
+}
+
+input.credentials {
+  width: 100%;
+  max-width: 80%;
+  border: 2px solid rgba(48, 101, 112, 1);
+}
+
+.submit-credentials {
+  border: 2px solid rgb(6, 7, 7);
 }
 
 .error-message {
