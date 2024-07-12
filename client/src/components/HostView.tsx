@@ -115,11 +115,7 @@ function HostView(){
   }
 
   useEffect(() => {
-    if(isBroadcasting){
-      changeScreen();
-    }
     setAnswers([]);
-    console.log(hostId)
   }, [questionIndex]);
 
   const toggleView = (event: any) => {
@@ -155,11 +151,15 @@ function HostView(){
   }
 
   useEffect(() => {
-    sendCommand(socket, 'startBroadcasting', {
-      roomId: projectId,
-      passedData:{}})
-
-
+    if(isBroadcasting){
+      setTimeout(() => {
+        console.log('Sending data')
+        sendCommand(socket, 'getCurrentQuestion', {
+          roomId: projectId,
+          passedData: projectData.questions[questionIndex]
+        })
+      } , 2000) 
+    }
   }, [viewersArray])
 
   useRoomListener(socket, 'joinRoom', (viewer: Viewer) => {
