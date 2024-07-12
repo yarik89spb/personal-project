@@ -48,7 +48,7 @@ export async function isOnline(projectId: string | undefined){
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const onlineStatus = await response.json();
-    return onlineStatus.isBroadcasting;
+    return onlineStatus;
   } catch(error){
     console.error(`Failed to get online status ${error}`)
   }

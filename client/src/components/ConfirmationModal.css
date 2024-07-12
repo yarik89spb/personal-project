@@ -1,5 +1,7 @@
 .modal-overlay{
-  max-width: 30%;
+  height: 100%;
+  max-width: 50%;
+  max-height: auto;
   border-radius: 10px;
   border: 3px solid rgb(51, 50, 46);
 }
@@ -7,7 +9,7 @@
 .modal-content{
   max-width: 100%;
   border-radius: 10px;
-  border: 3px solid rgba(15, 21, 22, 0.5);
+  border: 2px solid rgba(15, 21, 22, 0.5);
 }
 
 .card-header.modal-alert-message{
@@ -21,7 +23,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(223, 198, 215, 0.7);
+  background-color: rgba(240, 248, 255, 0.5);
   border-radius: 8px;
 }
 

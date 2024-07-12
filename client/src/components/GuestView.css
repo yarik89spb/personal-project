@@ -28,7 +28,7 @@ div.card-body{
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.8);
-  padding: 20px;
+  padding: 5px;
   border: 10px solid #333;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);

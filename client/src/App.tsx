@@ -30,7 +30,7 @@ const EventRoute = ({ element: Component }: ProtectedRouteProps) => {
 
   useEffect(() => {
   if (!loading && !online) {
-    console.log('test')
+    console.error('Event is offline')
     alert('The event is currently not online.');
   }
   }, [loading, online]);

@@ -13,6 +13,10 @@
   --bs-font-weight-base: 700;
 }
 
+.container.toggle-online{
+  display: flex;
+}
+
 .btn.host-panel-toggle{
   font-family: 'Oxanium', sans-serif;
   background-color: rgb(240, 217, 215);
@@ -20,6 +24,7 @@
   font-weight: 600;
   font-size: 1rem;
 }
+
 
 .btn.toggle-online.start,
 .btn.toggle-online.stop{
@@ -30,6 +35,33 @@
   color: rgba(226, 228, 120, 1);
   font-family: 'Oxanium', sans-serif;
   font-weight: 900;
+}
+
+.btn.toggle-online.start {
+  animation: dust 2s infinite;
+}
+
+@keyframes dust {
+  0% {
+    box-shadow: 
+      0 0 5px rgba(255, 255, 255, 0.5),
+      0 0 10px rgba(255, 255, 255, 0.5),
+      0 0 15px rgba(255, 255, 255, 0.5),
+      0 0 20px rgba(255, 255, 255, 0.5),
+      0 0 25px rgba(255, 255, 255, 0.5),
+      0 0 30px rgba(255, 255, 255, 0.5),
+      0 0 35px rgba(255, 255, 255, 0.5);
+  }
+  100% {
+    box-shadow: 
+      0 0 5px rgba(255, 255, 255, 0),
+      0 0 10px rgba(255, 255, 255, 0),
+      0 0 15px rgba(255, 255, 255, 0),
+      0 0 20px rgba(255, 255, 255, 0),
+      0 0 25px rgba(255, 255, 255, 0),
+      0 0 30px rgba(255, 255, 255, 0),
+      0 0 35px rgba(255, 255, 255, 0);
+  }
 }
 
 /* Basic button styles */
