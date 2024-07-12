@@ -25,7 +25,10 @@ export async function toggleBroadcasting(userId, projectId, broadcasting){
 
 export async function getBroadcastingStatus(projectId){
   const broadcastingObj = await getBroadcastingData(projectId);
-  return broadcastingObj.isBroadcasting;
+  return {
+    isBroadcasting: broadcastingObj.isBroadcasting,
+    projectName: broadcastingObj.projectName
+  };
 }
 
 export async function addNewProject(projectData){

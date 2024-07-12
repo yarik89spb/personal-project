@@ -23,7 +23,7 @@ export const EventProvider = ({ children, projectId}: EventProviderProps) => {
   const checkOnlineStatus = async () => {
     try{
       const onlineStatus = await isOnline(projectId);
-      setOnline(onlineStatus);
+      setOnline(onlineStatus.isBroadcasting);
     } catch(error){
       console.error('Server request error:', error);
     } finally {

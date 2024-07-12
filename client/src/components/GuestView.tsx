@@ -220,9 +220,7 @@ function GuestView() {
   });
 
   useCommandListener(socket, 'getCurrentQuestion', (passedData: object) => {
-    console.log('Received command')
     if(!currentScreen || currentScreen.id === 0){
-      console.log('Updating screen')
       const questionData = passedData as Question;
       setCurrentScreen(questionData);
       setIsHidden(false);

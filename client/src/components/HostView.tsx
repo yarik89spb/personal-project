@@ -52,7 +52,7 @@ function HostView(){
     async function fetchData(){
       try{
         const currentOnlineStatus = await isOnline(projectId);
-        setOnline(currentOnlineStatus)
+        setOnline(currentOnlineStatus.isBroadcasting)
         const newProjectData = await fetchProjectData(projectId);
         setIsLoadingQuestions(false);
         setProjectData(newProjectData);
@@ -115,6 +115,9 @@ function HostView(){
   }
 
   useEffect(() => {
+    if(isBroadcasting){
+      changeScreen();
+    }
     setAnswers([]);
   }, [questionIndex]);
 
@@ -153,7 +156,6 @@ function HostView(){
   useEffect(() => {
     if(isBroadcasting){
       setTimeout(() => {
-        console.log('Sending data')
         sendCommand(socket, 'getCurrentQuestion', {
           roomId: projectId,
           passedData: projectData.questions[questionIndex]
@@ -219,8 +221,8 @@ function HostView(){
   }
   return (
     <div className='container'>
-      <button className='btn btn-primary mr-2 back' onClick={() => handleBackClick()}> Back to Profile</button>
-      {online? <div> 
+      {/* <button className='btn btn-primary mr-2 back' onClick={() => handleBackClick()}> Back to Profile</button> */}
+      {online? <div className='container toggle-online'> 
         <button className='btn toggle-online stop'
           onClick={() => setShowModal(true)}>Stop</button>
         <ConfirmationModal
@@ -228,7 +230,8 @@ function HostView(){
           onConfirm={() => {toggleOnline(false); setShowModal(false)}}
           onCancel={() => setShowModal(false)}
           message="Are you sure you want to stop event?"
-        /> 
+        />
+        <div className='magic-dust'></div> 
       </div> 
       : 
       <div> 
