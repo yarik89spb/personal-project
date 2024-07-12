@@ -308,6 +308,12 @@ io.on("connection", (socket) => {
     emitBotMessage(roomId, botMessage)
   })
 
+  socket.on('getCurrentQuestion', (eventPayload)=>{
+    const {roomId} = eventPayload; // roomId = projectId
+    const {passedData} = eventPayload;
+    io.to(roomId).emit('getCurrentQuestion', passedData)
+  })
+
   socket.on('stopBroadcasting', (eventPayload)=>{
     const {roomId} = eventPayload; // roomId = projectId
     const {passedData} = eventPayload;

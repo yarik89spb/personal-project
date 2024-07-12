@@ -179,14 +179,6 @@ function GuestView() {
     console.log(`User ${usernameData.oldUsername} changed username to ${usernameData.newUsername}`)
   });
 
-  useEffect(()=>{
-    console.log(hostId)
-  }, [hostId])
-
-  useEffect(()=>{
-    console.log(viewersArray)
-  }, [viewersArray])
-
   function sendUserAnswerToServer(answer:Option){
     const eventPayload = {
       roomId: projectId,
@@ -225,6 +217,16 @@ function GuestView() {
 
   useCommandListener(socket, 'startBroadcasting', () => {
     setIsHidden(false);
+  });
+
+  useCommandListener(socket, 'getCurrentQuestion', (passedData: object) => {
+    console.log('Received command')
+    if(!currentScreen || currentScreen.id === 0){
+      console.log('Updating screen')
+      const questionData = passedData as Question;
+      setCurrentScreen(questionData);
+      setIsHidden(false);
+    }
   });
   
 

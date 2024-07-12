@@ -34,7 +34,6 @@ export default function ViewerList({viewers, hostId}: ViewerListProps){
   return (
     <div className="viewer-list-container">
       {viewers.map((viewer)=>{
-        console.log(hostId)
         return (viewer.id === hostId ? renderHost(viewer): renderViewer(viewer))}
       )}
     </div>
