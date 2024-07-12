@@ -22,6 +22,12 @@
   margin-bottom: 20px;
 }
 
+button.create-account {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgba(48, 101, 112, 1)
+}
+
 input.credentials {
   width: 100%;
   max-width: 80%;
@@ -29,6 +35,8 @@ input.credentials {
 }
 
 .submit-credentials {
+  width: 50%;
+  height: auto;
   border: 2px solid rgb(6, 7, 7);
 }
 

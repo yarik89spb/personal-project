@@ -110,7 +110,7 @@ export default function Login(){
       <div className="text-center mt-3">
         <button
         type='button'
-        className="btn btn-link"
+        className="btn btn-link create-account"
         onClick={showRegistrationForm}>
           Create account
         </button>
