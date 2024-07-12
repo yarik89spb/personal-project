@@ -164,7 +164,7 @@ const ProjectConstructor = () => {
                   name="title"
                   value={question.title}
                   onChange={(e) => handleQuestionChange(index, e)}
-                  placeholder='限做主持人看到'
+                  placeholder='僅主持人可見'
                   required
                 />
               </div>
