@@ -24,9 +24,11 @@ div.card-body{
 
 /* Add this txo your CSS file */
 .tv-box {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   background-color: rgba(0, 0, 0, 0.8);
   padding: 5px;
   border: 10px solid #333;

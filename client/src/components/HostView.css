@@ -14,7 +14,10 @@
 }
 
 .container.toggle-online{
+  flex: 3; /* Occupies 30% of the space */
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn.host-panel-toggle{
@@ -28,7 +31,7 @@
 
 .btn.toggle-online.start,
 .btn.toggle-online.stop{
-  width: 20%;
+  width: 100%;
   background-color: rgba(48, 101, 112, 0.5);
   border: 2px dashed rgb(37, 34, 36);
   font-size: 2rem;
@@ -39,6 +42,23 @@
 
 .btn.toggle-online.start {
   animation: dust 2s infinite;
+}
+
+.upper-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.ticker-container {
+  flex: 7; /* Occupies 70% of the space */
+  overflow: hidden;
+  white-space: nowrap;
+  background-color: #333;
+  color: #fff;
+  padding: 10px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes dust {
