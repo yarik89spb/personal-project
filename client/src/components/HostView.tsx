@@ -13,6 +13,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './HostView.css';
 import CopyLink from './CopyLink.tsx';
 import ReactionButtons from './ReactionButtons.tsx';
+import Ticker from './Ticker.tsx';
 
 function HostView(){
   let userComments = [
@@ -27,6 +28,7 @@ function HostView(){
 
   const { userId } = useContext(AuthContext);
   const [online, setOnline] = useState(false);
+  const [tickerText, setTickerText] = useState('會議目前離線，觀眾無法加入。當您準備好時，可以點擊「START」按鈕。');
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [hostPanel, setHostPanel] = useState('comments');
@@ -45,7 +47,7 @@ function HostView(){
   const [hostId, setHostId ] = useState<string | null>(null);
   const socket = useSocket(`${import.meta.env.VITE_API_BASE_URL}`, projectId, 'HOST');
   const [isBroadcasting, setIsBroadcasting] = useState(false);
-  const [selectedEmoji, setSelectedEmoji] = useState("");
+  const [selectedEmoji, setSelectedEmoji] = useState('');
   /* Project data rendering and broadcasting */
 
   useEffect(() => {
@@ -53,6 +55,9 @@ function HostView(){
       try{
         const currentOnlineStatus = await isOnline(projectId);
         setOnline(currentOnlineStatus.isBroadcasting)
+        if(currentOnlineStatus.isBroadcasting){
+          setTickerText(`會議「${projectData.projectName}」前目在線。您可以通過下面的鏈接讓觀眾加入。點擊「Share Screen」按鈕即可開始共享屏幕`)
+        }
         const newProjectData = await fetchProjectData(projectId);
         setIsLoadingQuestions(false);
         setProjectData(newProjectData);
@@ -77,9 +82,11 @@ function HostView(){
     const currentOnlineStatus = await changeOnlineStatus(jwt, projectId, status);
     if(currentOnlineStatus === true){
       setOnline(true)
+      setTickerText(`會議「${projectData.projectName}」前目在線。您可以通過下面的鏈接讓觀眾加入。點擊「Share Screen」按鈕即可開始共享屏幕`)
       console.log(`You're on the air! Now everyone can join ${projectData.projectName}`);
     } else if(currentOnlineStatus === false) {
       setOnline(false)
+      setTickerText(`會議「${projectData.projectName}」目前離線因此觀眾無法加入。當您準備好時，可以點擊「START」按鈕`)
       console.log(`${projectData.projectName} is offline`);
     }
   }
@@ -221,33 +228,65 @@ function HostView(){
   }
   return (
     <div className='container'>
-      {/* <button className='btn btn-primary mr-2 back' onClick={() => handleBackClick()}> Back to Profile</button> */}
-      {online? <div className='container toggle-online'> 
-        <button className='btn toggle-online stop'
-          onClick={() => setShowModal(true)}>Stop</button>
-        <ConfirmationModal
-          show={showModal}
-          onConfirm={() => {toggleOnline(false); setShowModal(false)}}
-          onCancel={() => setShowModal(false)}
-          message="Are you sure you want to stop event?"
-        />
-        <div className='magic-dust'></div> 
+      <div className='upper-bar'>
+        {/* <button className='btn btn-primary mr-2 back' onClick={() => handleBackClick()}> Back to Profile</button> */}
+        {online? <div className='container toggle-online'> 
+          <button className='btn toggle-online stop'
+            onClick={() => setShowModal(true)}>STOP</button>
+          <ConfirmationModal
+            show={showModal}
+            onConfirm={() => {toggleOnline(false); setShowModal(false)}}
+            onCancel={() => setShowModal(false)}
+            message="Are you sure you want to stop event?"
+          />
+          <div className='magic-dust'></div>
+        </div> 
+        : 
+        <div className='container toggle-online'> 
+          <button className='btn toggle-online start'
+          onClick={() => setShowModal(true)}>START</button>
+          <ConfirmationModal
+            show={showModal}
+            onConfirm={() => {toggleOnline(true); setShowModal(false)}}
+            onCancel={() => setShowModal(false)}
+            message="Are you sure you want to start event?"
+          /> 
+        </div>}
+        <Ticker text={tickerText}/> 
       </div> 
-      : 
-      <div> 
-        <button className='btn toggle-online start'
-        onClick={() => setShowModal(true)}>Go online</button>
-        <ConfirmationModal
-          show={showModal}
-          onConfirm={() => {toggleOnline(true); setShowModal(false)}}
-          onCancel={() => setShowModal(false)}
-          message="Are you sure you want to start event?"
-        /> 
-      </div>} 
       <CopyLink link={`/guest/${projectId}`}/> 
       <div className='row'>
+      <div className='col-md-6'>
+          <div className='event-screen'>
+            {isLoadingQuestions === false && (
+                <EventScreen
+                  question={projectData.questions[questionIndex]}
+                  onOptionClick={() => {
+                    return;
+                  }}
+                />
+              )
+            }
+          </div>
+          <div className="d-flex justify-content-center">
+        <div className="btn-group" role="group" aria-label="Control Buttons">
+          <button type="button" className="btn btn-primary btn-lg mx-2" onClick={() => handleQuestionIndexChange(false)}>
+            &lt;
+          </button>
+          {!isBroadcasting ? <button type="button" className="btn btn-success btn-lg mx-2" onClick={() => handleBroadcastingState()}>
+            Share Screen
+          </button>
+          :
+          <button type="button" className="btn btn-danger btn-lg mx-2" onClick={() => handleBroadcastingState()}>
+          Hide Screen
+          </button>}
+          <button type="button" className="btn btn-primary btn-lg mx-2" onClick={() => handleQuestionIndexChange(true)}>
+            &gt;
+          </button>
+        </div>
+      </div>
+        </div>
         <div className='col-md-6'>
-  
             {hostPanel === 'comments' ? (
               <div className='card host-panel' > 
                 <h3 className='card-header' >User comments:</h3>
@@ -271,42 +310,12 @@ function HostView(){
             data-view='viewers' 
             onClick={toggleView}
             >Viewers</button>
-        </div>
-        <div className='col-md-6'>
-          <div className='event-screen'>
-            {isLoadingQuestions === false && (
-                <EventScreen
-                  question={projectData.questions[questionIndex]}
-                  onOptionClick={() => {
-                    return;
-                  }}
-                />
-              )
-            }
-          </div>
-          <div>
+            <div>
             {renderAnswers()}
           </div>
           < ReactionButtons handleEmojiClick={handleEmojiClick} selectedEmoji={selectedEmoji}/>
         </div>
       </div>
-      <div className="d-flex justify-content-center">
-      <div className="btn-group" role="group" aria-label="Control Buttons">
-        <button type="button" className="btn btn-primary btn-lg mx-2" onClick={() => handleQuestionIndexChange(false)}>
-          &lt;
-        </button>
-        {!isBroadcasting ? <button type="button" className="btn btn-success btn-lg mx-2" onClick={() => handleBroadcastingState()}>
-          Show screen
-        </button>
-        :
-        <button type="button" className="btn btn-danger btn-lg mx-2" onClick={() => handleBroadcastingState()}>
-        Hide screen
-        </button>}
-        <button type="button" className="btn btn-primary btn-lg mx-2" onClick={() => handleQuestionIndexChange(true)}>
-          &gt;
-        </button>
-      </div>
-    </div>
     </div> 
   )
 }

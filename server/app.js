@@ -156,8 +156,8 @@ app.post('/api/toggle-sharing', async (req, res)=>{
 app.get('/api/broadcasting', async (req, res)=>{
   try{
     const {projectId} = req.query;
-    const isBroadcasting = await getBroadcastingStatus(projectId);
-    res.status(200).json({isBroadcasting});
+    const onlineStatus = await getBroadcastingStatus(projectId);
+    res.status(200).json(onlineStatus);
 
   }catch(error){
     res.status(400).json({error:`Failed to toggle broadcasting. ${error}`})
