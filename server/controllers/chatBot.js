@@ -45,7 +45,7 @@ class PorkoBot {
 
   readNote(text){
     if(text){
-      const botMessage = `主持人的備注：“${text}”`
+      const botMessage = `主持人的備註：“${text}”`
       return botMessage;
     }
   }
