@@ -76,7 +76,7 @@ export default function WelcomePage(){
       </div>
       <h2>Welcome to Porko</h2>
       <p className='project-intro'>
-        Porko 是一個活動舉辦平台，其目的是通過增加觀眾互動來輔助網路研討會、Workshop、測驗和各類其他會議
+        Porko 是一個活動舉辦平台，其目的是通過增加觀眾互動來輔助會議，網路研討會、討論，測驗和各類其他會議
       </p>
       <h3>Getting started</h3>
         <div className='row welcome-options'>
