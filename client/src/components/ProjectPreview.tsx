@@ -63,7 +63,7 @@ const ProjectPreview = () => {
     <div className='project-information'>
       <div className='element'> Description: '{projectData.description}' </div>
       <div className='element'> Total questions: {projectData.questions.length}</div>
-      <div className='element key-words title'>Key words:</div>
+      <div className='element key-words title'>Keywords:</div>
       <div className='english key-words-container'>{keyWords(projectData.keyWordsEng)}</div>
       <div className='element key-words title'> 關鍵詞:</div>
       <div className='chinese key-words-container'>{keyWords(projectData.keyWordsCn)}</div>

@@ -260,7 +260,7 @@ function GuestView() {
               <input
                 type='text'
                 placeholder="...Type your message"
-                className='form-control'
+                className='form-control message-input'
                 value={userMessageInput}
                 onKeyDown={(e) => {
                   if (e.key === "Enter")
@@ -270,7 +270,7 @@ function GuestView() {
               />
               <button
                 type='button'
-                className='btn btn-primary'
+                className='btn btn-primary send-message'
                 onClick={()=>addMessageToChat()}
               >
                 Send
