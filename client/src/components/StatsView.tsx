@@ -181,7 +181,7 @@ export default function StatsView(){
         <div key={index}>
           <div className="row">
             <div className="col-12">
-              <h5>{questionData.title}</h5>
+              <h5 className='sankey question-title'>{questionData.title}</h5>
             </div>
           </div>
           {renderSankeyDiagram(questionData.reactions)}
@@ -217,14 +217,14 @@ export default function StatsView(){
           <h2> Statistics for {projectStats.projectName} </h2> : 
           <h2> No Statistics available</h2>}
         <div className='row'>
-          <div className='d-flex justify-content-start'>
+          <div className='d-flex justify-content-center'>
             <button 
-              className='btn btn-primary btn-lg mx-2'
+              className='plot-switcher left me-0'
               onClick={() => {setPlotType('answers')}}>
                 Answers
             </button>
             <button 
-              className='btn btn-primary btn-lg mx-2'
+              className='plot-switcher right me-0'
               onClick={() => {setPlotType('reactions')}}>
                 Reactions
             </button>
@@ -232,7 +232,8 @@ export default function StatsView(){
         </div>
         <div>{displayPlot(plotType)}</div>
       </div>
-      <div className="container mt-5">
+      <div className="container word-cloud mt-5">
+        <h3 className='word-cloud-title'> Most used words </h3>
         <div>{renderWordCloud()}</div>
       </div>
     </div>

@@ -197,6 +197,13 @@
   color: #fff;
 }
 
+.btn-group-bar {
+  margin-top: 25px;
+}
+
+button.flow-control-button {
+  font-size: 1.5rem;
+}
 
 /* Animation for the shine effect */
 @keyframes shine {

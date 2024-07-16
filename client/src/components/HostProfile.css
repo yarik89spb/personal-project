@@ -24,6 +24,13 @@
   margin-bottom: 15px;
 }
 
+.project-control {
+  font-size: 1rem;
+  font-weight: 400;
+  border: 2px solid black;
+  font-family: 'Roboto', sans-serif;
+}
+
 .btn.btn-info.create-project{
   font-weight: 600;
   color: #f8f9fa;
@@ -41,4 +48,19 @@
 
 .welcome-username{
   color: rgb(22, 24, 24);
+}
+
+.project-list-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px; /* Adjust height as needed */
+}
+
+.btn.btn-info.create-project {
+  font-size: 2rem;
+  width: 30%;
+  height: auto;
+  vertical-align: middle;
+  font-family: 'Roboto', sans-serif;
 }
