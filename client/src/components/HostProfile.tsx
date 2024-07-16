@@ -15,7 +15,7 @@ export default function HostProfile(){
 
   function renderProjectsList(){
     if(!projectsArray || projectsArray.length === 0){
-      return <h4>No projects found... Maybe add one?</h4>
+      return <h4>No events found... Maybe add one?</h4>
     }
     return (
       projectsArray.map((projectObj:  ProjectObject)=>{
@@ -27,25 +27,25 @@ export default function HostProfile(){
             <p>{projectObj.description}</p>
             <button 
             type='button'
-            className="btn btn-primary mr-2"
+            className="btn btn-primary mr-2 project-control"
             onClick={()=>handleEventStart(projectObj.projectId)}>
               Start 
             </button> 
             <button 
             type='button'
-            className="btn btn-secondary"
+            className="btn btn-secondary project-control"
             onClick={()=>handlePreviewClick(projectObj.projectId)}>
               Details  
             </button>
             <button 
             type='button'
-            className="btn btn-secondary"
+            className="btn btn-secondary project-control"
             onClick={()=>handleStatsClick(projectObj.projectId)}>
               Summary 
             </button>
             <button 
             type='button'
-            className="btn btn-danger"
+            className="btn btn-danger project-control"
             onClick={(e)=>deleteProject(e, projectObj.projectId)}>
               Delete 
             </button>
@@ -113,16 +113,16 @@ export default function HostProfile(){
   return (
     <div className="host-profile-container">
       <h3 className='welcome-username'>Hi, {userName}!</h3>
-      <h2 className='username-projects-title'>Your projects:</h2>
+      <h2 className='username-projects-title'>Your events:</h2>
       <div>
         {renderProjectsList()}
       </div>
-      <div>
+      <div className='project-list-footer'>
         <button 
         type='button'
         className="btn btn-info create-project"
         onClick={()=>{setShowConstructor(!showConstructor)}}>
-          Create project
+          Create event
         </button>
       </div>
       <div>

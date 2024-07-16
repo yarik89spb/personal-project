@@ -270,23 +270,23 @@ function HostView(){
             < ReactionButtons handleEmojiClick={handleEmojiClick} selectedEmoji={selectedEmoji}/>
             {renderAnswers()}
           </div>
-          <div className="d-flex justify-content-center">
-        <div className="btn-group" role="group" aria-label="Control Buttons">
-          <button type="button" className="btn btn-primary btn-lg mx-2" onClick={() => handleQuestionIndexChange(false)}>
-            &lt;
-          </button>
-          {!isBroadcasting ? <button type="button" className="btn btn-success btn-lg mx-2" onClick={() => handleBroadcastingState()}>
-            Show Questions
-          </button>
-          :
-          <button type="button" className="btn btn-danger btn-lg mx-2" onClick={() => handleBroadcastingState()}>
-          Hide Questions
-          </button>}
-          <button type="button" className="btn btn-primary btn-lg mx-2" onClick={() => handleQuestionIndexChange(true)}>
-            &gt;
-          </button>
+        <div className="d-flex justify-content-center btn-group-bar">
+          <div className="btn-group" role="group" aria-label="Control Buttons">
+            <button type="button" className="btn btn-primary btn-lg mx-2 flow-control-button" onClick={() => handleQuestionIndexChange(false)}>
+              &lt;
+            </button>
+            {!isBroadcasting ? <button type="button" className="btn btn-success btn-lg mx-2 flow-control-button" onClick={() => handleBroadcastingState()}>
+              Show Questions
+            </button>
+            :
+            <button type="button" className="btn btn-danger btn-lg mx-2 flow-control-button" onClick={() => handleBroadcastingState()}>
+            Hide Questions
+            </button>}
+            <button type="button" className="btn btn-primary btn-lg mx-2 flow-control-button" onClick={() => handleQuestionIndexChange(true)}>
+              &gt;
+            </button>
+          </div>
         </div>
-      </div>
         </div>
         <div className='col-md-6'>
             {hostPanel === 'comments' ? (
