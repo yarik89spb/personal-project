@@ -1,0 +1,40 @@
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  50% { border-color: gray; }
+  to { border-color: transparent; }
+}
+
+.hint-container {
+  border: 2px solid rgba(0, 0, 0);
+  border-radius: 4px;
+  background-color: rgb(38, 40, 49);
+  min-width: 70%;
+  height: 100%;
+}
+
+.typing-container {
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  width: fit-content;
+  border-right: 2px solid gray;
+  animation: blink 1s step-end infinite;
+  height: 100%;
+}
+
+.typing-text {
+  margin: 0px 20px;
+  display: inline-block;
+  font-size: 1.3rem;
+  font-weight: bold;
+  background-color: rgb(231, 236, 238);
+  background-clip: border-box;
+  -webkit-background-clip: text;
+  color: transparent;
+  border-radius: 6px;
+  animation: typing 5s steps(23) 1;
+}

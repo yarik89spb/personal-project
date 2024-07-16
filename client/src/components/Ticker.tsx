@@ -1,4 +1,3 @@
-import React from 'react';
 import './Ticker.css';
 
 interface TickerProps{
@@ -8,7 +7,9 @@ interface TickerProps{
 const Ticker = ({ text } : TickerProps) => {
   return (
     <div className="ticker-container">
-      <div className="ticker-text">{text}</div>
+      <div className="ticker-wrapper">
+        <div className="ticker-text"> {text} </div>
+      </div>
     </div>
   );
 };

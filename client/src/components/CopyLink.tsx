@@ -29,7 +29,7 @@ const CopyLink: React.FC<CopyLinkProps> = ({ link }) => {
         onClick={copyToClipboard}
         className='copy-link-button'
       >
-        Copy
+        COPY MEETING URL
       </button>
     </div>
   );
