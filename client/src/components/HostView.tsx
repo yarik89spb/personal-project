@@ -1,7 +1,6 @@
-import { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { useState, useEffect } from 'react';
 import { useSocket, useMessageListener, sendCommand, useAnswerListener, useEmojiListener, useRoomListener, useNicknameListener } from '../utils/websocket';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import EventScreen from './EventScreen';
 import ChatComments from './ChatComments';
 import ViewerList from './ViewerList.tsx';
@@ -13,7 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './HostView.css';
 import CopyLink from './CopyLink.tsx';
 import ReactionButtons from './ReactionButtons.tsx';
-import Ticker from './Ticker.tsx';
+import TypingText from './TypingText.tsx';
 
 function HostView(){
   let userComments = [
@@ -26,10 +25,8 @@ function HostView(){
     throw new Error('Project ID is required');
   }
 
-  const { userId } = useContext(AuthContext);
   const [online, setOnline] = useState(false);
-  const [tickerText, setTickerText] = useState('會議目前離線，觀眾無法加入。當您準備好時，可以點擊「START」按鈕。');
-  const navigate = useNavigate();
+  const [tickerText, setTickerText] = useState('Meeting is offline. Click「START」to go online');
   const [showModal, setShowModal] = useState(false);
   const [hostPanel, setHostPanel] = useState('comments');
   const [projectData, setProjectData] = useState({
@@ -56,7 +53,7 @@ function HostView(){
         const currentOnlineStatus = await isOnline(projectId);
         setOnline(currentOnlineStatus.isBroadcasting)
         if(currentOnlineStatus.isBroadcasting){
-          setTickerText(`會議「${projectData.projectName}」前目在線。您可以通過下面的鏈接讓觀眾加入。點擊「Share Screen」按鈕即可開始共享屏幕`)
+          setTickerText(`Meeting is online。Click「Share Screen」to show the question`)
         }
         const newProjectData = await fetchProjectData(projectId);
         setIsLoadingQuestions(false);
@@ -82,17 +79,13 @@ function HostView(){
     const currentOnlineStatus = await changeOnlineStatus(jwt, projectId, status);
     if(currentOnlineStatus === true){
       setOnline(true)
-      setTickerText(`會議「${projectData.projectName}」前目在線。您可以通過下面的鏈接讓觀眾加入。點擊「Share Screen」按鈕即可開始共享屏幕`)
+      setTickerText(`Meeting is online。Click「Share Screen」to show the question`)
       console.log(`You're on the air! Now everyone can join ${projectData.projectName}`);
     } else if(currentOnlineStatus === false) {
       setOnline(false)
-      setTickerText(`會議「${projectData.projectName}」目前離線因此觀眾無法加入。當您準備好時，可以點擊「START」按鈕`)
+      setTickerText(`Meeting is offline. Click「START」to go online`)
       console.log(`${projectData.projectName} is offline`);
     }
-  }
-
-  function handleBackClick(){
-    navigate(`/profile/${userId}`)
   }
 
   function handleQuestionIndexChange(isForward = true){
@@ -221,7 +214,7 @@ function HostView(){
   function renderAnswers(){
     return(
       <div className='answer-counter'>
-        <div>Answers submitted</div>
+        <div>Answers submitted:&nbsp;</div>
         <div>{answersArray.length}</div>
       </div>
     )
@@ -252,12 +245,19 @@ function HostView(){
             message="Are you sure you want to start event?"
           /> 
         </div>}
-        <Ticker text={tickerText}/> 
+        <div className='hint-container'>
+          <TypingText text={tickerText}/> 
+        </div>
       </div> 
       <CopyLink link={`/guest/${projectId}`}/> 
       <div className='row'>
       <div className='col-md-6'>
-          <div className='event-screen'>
+          <div className='sharing-status row'>
+            {isBroadcasting ? <div className='col-md-2 status-content show-questions'> Viewers CAN see the questions </div> :
+            <div className='col-md-2 status-content hide-questions'> Viewers can NOT see the questions </div> }
+            
+          </div>
+          <div className={`host-event-screen ${isBroadcasting?'sharing-screen-border' : ''}`}>
             {isLoadingQuestions === false && (
                 <EventScreen
                   question={projectData.questions[questionIndex]}
@@ -267,6 +267,8 @@ function HostView(){
                 />
               )
             }
+            < ReactionButtons handleEmojiClick={handleEmojiClick} selectedEmoji={selectedEmoji}/>
+            {renderAnswers()}
           </div>
           <div className="d-flex justify-content-center">
         <div className="btn-group" role="group" aria-label="Control Buttons">
@@ -274,11 +276,11 @@ function HostView(){
             &lt;
           </button>
           {!isBroadcasting ? <button type="button" className="btn btn-success btn-lg mx-2" onClick={() => handleBroadcastingState()}>
-            Share Screen
+            Show Questions
           </button>
           :
           <button type="button" className="btn btn-danger btn-lg mx-2" onClick={() => handleBroadcastingState()}>
-          Hide Screen
+          Hide Questions
           </button>}
           <button type="button" className="btn btn-primary btn-lg mx-2" onClick={() => handleQuestionIndexChange(true)}>
             &gt;
@@ -311,9 +313,7 @@ function HostView(){
             onClick={toggleView}
             >Viewers</button>
             <div>
-            {renderAnswers()}
           </div>
-          < ReactionButtons handleEmojiClick={handleEmojiClick} selectedEmoji={selectedEmoji}/>
         </div>
       </div>
     </div> 

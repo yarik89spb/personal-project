@@ -84,6 +84,81 @@
   }
 }
 
+
+.host-event-screen {
+  height: 70%;
+  padding: 10px;
+}
+
+.sharing-screen-border {
+  padding: 5px;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  animation: dust2 3s infinite;
+}
+
+@keyframes dust2 {
+  0% {
+    box-shadow: 
+      0 0 5px rgba(255, 255, 204, 0.5),
+      0 0 10px rgba(255, 255, 204, 0.5),
+      0 0 15px rgba(255, 255, 204, 0.5),
+      0 0 20px rgba(255, 255, 204, 0.5),
+      0 0 25px rgba(255, 255, 204, 0.5),
+      0 0 30px rgba(255, 255, 204, 0.5),
+      0 0 35px rgba(255, 255, 204, 0.5);
+  }
+  100% {
+    box-shadow: 
+      0 0 5px rgba(255, 255, 204, 0),
+      0 0 10px rgba(255, 255, 204, 0),
+      0 0 15px rgba(255, 255, 204, 0),
+      0 0 20px rgba(255, 255, 204, 0),
+      0 0 25px rgba(255, 255, 204, 0),
+      0 0 30px rgba(255, 255, 204, 0),
+      0 0 35px rgba(255, 255, 204, 0);
+  }
+}
+
+.sharing-status {
+  margin: 5px 4px;
+  display: flex;
+  align-items: center;
+  margin-top: 10px; /* Adjust margin as needed */
+}
+
+.status-box {
+  background-color: rgba(226, 231, 233, 0.5); /* Adjust color as needed */
+  border: 1px solid black;
+  padding: 10px 0;
+  border-radius: 5px;
+  font-weight: bold;
+  min-width: 20px; /* Adjust minimum width as needed */
+  text-align: center;
+  flex-grow: 0.5;
+}
+
+.status-content {
+  padding: 10px;
+  font-size: 1.3rem; /* Adjust font size as needed */
+  font-weight: bold;
+  flex-grow: 10;
+  font-family: 'Roboto', sans-serif;
+  letter-spacing: 0.1rem;
+}
+
+.status-content.show-questions {
+  color: rgba(244, 248, 13, 0.9);
+  text-shadow: #FC0 5px 0 10px;
+}
+
+.status-content.hide-questions {
+  color: rgba(102, 102, 101, 0.9);
+  text-shadow: rgba(238, 20, 20, 0.9) 52px 2 10px;
+}
+
 /* Basic button styles */
 .reaction-buttons {
   display: flex;
@@ -106,18 +181,20 @@
 }
 
 .reaction-button.selected {
-  background-color: rgba(251, 255, 0, 0.5); /* Light blue background */
+  background-color: rgba(251, 255, 0, 0.1); /* Light blue background */
   border-radius: 50%; /* Make button round */
   animation: shine 1s ease-in-out;
 }
 
 
 .answer-counter{
+  display: flex;
   font-size: large;
-  font-family: 'Roboto', sans-serif;;
-  background-color: rgba(255, 255, 255, 0.4);
+  font-family: 'Roboto', sans-serif;
   border-radius: 8px;
-  text-align: center;
+  text-align: left;
+  font-size: 2rem;
+  color: #fff;
 }
 
 

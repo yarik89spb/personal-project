@@ -12,16 +12,21 @@
   white-space: nowrap;
   width: 100%;
   background-color: #333;
-  border-radius: 6px;
   color: #fff;
   padding: 10px 0;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+}
+
+.ticker-wrapper {
+  display: flex;
+  animation: ticker 15s linear infinite;
 }
 
 .ticker-text {
-  font-size: 2rem;
-  letter-spacing: 0.2rem;
+  font-size: 1.5rem;
+  letter-spacing: 0.3rem;
+  padding: 0 50px;
   display: inline-block;
-  padding-left: 100%;
-  animation: ticker 30s linear infinite;
 }
