@@ -62,6 +62,19 @@ div.card-body{
   outline: none;
 }
 
+.btn.btn-primary.send-message {
+  margin: 0;
+}
+
+.input-group {
+  width: auto;
+}
+
+.nickname-emoji-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
 .user-nickname-input, .user-nickname-display {
   display: flex;
   align-items: center;
@@ -105,17 +118,6 @@ div.card-body{
   outline: none;
   border-radius: 80%; /* Ensure it's fully opaque when selected */
   transition: background-color 0.3s ease;
-}
-
-.reaction-button:hover {
-  background-color: rgba(255, 251, 0, 0.3);
-  border-radius: 16px;
-}
-
-.reaction-button.selected {
-  background-color: rgba(251, 255, 0, 0.7); /* Light yellow background */
-  animation: shine 1s ease-in-out;
-  box-shadow: 0 0 10px rgba(251, 255, 0, 0.7);
 }
 
 .reaction-button.deselected {

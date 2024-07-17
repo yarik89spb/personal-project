@@ -156,34 +156,114 @@
 
 .status-content.hide-questions {
   color: rgba(102, 102, 101, 0.9);
-  text-shadow: rgba(238, 20, 20, 0.9) 52px 2 10px;
+  text-shadow: rgba(238, 20, 20, 0.705) 52px 2 10px;
+}
+
+button.flow-control-button.hide-questions{
+  background-color: rgba(238, 20, 20, 0.521);
+  border-radius: 2px;
 }
 
 /* Basic button styles */
 .reaction-buttons {
   display: flex;
+  text-shadow: #333;
   gap: 10px;
+}
+
+.fa-icon {
+  font-size: 2rem;
+}
+
+.host-event-screen .reaction-button .fa-icon.heart{
+  color: rgba(234, 178, 206, 0.6);
+  text-shadow: rgb(26, 25, 25) 1px 6 15px;
+}
+
+.host-event-screen .reaction-button .fa-icon.like{
+  color: rgba(243, 235, 239, 0.863);
+}
+
+.host-event-screen .reaction-button .fa-icon.dislike{
+  color: rgba(156, 150, 153, 0.863);
 }
 
 .reaction-button {
   border: none;
   background-color: transparent;
   cursor: pointer;
-  padding: 10px;
-  font-size: 24px;
+  padding: 5px;
   outline: none;
-  transition: transform 0.3s ease, background-color 0.3s ease, border-radius 0.3s ease;
-  color: inherit;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+  position: relative;
+  font-size: 1.5rem; /* Adjust icon size */
 }
 
 .reaction-button:hover {
-  transform: scale(1.2); /* Slightly enlarge the button on hover */
+  background-color: rgba(255, 251, 0, 0.5);
 }
 
 .reaction-button.selected {
-  background-color: rgba(251, 255, 0, 0.1); /* Light blue background */
-  border-radius: 50%; /* Make button round */
-  animation: shine 1s ease-in-out;
+  animation: jump 1s ease, shine 1s ease-in-out;
+  border-radius: 50%;
+}
+
+.reaction-button:active {
+  transform: translateY(-2px);
+}
+
+@keyframes jump {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes shine {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
+  }
+  50% {
+    box-shadow: 
+      0 0 5px rgba(255, 255, 0, 0.5),
+      0 0 10px rgba(255, 255, 0, 0.7),
+      0 0 15px rgba(255, 255, 0, 0.5),
+      0 0 20px rgba(255, 255, 0, 0.3),
+      0 0 25px rgba(255, 255, 0, 0.1),
+      0 0 30px rgba(255, 255, 0, 0.05),
+      0 0 35px rgba(255, 255, 0, 0.02),
+      0 0 40px rgba(255, 255, 0, 0.01);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
+  }
+}
+
+.reaction-button.selected::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255, 255, 0, 0.6), rgba(255, 255, 0, 0) 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: aura 1s ease-in-out infinite;
+}
+
+@keyframes aura {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
 }
 
 
@@ -195,6 +275,7 @@
   text-align: left;
   font-size: 2rem;
   color: #fff;
+  text-shadow: rgb(26, 25, 25) 1px 6 15px;
 }
 
 .btn-group-bar {
@@ -202,19 +283,12 @@
 }
 
 button.flow-control-button {
+  font-family: 'Roboto', sans-serif; ;
+  text-align: center;
+  vertical-align: middle;
   font-size: 1.5rem;
+  font-weight: 500;
+  border: 2px solid black;
 }
 
-/* Animation for the shine effect */
-@keyframes shine {
-  0% {
-    box-shadow: 0 0 5px rgba(48, 101, 112, 0.5);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(48, 101, 112, 0.5);
-  }
-  100% {
-    box-shadow: 0 0 5px rgba(48, 101, 112, 0.5);
-  }
-}
 
