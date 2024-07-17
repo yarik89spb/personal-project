@@ -279,7 +279,7 @@ function HostView(){
               Show Questions
             </button>
             :
-            <button type="button" className="btn btn-danger btn-lg mx-2 flow-control-button" onClick={() => handleBroadcastingState()}>
+            <button type="button" className="btn btn-danger btn-lg mx-2 flow-control-button hide-questions" onClick={() => handleBroadcastingState()}>
             Hide Questions
             </button>}
             <button type="button" className="btn btn-primary btn-lg mx-2 flow-control-button" onClick={() => handleQuestionIndexChange(true)}>

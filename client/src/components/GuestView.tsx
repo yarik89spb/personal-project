@@ -253,9 +253,10 @@ function GuestView() {
           </div>
         </div>
           <div className='card-footer chat'>
-            < ReactionButtons handleEmojiClick={handleEmojiClick} selectedEmoji={selectedEmoji}/>
-            {UserNickname()}
-
+            <div className='nickname-emoji-container'>
+              {UserNickname()}
+              < ReactionButtons handleEmojiClick={handleEmojiClick} selectedEmoji={selectedEmoji}/>
+            </div>
             <div id='messenger' className='input-group'>
               <input
                 type='text'
