@@ -2,24 +2,25 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import connectToDB from './models/db.js';
-import { insertAnswer, getWordCounts } from './models/queries.js';
-import { storeComment, storeCommentBatch, getProjectComments } from './controllers/commentController.js';
+import { insertAnswer } from './models/queries.js';
+import { storeComment, storeCommentBatch} from './controllers/commentController.js';
 import { storeEmoji, storeEmojiBatch } from './controllers/emojiController.js'
-import { getProjectStatistics } from './controllers/dashboard.js';
-import { signUp, signIn, validateJWT } from './controllers/userContoller.js'
-import { addViewer, renameViewer, removeViewer, getViewers } from './controllers/viewerController.js';
-import { addNewProject, deleteProject, getUserProjects, getProjectData, toggleBroadcasting, getBroadcastingStatus } from './controllers/projectController.js'
-import { addWordCounts, addKeyWords } from './utils/callPython.js'
+import { addViewer, renameViewer, removeViewer } from './controllers/viewerController.js';
+import { addWordCounts } from './utils/callPython.js'
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { useBot } from './controllers/chatBot.js';
+import projectRouter from './routes/projectRoutes.js'
+import userRouter from './routes/userRoutes.js';
+import eventStatusRouter from './routes/eventStatusRoutes.js'
+import dashboardRouter from './routes/dashboardRoutes.js'
 
 dotenv.config();
 
-const app = express();
 connectToDB()
 
+const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   //...
@@ -32,192 +33,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post('/api/add-project', async (req, res)=>{
-  try{
-    const projectData = req.body;
-    const projectId = await addNewProject(projectData);
-    addKeyWords(projectId)
-    res.status(200).json({projectId}) 
-  }catch(error){
-    res.status(400).json({error:'Failed to add project data'})
-  }
-})
-
-app.post('/api/delete-project', async (req, res)=>{
-  try{
-    const {userId, projectId} = req.body;
-    await deleteProject(userId, projectId);
-    res.status(200).json({message:'Ok'}) 
-  }catch(error){
-    res.status(400).json({error:'Failed to add project data'})
-  }
-})
-
-app.get('/api/project-data', async (req, res)=>{
-  try{
-    const projectId = req.query.projectId;
-    const projectData = await getProjectData(projectId);
-    res.status(200).json({data: projectData}) 
-  }catch(error){
-    res.status(400).json({error:`Failed to load data. ${error.message}`})
-  }
-})
-
-app.get('/api/user-projects', async (req, res)=>{
-  try{
-    const projectId = req.query.userId;
-    const projectData = await getUserProjects(projectId);
-    res.status(200).json({data: projectData}) 
-  }catch(error){
-    console.log(error)
-    res.status(400).json({error:'Failed to load data'})
-  }
-})
-
-app.get('/api/project-viewers', async (req, res) =>{
-  try{
-    const projectId = req.query.projectId;
-    const [hostId, projectViewers] = getViewers(projectId)
-    res.status(200).json({hostId, data: projectViewers})
-  } catch(error){
-    console.error(error);
-    res.status(400).json({error: 'Failed to get list of viewers'})
-  }
-})
-
-app.get('/api/project-comments', async (req, res) =>{
-  try{
-    const projectId = req.query.projectId;
-    const projectComments = await getProjectComments(projectId);
-    res.status(200).json({data: projectComments})
-  } catch(error){
-    console.error(error);
-    res.status(400).json({error: 'Failed to load comments'})
-  }
-})
-
-
-app.get('/api/project-stats', async (req, res)=>{
-  try{
-    const projectId = req.query.projectId;
-    const data = await getProjectStatistics(projectId);
-    res.status(200).json({data: data}) 
-  }catch(error){
-    res.status(400).json({error:'Failed to load data'})
-  }
-})
-
-app.get('/api/word-counts', async (req, res)=>{
-  try{
-    const projectId = req.query.projectId;
-    const data = await getWordCounts(projectId);
-    res.status(200).json({data: data}) 
-  }catch(error){
-    res.status(400).json({error:'Failed to load data'})
-  }
-})
-
-app.post('/api/toggle-broadcasting', async (req, res)=>{
-  try{
-    const {projectId} = req.query;
-    const {broadcasting} = req.query;
-    const authHeader = req.headers.authorization;
-    const userJWT = authHeader.split(' ')[1];
-    if(!userJWT){
-      throw new Error('Missing JWT')
-    }
-    const {userId} = validateJWT(userJWT);
-    const broadcastingStatus = await toggleBroadcasting(userId, projectId, broadcasting);
-    res.status(200).json(broadcastingStatus) 
-
-  }catch(error){
-    res.status(400).json({error:`Failed to toggle broadcasting. ${error}`})
-  }
-})
-
-app.post('/api/toggle-sharing', async (req, res)=>{
-  try{
-    const {projectId} = req.query;
-    const {sharing} = req.query;
-    const authHeader = req.headers.authorization;
-    const userJWT = authHeader.split(' ')[1];
-    if(!userJWT){
-      throw new Error('Missing JWT')
-    }
-    const {userId} = validateJWT(userJWT);
-    const broadcastingStatus = await toggleBroadcasting(userId, projectId, broadcasting);
-    res.status(200).json(broadcastingStatus) 
-
-  }catch(error){
-    res.status(400).json({error:`Failed to toggle broadcasting. ${error}`})
-  }
-})
-
-app.get('/api/broadcasting', async (req, res)=>{
-  try{
-    const {projectId} = req.query;
-    const onlineStatus = await getBroadcastingStatus(projectId);
-    res.status(200).json(onlineStatus);
-
-  }catch(error){
-    res.status(400).json({error:`Failed to toggle broadcasting. ${error}`})
-  }
-})
-
-app.post('/user/signup', async (req, res) => {
-  try{
-    const userData = {
-      userEmail: req.body.userEmail,
-      userName: req.body.userName,
-      userPassword: req.body.userPassword,
-      userCompany: req.body.userCompany
-    }
-    if(!userData.userEmail || !userData.userPassword || !userData.userName){
-      throw new Error('Incomplete user credentials');
-    }
-    const userObject = await signUp(userData);
-    res.status(201).json(userObject);
-  } catch(error) {
-    console.error(error)
-    res.status(400).json({text: `Failed to register user. ${error.message}`})
-  }
-})
-
-app.post('/user/signin', async (req, res) => {
-  try{
-    const userData = {
-      userEmail: req.body.userEmail,
-      userPassword: req.body.userPassword,
-    }
-    if(!userData.userEmail || !userData.userPassword){
-      throw new Error('Incomplete user credentials');
-    }
-    const userObject = await signIn(userData);
-    res.status(201).json(userObject);
-  } catch(error) {
-    console.error(error)
-    res.status(400).json({text: `Failed to login. ${error.message}`})
-  }
-})
-
-app.get('/user/verify', (req, res) => {
-  // Verify jwt validity
-  try{
-    const authHeader = req.headers.authorization;
-    const userJWT = authHeader.split(' ')[1];
-    if(!userJWT){
-      throw new Error('Missing JWT')
-    }
-    const payload = validateJWT(userJWT);
-    if(payload){
-      res.status(200).json(payload);
-    }else{
-      throw new Error('JWT validation failed.')
-    }
-  } catch(error) {
-    res.status(400).json({text: `Incorrect or epxired JWT. ${error.message}`})
-  }
-})
+app.use('/project', projectRouter);
+app.use('/user', userRouter);
+app.use('/event-status', eventStatusRouter);
+app.use('/dashboard', dashboardRouter);
 
 // Put it after other routes
 app.get('*', (req, res) => {
@@ -283,7 +102,6 @@ io.on("connection", (socket) => {
     const {roomId} = eventPayload; // roomId = projectId
     const message = eventPayload.passedData;
     io.to(roomId).emit('viewerMessage', message)
-    console.log('viewerMessage')
     await storeComment(roomId, message);
   })
 
@@ -294,7 +112,7 @@ io.on("connection", (socket) => {
     io.to(roomId).emit('changeScreen', passedData)
     const bot = useBot(roomId);
     const botMessage = bot.readNote(passedData.botNote);
-    emitBotMessage(roomId, botMessage)
+    emitBotMessage(roomId, botMessage);
     await storeCommentBatch(roomId);
     await storeEmojiBatch(roomId);
   })

@@ -58,7 +58,7 @@ export default function HostProfile(){
   useEffect(()=>{
     async function fetchProjectsList(){
       try{
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user-projects?userId=${userId}`)
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/project/user-projects?userId=${userId}`)
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -78,7 +78,7 @@ export default function HostProfile(){
     e.preventDefault();
 
     try{
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/delete-project`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/project/delete-project`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
