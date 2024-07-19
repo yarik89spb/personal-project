@@ -18,10 +18,6 @@ const ProjectConstructor = () => {
   ]);
   const [nextQuestionId, setNextQuestionId] = useState(2); // To manage unique IDs for questions
 
-  useEffect(()=>{
-    console.log(questions)
-  },[questions])
-
   const handleQuestionChange = (index: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     let newQuestions = [...questions];
@@ -115,8 +111,7 @@ const ProjectConstructor = () => {
   };
 
   async function addProjectData(projectObject: object){
-    console.log(JSON.stringify(projectObject))
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/add-project`, {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/project/add-project`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

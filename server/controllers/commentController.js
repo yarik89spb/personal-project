@@ -9,7 +9,7 @@ export async function storeComment(projectId, commentObj){
   }else{
     comments[projectId].push(commentObj);
   }
-  // Insert every 20 comments
+  // Insert every 10 comments
   if(comments[projectId] && comments[projectId].length % 10 === 0){
     await storeCommentBatch(projectId, commentObj.questionId)
   }

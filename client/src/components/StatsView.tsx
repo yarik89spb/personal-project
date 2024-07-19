@@ -41,7 +41,7 @@ export default function StatsView(){
     async function fetchResponses(): Promise<void>{
       try{
         console.log(projectId)
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/project-stats?projectId=${projectId}`)
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/dashboard/project-stats?projectId=${projectId}`)
         const responseJSON = await response.json();
         const responseData: ProjectStats = responseJSON.data;
         setProjectStats(responseData);
@@ -53,7 +53,7 @@ export default function StatsView(){
     }
     async function fetchWordCounts(){
       try{
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/word-counts?projectId=${projectId}`)
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/dashboard/word-counts?projectId=${projectId}`)
         const responseJSON = await response.json();
         const wordCounts = responseJSON.data;
         setWordCounts(wordCounts);

@@ -156,9 +156,8 @@ export async function searchProjectById(projectId) {
 export async function insertComments(projectId, questionId, comments) {
   try {
     console.log(`Inserting comments into projectId: ${projectId}, questionId: ${questionId}`);
+    
     // Try to update the specific question's comments if it exists
-    
-    
     const result = await ProjectResponses.updateOne(
       { projectId: projectId, 'questions.id': questionId },
       { $push: { 'questions.$.comments': { $each: comments } } }
@@ -170,8 +169,6 @@ export async function insertComments(projectId, questionId, comments) {
         { projectId: projectId },
         {
           $addToSet: {
-            comments: comments,
-            wordCounts: [],
             questions: {
               id: questionId,
               comments: comments,
@@ -197,6 +194,10 @@ export async function insertComments(projectId, questionId, comments) {
       }
     } else {
       console.log('Comments inserted into existing question successfully');
+      await ProjectResponses.updateOne(
+        { projectId: projectId },
+        { $push: { comments: { $each: comments } } }
+      );
     }
   } catch (error) {
     console.error('Insert error occurred:', error);
