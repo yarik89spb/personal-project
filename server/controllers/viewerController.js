@@ -1,15 +1,23 @@
 let currentViewers = {};
 let projectHosts = {};
 
-export function removeViewer(projectId, viewerId){
-  if(currentViewers[projectId]){
-    currentViewers[projectId] = currentViewers[projectId].filter(viewer => viewer.id !== viewerId);
-  } else {
-    console.error(`Project ${projectId} not found`);
+export function removeViewer(viewerId){
+  let projectId; 
+  for(let project of Object.keys(currentViewers)){
+    let viewerArray = currentViewers[project];
+    for (let i = 0; i < viewerArray.length; i++) {
+      if (viewerArray[i].id === viewerId) {
+        projectId = project;
+        viewerArray.splice(i, 1);
+        break; 
+      }
+    }
   }
   if(currentViewers[projectId] && currentViewers[projectId].length === 0){
     projectHosts[projectId] = null;
   }
+
+  //return viewerPayload
 }
 
 export function addViewer(projectId, viewerObj){
@@ -25,20 +33,13 @@ export function addViewer(projectId, viewerObj){
 
 export function renameViewer(projectId, usernameData){
   if(currentViewers[projectId]){
-    const viewerExists = currentViewers[projectId].some(viewer => viewer.id === usernameData.id);
-    if (viewerExists) {
-      removeViewer(projectId, usernameData.id);
-      addViewer(projectId, {
-        id: usernameData.id,
-        userName: usernameData.newUsername,
-        isBot: false
-      });
-    } else {
-      addViewer(projectId, {
-        id: usernameData.id,
-        userName: usernameData.newUsername,
-        isBot: false
-      });
+    let viewerExists = false;
+    for(let viewer of currentViewers[projectId]){
+      if(viewer.id === usernameData.id){
+        viewerExists = true;
+        viewer.userName = usernameData.newUsername
+        break
+      }
     }
   } else {
     console.error(`Project ${projectId} not found`);

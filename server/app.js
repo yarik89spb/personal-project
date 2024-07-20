@@ -81,7 +81,6 @@ io.on("connection", (socket) => {
       userName: userPayload.userName,
       isBot: false
     }
-    removeViewer(userPayload.roomId, viewer.id)
     io.to(userPayload.roomId).emit('leaveRoom', viewer);
   });
 
@@ -159,6 +158,8 @@ io.on("connection", (socket) => {
   
   socket.on('disconnect', () => {
     console.log('User disconnected', socket.id);
+    console.log('Removing viewer', socket.id)
+    removeViewer(socket.id)
   });
 });
 
