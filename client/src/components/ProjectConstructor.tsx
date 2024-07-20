@@ -10,7 +10,7 @@ const ProjectConstructor = () => {
   const [questions, setQuestions] = useState([
     {
       id: 1,
-      title: '',
+      title: '', 
       content: '',
       botNote: '',
       options: [{ id: 11, text: '', isCorrect: false }],
@@ -183,7 +183,6 @@ const ProjectConstructor = () => {
                   value={question.botNote}
                   onChange={(e) => handleQuestionChange(index, e)}
                   placeholder='注意：當時内容會被機器人貼在聊天室'
-                  required
                 />
               </div>
               {question.options.map((option, optionIndex) => (
@@ -228,7 +227,7 @@ const ProjectConstructor = () => {
         </button>
         <br />
         <button type="submit" className="btn btn-success mt-3">
-          Create Project
+          Create Event
         </button>
       </form>
     </div>
