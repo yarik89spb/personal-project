@@ -2,6 +2,8 @@ import { insertEmoji } from '../models/queries.js'
 
 let emojies = {};
 let QUESTION_ID;
+// Insert every 10 emoji
+const emojiBatchSize = 10;
 
 export async function storeEmoji(projectId, emojiObj){
   QUESTION_ID = emojiObj.questionId;
@@ -10,8 +12,7 @@ export async function storeEmoji(projectId, emojiObj){
   }else{
     emojies[projectId].push(emojiObj);
   }
-  // Insert every 20 emoji
-  if(emojies[projectId] && emojies[projectId].length % 10 === 0){
+  if(emojies[projectId] && emojies[projectId].length % emojiBatchSize === 0){
     await storeEmojiBatch(projectId, emojiObj.questionId)
   }
 }
