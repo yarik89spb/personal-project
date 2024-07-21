@@ -9,15 +9,14 @@ export function removeViewer(viewerId){
       if (viewerArray[i].id === viewerId) {
         projectId = project;
         viewerArray.splice(i, 1);
-        break; 
+        // Remove host if no viewers left
+        if(currentViewers[projectId] && currentViewers[projectId].length === 0){
+          projectHosts[projectId] = null;
+        }
+        return viewerArray
       }
     }
   }
-  if(currentViewers[projectId] && currentViewers[projectId].length === 0){
-    projectHosts[projectId] = null;
-  }
-
-  //return viewerPayload
 }
 
 export function addViewer(projectId, viewerObj){
@@ -29,6 +28,7 @@ export function addViewer(projectId, viewerObj){
   if(!projectHosts[projectId] || projectHosts[projectId] === null){
     projectHosts[projectId] = viewerObj.id;
   }
+  return currentViewers[projectId]
 }
 
 export function renameViewer(projectId, usernameData){
@@ -38,7 +38,7 @@ export function renameViewer(projectId, usernameData){
       if(viewer.id === usernameData.id){
         viewerExists = true;
         viewer.userName = usernameData.newUsername
-        break
+        return viewer;
       }
     }
   } else {
