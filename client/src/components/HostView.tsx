@@ -55,7 +55,7 @@ function HostView(){
         if(currentOnlineStatus.isBroadcasting){
           setTickerText(`Meeting is online。Click「Share Screen」to show the question`)
         }
-        const newProjectData = await fetchProjectData(projectId);
+        const newProjectData = await fetchProjectData(cookies.jwt, projectId);
         setIsLoadingQuestions(false);
         setProjectData(newProjectData);
         const commentsData = await fetchComments(projectId) as Comment[];

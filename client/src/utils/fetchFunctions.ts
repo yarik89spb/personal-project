@@ -1,8 +1,13 @@
 import { Comment } from "./interfaces";
 
-export async function fetchProjectData(projectId: string | undefined){
+export async function fetchProjectData(jwt: string, projectId: string | undefined){
   try{
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/project/project-data?projectId=${projectId}`)
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/project/project-data?projectId=${projectId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${jwt}`,
+      },
+    })
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -68,5 +73,25 @@ export async function changeOnlineStatus(jwt:string, projectId: string | undefin
       return onlineStatus.isBroadcasting;
     } catch(error){
       console.error(`Failed to toggle project visibility ${error}`)
+    }
+  }
+
+  export async function deleteProject(jwt: string, userId: string | undefined, projectId: string){
+    try{
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/project/delete-project?projectId=${projectId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwt}`
+        },
+        body: JSON.stringify({
+          userId
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+    } catch(error){
+      console.error(`Failed to delete project ${error}`)
     }
   }

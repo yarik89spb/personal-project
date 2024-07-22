@@ -1,10 +1,11 @@
 import express from 'express';
 import { getProjectStatistics } from '../controllers/dashboard.js';
 import { getWordCounts } from '../models/queries.js';
+import { authorizeOperation } from '../middleware/userAuthorization.js'
 
 const router = express.Router();
 
-router.get('/project-stats', async (req, res)=>{
+router.get('/project-stats', authorizeOperation, async (req, res)=>{
   try{
     const projectId = req.query.projectId;
     const data = await getProjectStatistics(projectId);
@@ -14,7 +15,7 @@ router.get('/project-stats', async (req, res)=>{
   }
 })
 
-router.get('/word-counts', async (req, res)=>{
+router.get('/word-counts', authorizeOperation, async (req, res)=>{
   try{
     const projectId = req.query.projectId;
     const data = await getWordCounts(projectId);

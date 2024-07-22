@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { fetchProjectData } from '../utils/fetchFunctions';
 import EventScreen from './EventScreen';
 import { AuthContext } from '../context/AuthContext';
+import { useCookies } from 'react-cookie';
 import './ProjectPreview.css';
 
 const ProjectPreview = () => {
@@ -17,6 +18,7 @@ const ProjectPreview = () => {
     keyWordsEng: ['none'],
     keyWordsCn: ['none']});
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
+  const [cookies]  = useCookies(['jwt']);
 
   function keyWords(keywords: string[]){
     if(keywords){
@@ -34,7 +36,7 @@ const ProjectPreview = () => {
 
   useEffect(() => {
     async function fetchData(){
-      const newProjectData = await fetchProjectData(projectId);
+      const newProjectData = await fetchProjectData(cookies.jwt, projectId);
       setProjectData(newProjectData);
       setIsLoadingQuestions(false);
     }

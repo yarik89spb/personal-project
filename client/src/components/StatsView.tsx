@@ -8,6 +8,7 @@ import { barChartOptions, sankeyOptions } from '../utils/chartOptions.ts'
 import WordCloud, { Options } from 'react-wordcloud';
 import { Chart } from "react-google-charts";
 import './StatsView.css';
+import { useCookies } from 'react-cookie';
 
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
@@ -34,14 +35,19 @@ export default function StatsView(){
     value: 0}])
   const [plotType, setPlotType] = useState<String>('answers');
   const [loading, setLoading] = useState(true);
+  const [cookies]  = useCookies(['jwt']);
 
 
 
   useEffect(() => {
     async function fetchResponses(): Promise<void>{
       try{
-        console.log(projectId)
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/dashboard/project-stats?projectId=${projectId}`)
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/dashboard/project-stats?projectId=${projectId}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${cookies.jwt}`,
+          },
+        })
         const responseJSON = await response.json();
         const responseData: ProjectStats = responseJSON.data;
         setProjectStats(responseData);
@@ -53,7 +59,12 @@ export default function StatsView(){
     }
     async function fetchWordCounts(){
       try{
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/dashboard/word-counts?projectId=${projectId}`)
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/dashboard/word-counts?projectId=${projectId}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${cookies.jwt}`,
+          },
+        })
         const responseJSON = await response.json();
         const wordCounts = responseJSON.data;
         setWordCounts(wordCounts);
