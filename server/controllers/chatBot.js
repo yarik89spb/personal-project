@@ -30,7 +30,7 @@ class PorkoBot {
       this.#isSpawned = true;
       return botMessage;
     }
-    return ''
+    return '';
   }
 
   start(){

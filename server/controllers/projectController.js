@@ -9,11 +9,6 @@ import {
 } from '../models/queries.js'
 
 export async function toggleBroadcasting(userId, projectId, broadcasting){
-  const userData = await searchUserById(userId);
-  const userProjects = userData.projects.map((projectObj)=>projectObj.projectId)
-  if (!userProjects.includes(projectId)){
-    throw new Error(`User has no such project`)
-  }
   let currentState; 
   if(broadcasting === 'true'){
     currentState = await startBroadcasting(projectId);

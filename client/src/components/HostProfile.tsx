@@ -3,15 +3,26 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { ProjectObject } from '../utils/interfaces'
 import ProjectConstructor from './ProjectConstructor';
+import { deleteProject } from '../utils/fetchFunctions'
 import './HostProfile.css';
+import { useCookies } from 'react-cookie';
 
 
 export default function HostProfile(){
   const navigate = useNavigate();
   const { userId } = useParams();
   const { userName} = useContext(AuthContext);
-  const [projectsArray, setProjectsArray] = useState([]);
+  const [projectsArray, setProjectsArray] = useState<ProjectObject[]>([]);
   const [showConstructor, setShowConstructor] = useState(false);
+  const [cookies]  = useCookies(['jwt']);
+
+  async function handleDeleteProject(e: any, projectId: string){
+    e.preventDefault();
+    await deleteProject(cookies.jwt, userId, projectId);
+    const newProjectArray = projectsArray.filter(project => project.projectId !== projectId);
+    setProjectsArray(newProjectArray);
+  }
+    
 
   function renderProjectsList(){
     if(!projectsArray || projectsArray.length === 0){
@@ -46,7 +57,7 @@ export default function HostProfile(){
             <button 
             type='button'
             className="btn btn-danger project-control"
-            onClick={(e)=>deleteProject(e, projectObj.projectId)}>
+            onClick={(e)=> handleDeleteProject(e, projectObj.projectId)}>
               Delete 
             </button>
           </div>
@@ -65,7 +76,7 @@ export default function HostProfile(){
         const projectsData = await response.json();
         setProjectsArray(projectsData.data);
       } catch(error){
-        console.error(`Failed to get project data. ${error}`)
+        console.error(`Failed to get project data. ${error}`);
       }
     }
     fetchProjectsList();
@@ -74,40 +85,18 @@ export default function HostProfile(){
     }
   }, [userId])
 
-  async function deleteProject(e:any, projectId: string){
-    e.preventDefault();
-
-    try{
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/project/delete-project`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          projectId
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const projectsData = await response.json();
-      setProjectsArray(projectsData.data);
-    } catch(error){
-      console.error(`Failed to delete project ${error}`)
-    }
-  }
+  
 
   function handlePreviewClick(projectId: string){
-    navigate(`/preview/${projectId}`)
+    navigate(`/preview/${projectId}`);
   }
 
   function handleEventStart(projectId: string){
-    navigate(`/host/${projectId}`)
+    navigate(`/host/${projectId}`);
   }
 
   function handleStatsClick(projectId: string){
-    navigate(`/stats/${projectId}`)
+    navigate(`/stats/${projectId}`);
   }
 
   return (

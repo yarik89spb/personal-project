@@ -3,6 +3,7 @@ import { toggleBroadcasting, getBroadcastingStatus } from '../controllers/projec
 import { validateJWT } from '../controllers/userController.js';
 import { getViewers } from '../controllers/viewerController.js';
 import { getProjectComments } from '../controllers/commentController.js';
+import { authorizeOperation } from '../middleware/userAuthorization.js'
 
 const router = Router();
 
@@ -18,7 +19,6 @@ router.post('/toggle-broadcasting', async (req, res)=>{
     const {userId} = validateJWT(userJWT);
     const broadcastingStatus = await toggleBroadcasting(userId, projectId, broadcasting);
     res.status(200).json(broadcastingStatus) 
-
   }catch(error){
     res.status(400).json({error:`Failed to toggle broadcasting. ${error}`})
   }
