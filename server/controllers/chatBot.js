@@ -50,6 +50,15 @@ class PorkoBot {
       return botMessage;
     }
   }
+
+  sleep(){
+    if(this.#isSpawned){
+      const botMessage = '我要休息了，再見！';
+      this.#isSpawned = false;
+      return botMessage;
+    }
+    return '';
+  }
 }
 
 let bots= {};

@@ -7,7 +7,7 @@ import { authorizeOperation } from '../middleware/userAuthorization.js'
 
 const router = Router();
 
-router.post('/toggle-broadcasting', async (req, res)=>{
+router.post('/toggle-broadcasting', authorizeOperation, async (req, res)=>{
   try{
     const {projectId} = req.query;
     const {broadcasting} = req.query;
