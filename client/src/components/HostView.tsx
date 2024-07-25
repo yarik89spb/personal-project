@@ -261,9 +261,6 @@ function HostView(){
             {isLoadingQuestions === false && (
                 <EventScreen
                   question={projectData.questions[questionIndex]}
-                  onOptionClick={() => {
-                    return;
-                  }}
                 />
               )
             }

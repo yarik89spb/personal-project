@@ -5,7 +5,7 @@ import './EventScreen.css';
 
 interface EventScreenProps {
   question : Question;
-  onOptionClick: (userAnswer: Option) => void;
+  onOptionClick?: (userAnswer: Option) => void;
 }
 
 function EventScreen( { question, onOptionClick } : EventScreenProps){
@@ -16,15 +16,9 @@ function EventScreen( { question, onOptionClick } : EventScreenProps){
   function handleOptionClick(e:  MouseEvent<HTMLButtonElement>){
     const optionId = (e.target as HTMLButtonElement).value;
     const userAnswer = question.options.find((option) => option.id === parseInt(optionId))
-    if(userAnswer){
+    if(onOptionClick && userAnswer){
       setSelectedAnswerId(userAnswer.id);
       onOptionClick(userAnswer);
-    }else{
-      onOptionClick({
-        _id: '000000000', 
-        id: 0,
-        text: 'unknown option',
-        isCorrect: false});
     }
   }
 

@@ -242,7 +242,7 @@ function GuestView() {
           }
         </div>
 
-        <div className='card'>
+        <div className='card viewer-interface'>
           <h3 className='card-header chat'>Chat:</h3>
           <div className='card-body'>
           <div className='row'>
