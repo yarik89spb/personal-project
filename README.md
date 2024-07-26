@@ -1,10 +1,11 @@
+!image[banner](https://imgur.com/y0WEtMM)
 # Porko Meeting Platform 
-### [TRY NOW](https://cerealsdwarf.online/)
 * Run an interactive meeting, focus group or quiz
 * Collect user responses, reactions and commentaries
 * Access summary & analytics on past meetings
 * Easily add new event using built-in constructor
 * Manage existing events
+### [TRY NOW](https://cerealsdwarf.online/)
 
 ## Quick Start 
 
