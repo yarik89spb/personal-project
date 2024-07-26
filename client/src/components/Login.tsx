@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useState, ChangeEvent } from "react"
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../context/AuthContext"
 import './Login.css'
@@ -9,13 +9,19 @@ export default function Login(){
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [hasAccount, setHasAccount] = useState(true);
+  const [email, setEmail] = useState('host@mail.com');
+  const [password, setPassword] = useState('ilovetaiwan');
+  
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const target = e.target as typeof e.target & {
-      userEmail: { value: string };
-      userPassword: { value: string };
-    };
     try {
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/signin`, {
         method: 'POST',
@@ -23,8 +29,8 @@ export default function Login(){
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userEmail: target.userEmail.value,
-          userPassword: target.userPassword.value,
+          userEmail: email,
+          userPassword: password
         }),
       });
       if (!response.ok) {
@@ -98,12 +104,16 @@ export default function Login(){
           placeholder='E-mail'
           name='userEmail'
           className="form-control mb-2 credentials"
+          value={email}
+          onChange={handleEmailChange}
         />
         <input
           type='password'
           placeholder='Password'
           name='userPassword'
           className="form-control mb-2 credentials"
+          value={password}
+          onChange={handlePasswordChange}
         />
         <button type='submit' className="btn btn-primary btn-block submit-credentials"> Login </button>
       </form>
