@@ -136,6 +136,8 @@ dist
 *.key
 *.pem
 *.env
+github
+github.pub
 
 # Python environment 
 
