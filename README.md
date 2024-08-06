@@ -1,4 +1,4 @@
-!image[banner](https://imgur.com/y0WEtMM)
+![banner](https://github.com/yarik89spb/media-assets/blob/main/porko-banner2.png?raw=true)
 # Porko Meeting Platform 
 * Run an interactive meeting, focus group or quiz
 * Collect user responses, reactions and commentaries
@@ -11,12 +11,14 @@
 
 1. [Enter the website](https://cerealsdwarf.online/)
 2. Click "I AM HOST"
-3. Enter login (host@mail.com) & password (ilovetaiwan)
-4. Under the event title ('Expert opinion on AI' ) click "Run" 
-5. Click button "START", copy meeting url and share it to viewers
-6. Control the question display using buttons in the bottom left part of UI 
-7. Click "User profile" (navigation bar) and explore meeting's
+3. Under the event title ('Expert opinion on AI' ) click "Run" 
+4. Click button "START", copy meeting url and share it to viewers
+5. Control the question display using buttons in the bottom left part of UI 
+6. Click "User profile" (navigation bar) and explore meeting's
 data using "Details" and "Summary" buttons 
+
+![host-control-panel](https://github.com/yarik89spb/media-assets/blob/main/host-control.gif?raw=true)
+![viewer-screen](https://github.com/yarik89spb/media-assets/blob/main/viewer.gif?raw=true)
 
 ## Website test tutorial
 
