@@ -17,8 +17,9 @@
 6. Click "User profile" (navigation bar) and explore meeting's
 data using "Details" and "Summary" buttons 
 
-![host-control-panel](https://github.com/yarik89spb/media-assets/blob/main/host-control.gif?raw=true)
-![viewer-screen](https://github.com/yarik89spb/media-assets/blob/main/viewer.gif?raw=true)
+Host screen | Viewer screen
+:-------------------------:|:-------------------------:
+![host-control-panel](https://github.com/yarik89spb/media-assets/blob/main/host-control.gif?raw=true) | ![viewer-screen](https://github.com/yarik89spb/media-assets/blob/main/viewer.gif?raw=true)
 
 ## Website test tutorial
 
@@ -34,3 +35,22 @@ data using "Details" and "Summary" buttons
 + Since the test account is shared among multiple users, its 
 meeting data might be erased or altered by another user 
 + For more complete experience, tester can register new account and add own event - access will be restricted to this user only
+
+## Structure Chart
+
+![structure](https://github.com/yarik89spb/media-assets/blob/main/struct3.png?raw=true)
+
+* Server-side logic is written in Node.js including such packages/frameworks as: 
+  * Express 
+  * Socket.IO
+  * Mongoose
+  * jsonwebtoken
+* Online meeting usability is mostly performed through the WebSocket protocol, including screen sharing, viewer comments exchange, reactions and bot actions
+* Data is stored in document format and sent into MongoDB Atlas. The input format is controlled on two levels: TypeScript interfaces used for the client-side and Mongoose schemas
+* Text data, such as commentaries and meeting questions, is processed using Python libraries.
+  * Python code is executed as a child process only upon certain events. It loads DB records, process them and stores the result in the DB as well. Later it can be accessed by a specific API call
+  * Server accepts and processes both English and traditional Chinese characters. The input is cleansed and filtered using jieba, stopwordsiso, pandas and numpy. In some cases, translated into English and back to Chinese using deep_translator package
+  * WordCloud keywords represent the most frequently used words in viewers' commentaries for a given meeting and avaible on the meeting dashboard
+  * Meeting keywords are derived using pre-trained Spacy model (en_core_web_md) that evaluates word's weight according to its semantics 
+![structure](https://github.com/yarik89spb/media-assets/blob/main/preview.png?raw=true)
+* The client-side is developed with React, allowing webpage content to dynamically re-render upon updates, minimizing refreshes and enhancing the user experience
