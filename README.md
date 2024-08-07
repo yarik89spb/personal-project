@@ -38,7 +38,7 @@ meeting data might be erased or altered by another user
 
 ## Structure Chart
 
-![structure](https://github.com/yarik89spb/media-assets/blob/main/struct3.png?raw=true)
+![structure](https://github.com/yarik89spb/media-assets/blob/main/struct3.PNG?raw=true)
 
 * Server-side logic is written in Node.js including such packages/frameworks as: 
   * Express 
@@ -52,5 +52,5 @@ meeting data might be erased or altered by another user
   * Server accepts and processes both English and traditional Chinese characters. The input is cleansed and filtered using jieba, stopwordsiso, pandas and numpy. In some cases, translated into English and back to Chinese using deep_translator package
   * WordCloud keywords represent the most frequently used words in viewers' commentaries for a given meeting and avaible on the meeting dashboard
   * Meeting keywords are derived using pre-trained Spacy model (en_core_web_md) that evaluates word's weight according to its semantics 
-![structure](https://github.com/yarik89spb/media-assets/blob/main/preview.png?raw=true)
+![structure](https://github.com/yarik89spb/media-assets/blob/main/preview.PNG?raw=true)
 * The client-side is developed with React, allowing webpage content to dynamically re-render upon updates, minimizing refreshes and enhancing the user experience
