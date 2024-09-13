@@ -51,6 +51,7 @@ meeting data might be erased or altered by another user
   * Python code is executed as a child process only upon certain events. It loads DB records, process them and stores the result in the DB as well. Later it can be accessed by a specific API call
   * Server accepts and processes both English and traditional Chinese characters. The input is cleansed and filtered using jieba, stopwordsiso, pandas and numpy. In some cases, translated into English and back to Chinese using deep_translator package
   * WordCloud keywords represent the most frequently used words in viewers' commentaries for a given meeting and avaible on the meeting dashboard
-  * Meeting keywords are derived using pre-trained Spacy model (en_core_web_md) that evaluates word's weight according to its semantics 
-![structure](https://github.com/yarik89spb/media-assets/blob/main/preview.PNG?raw=true)
+  * Meeting keywords are derived using pre-trained Spacy model (en_core_web_md) that evaluates word's weight according to its semantics
+* User profile and host control panel are protected from unauthorized usage. Private webpages can be accessed only by passing auth context (React). Sensitive operations, such as meeting deletion, are followed by extra layer of authorization.  
+![preview](https://github.com/yarik89spb/media-assets/blob/main/preview.PNG?raw=true)
 * The client-side is developed with React, allowing webpage content to dynamically re-render upon updates, minimizing refreshes and enhancing the user experience
