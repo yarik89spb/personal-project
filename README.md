@@ -1,4 +1,4 @@
-![banner](https://github.com/yarik89spb/media-assets/blob/main/porko-banner2.png?raw=true)
+![banner](https://i.imgur.com/y0WEtMM.png)
 # Porko Meeting Platform 
 * Run an interactive meeting, focus group or quiz
 * Collect user responses, reactions and commentaries
@@ -19,7 +19,7 @@ data using "Details" and "Summary" buttons
 
 Host screen | Viewer screen
 :-------------------------:|:-------------------------:
-![host-control-panel](https://github.com/yarik89spb/media-assets/blob/main/host-control.gif?raw=true) | ![viewer-screen](https://github.com/yarik89spb/media-assets/blob/main/viewer.gif?raw=true)
+![host-control-panel](https://i.imgur.com/3C5d0WW.gif) | ![viewer-screen](https://i.imgur.com/5fwAg0y.gif)
 
 ## Website test tutorial
 
@@ -38,7 +38,7 @@ meeting data might be erased or altered by another user
 
 ## Structure Chart
 
-![structure](https://github.com/yarik89spb/media-assets/blob/main/struct3.PNG?raw=true)
+![structure](https://i.imgur.com/wPmJ1DP.png)
 
 * Server-side logic is written in Node.js including such packages/frameworks as: 
   * Express 
@@ -53,5 +53,5 @@ meeting data might be erased or altered by another user
   * WordCloud keywords represent the most frequently used words in viewers' commentaries for a given meeting and avaible on the meeting dashboard
   * Meeting keywords are derived using pre-trained Spacy model (en_core_web_md) that evaluates word's weight according to its semantics
 * User profile and host control panel are protected from unauthorized usage. Private webpages can be accessed only by passing auth context (React). Sensitive operations, such as meeting deletion, are followed by extra layer of authorization.  
-![preview](https://github.com/yarik89spb/media-assets/blob/main/preview.PNG?raw=true)
+![preview](https://i.imgur.com/fiWqrlx.png)
 * The client-side is developed with React, allowing webpage content to dynamically re-render upon updates, minimizing refreshes and enhancing the user experience
