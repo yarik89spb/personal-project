@@ -1,61 +1,53 @@
 name: Deploy to EC2 on merge
 
 on:
-    push:
-        branches:
-            - main
+  push:
+    branches:
+      - main
 
 jobs:
-    deploy:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-            - name: Install SSH key
-              uses: webfactory/ssh-agent@v0.6.0
-              with:
-                ssh-private-key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
 
-            - name: Cache spaCy model
-              id: cache-spacy
-              uses: actions/cache@v2
-              with:
-                path: ~/.cache/spacy
-                key: ${{ runner.os }}-spacy-en_core_web_md
-                restore-keys: |
-                  ${{ runner.os }}-spacy
+      - name: Cache spaCy model
+        id: cache-spacy
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/spacy
+          key: ${{ runner.os }}-spacy-en_core_web_md
+          restore-keys: |
+            ${{ runner.os }}-spacy
 
-            - name: Update code
-              run: |
-                ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.SERVER_IP_ADDRESS }} << 'EOF'
-                  echo "Hello from github action, start deploy main to ec2"
-                  cd ~/porko/personal-project
-                  git switch action
-                  git pull
-                  cd server
-                  sudo apt-get update
-
-                  # Activate Python venv and install modules
-                  source ./myenv/bin/activate
-                  python3 -m pip install --upgrade pip
-                  pip install -r requirements.txt
-                  pip install --upgrade pymongo
-                  pip install --upgrade bson
-
-                  # Download model if not cached
-                  python3 nlp/download_model.py
-
-                  # Node dependencies
-                  export PATH=$PATH:/home/ubuntu/.nvm/versions/node/v20.15.0/bin
-                  if ! command -v node &> /dev/null; then
-                    nvm install 20
-                  fi
-                  npm install
-                  npm install pm2 -g
-
-                  # Start server
-                  pm2 stop all || true
-                  pm2 start app.js --name "porko"
-                  pm2 save
-                EOF
+      - name: Update code
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.SERVER_IP_ADDRESS }} << 'EOF'
+            echo "Hello from GitHub Action, starting deploy main to EC2"
+            cd ~/porko/personal-project
+            git fetch origin main
+            git checkout main
+            git pull origin main
+            cd server
+            sudo apt-get update
+            source ./myenv/bin/activate
+            python3 -m pip install --upgrade pip
+            pip install -r requirements.txt
+            pip install --upgrade pymongo bson
+            python3 nlp/download_model.py
+            export PATH=$PATH:/home/ubuntu/.nvm/versions/node/v20.15.0/bin
+            if ! command -v node &> /dev/null; then
+              nvm install 20
+            fi
+            npm install
+            npm install pm2 -g
+            pm2 stop all || true
+            pm2 start app.js --name "porko"
+            pm2 save
+          EOF
