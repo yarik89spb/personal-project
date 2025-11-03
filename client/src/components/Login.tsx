@@ -10,7 +10,7 @@ export default function Login(){
   const [error, setError] = useState('');
   const [hasAccount, setHasAccount] = useState(true);
   const [email, setEmail] = useState('host@mail.com');
-  const [password, setPassword] = useState('ilovetaiwan');
+  const [password, setPassword] = useState('123456');
   
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);

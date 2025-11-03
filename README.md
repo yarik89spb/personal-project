@@ -26,9 +26,9 @@ Host screen | Viewer screen
 #### Test accounts with data:
 | Login         | Password      | 
 | ------------- |:-------------:| 
-| host@mail.com | ilovetaiwan   | 
-| host2@mail.com| ilovetaiwan   |
-| host3@mail.com| ilovetaiwan   |
+| host@mail.com | 123456   | 
+| host2@mail.com| 123456   |
+| host3@mail.com| 123456   |
 
 + Recommended to invite at least two users to test host-viewer interaction
 + Bigger number of viewers, responses and reactions is highly advised for more accurate presentation of Porko's usability  
